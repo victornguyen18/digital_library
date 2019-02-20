@@ -1,0 +1,37 @@
+{% load static from staticfiles %}
+
+<header class="main-header">
+    <!-- Logo -->
+    <a href="{% url 'dashboard' %}" class="logo">
+        <!-- mini logo for sidebar mini 50x50 pixels -->
+        <span class="logo-mini"><b>Lib</b>IU</span>
+        <!-- logo for regular state and mobile devices -->
+        <span class="logo-lg"><b>Library</b>IU</span>
+    </a>
+
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+            <span class="sr-only">Toggle navigation</span>
+        </a>
+        <!-- Navbar Right Menu -->
+        <div class="navbar-custom-menu">
+            <ul class="nav navbar-nav">
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="user user-menu">
+                    <a href="#">
+                        <img src="{% static 'admin/dist/img/user2-160x160.jpg' %}" class="user-image" alt="User Image">
+                        <span class="hidden-xs text-uppercase bold">  {{ user.get_username }}</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'log-out' %}">
+                        <i class="fa fa-log-out"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+    </nav>
+</header>

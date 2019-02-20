@@ -1,0 +1,82 @@
+{% extends 'layout/admin/main.html' %}
+
+{% load static from staticfiles %}
+
+{% block header %}
+    <link rel="stylesheet"
+          href="{% static 'admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
+{% endblock %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Publisher
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'dashboard' %}">
+                    <i class="fa fa-dashboard"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'title:publisher.index' %}">
+                    <i class="fa fa-dashboard"></i> Publisher
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'title:publisher.create' %}">
+                    <i class="fa fa-dashboard"></i> Add Publisher
+                </a>
+            </li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="pull-right">
+                            <button type="submit" form="form-category" data-toggle="tooltip" title=""
+                                    class="btn btn-primary" data-original-title="Save"><i class="fa fa-save"></i>
+                            </button>
+                            <a href="{% url 'title:publisher.index' %}"
+                               data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i
+                                    class="fa fa-reply"></i></a></div>
+                        <h3 class="panel-title"><i class="fa fa-pencil"></i> Add Publisher</h3>
+                    </div>
+                    <div class="panel-body">
+                        <form action="" method="post" enctype="multipart/form-data" id="form-product"
+                              class="form-horizontal">
+                            {% csrf_token %}
+                            {% include 'publisher/form.html' %}
+
+                        </form>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block footer %}
+    <script src="{% static 'admin/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
+    <script>
+        $(function () {
+            $('#example2').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': false,
+                'ordering': true,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+{% endblock %}
