@@ -1,16 +1,14 @@
-# Import django
+# Import django lib
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
-from django.http import HttpResponse
+
+# Import python lib
 
 # Import Models
 from django.contrib.auth.models import User, Group
 from user.models import Detail
-
-# Import python lib
-from datetime import datetime
 
 
 @login_required(login_url='/log-in')
@@ -24,6 +22,7 @@ def user_index(request):
 
 def user_create(request):
     if request.POST:
+        # Create user -> save to db
         data_user = User.objects.create(
             password=make_password(request.POST.get('username')),
             is_superuser=0,
@@ -36,23 +35,26 @@ def user_create(request):
         )
         try:
             data_user.save()
-            detail_user = Detail.object.create(
+            detail_user = Detail.objects.create(
                 address=request.POST.get('address'),
                 phone=request.POST.get('phone'),
                 user_id=data_user.id
             )
             try:
                 detail_user.save()
-            except:
+            except Exception as e:
+                print("Some thing error:", e)
                 messages.error(request, 'Some input is wrong format')
             else:
                 messages.success(request, 'Create successfully new user')
-        except:
+        except Exception as e:
+            print("Some thing error:", e)
             messages.error(request, 'Some input is wrong format')
         else:
             messages.success(request, 'Create successfully new user')
         return redirect('user:user')
     else:
+        # Render create user form
         groups = Group.objects.all().order_by('id')
         return render(request, 'user/create.html', {
             'groups': groups,

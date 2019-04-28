@@ -1,19 +1,17 @@
+# Import django lib
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.db.models import Count, Q
-from django.http import HttpResponse
 from django.http import JsonResponse
-from django.contrib import messages
 
-# Import Library
+# Import python lib
 from datetime import datetime
 import json
 
 # Import Models
 from django.contrib.auth.models import User
-from title.models import Author, Publisher, Title, Book
-from transaction.models import Master, Detail
+from title.models import Title, Book
+from transaction.models import Detail
 
 
 def index(request):

@@ -1,12 +1,10 @@
-import json
-from django.shortcuts import render, redirect
+# Import django lib
+from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
 from django.http import JsonResponse
-from django.core.serializers import serialize
-from datetime import datetime
-from datetime import timedelta
-from django.contrib import messages
+
+# Import python lib
+from datetime import datetime, timedelta
 
 # Import Models
 from .models import Title, Author, Publisher, Book
@@ -22,10 +20,15 @@ def title_create(request):
 
 
 def get_book_info(request, barcode):
-    # return HttpResponse('run')
+    """
+    Get information of book by ajax
+    :param request:
+    :param barcode:
+    :return: JsonResponse
+    """
     try:
         book_info = Book.objects.get(barcode=barcode)
-    except:
+    except Book.DoesNotExist:
         return JsonResponse({'status': 404, 'message': 'Can not find this barcode'})
     else:
         author = ''

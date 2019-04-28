@@ -1,5 +1,4 @@
 # Import python lib
-from datetime import datetime
 
 # Import Model
 from django.db import models
