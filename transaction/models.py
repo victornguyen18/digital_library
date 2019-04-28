@@ -1,23 +1,23 @@
 from django.db import models
 from django.contrib.auth.models import Permission, User
-from title.models import book
+from title.models import Book
 from datetime import datetime
 
 
 # Create your models here.
-class master(models.Model):
+class Master(models.Model):
     date = models.DateTimeField()
     user = models.ForeignKey(User)
 
 
-class detail(models.Model):
-    book = models.ForeignKey(book)
+class Detail(models.Model):
+    book = models.ForeignKey(Book)
     hire_type = models.IntegerField(default=0)
     due_date = models.DateTimeField(null=False)
     return_date = models.DateTimeField(null=True)
     price = models.FloatField(default=0)
     status = models.IntegerField(default=2)
-    transaction = models.ForeignKey(master, default=1)
+    transaction = models.ForeignKey(Master, default=1)
 
     class Meta:
         permissions = (("can_mark_returned", "Set book as returned"),

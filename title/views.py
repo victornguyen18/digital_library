@@ -1,6 +1,5 @@
 import json
 from django.shortcuts import render, redirect
-from .models import Title, Author, Publisher, book
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.http import JsonResponse
@@ -8,6 +7,9 @@ from django.core.serializers import serialize
 from datetime import datetime
 from datetime import timedelta
 from django.contrib import messages
+
+# Import Models
+from .models import Title, Author, Publisher, Book
 
 
 # Create your views here.
@@ -22,28 +24,28 @@ def title_create(request):
 def get_book_info(request, barcode):
     # return HttpResponse('run')
     try:
-        bookInfo = book.objects.get(barcode=barcode)
+        book_info = Book.objects.get(barcode=barcode)
     except:
         return JsonResponse({'status': 404, 'message': 'Can not find this barcode'})
     else:
         author = ''
-        if (bookInfo.title.status != 0):
-            for item in bookInfo.title.author.all():
+        if book_info.title.status != 0:
+            for item in book_info.title.author.all():
                 author += item.name + ', '
             week = datetime.now() + timedelta(days=7)
             sem = datetime.now() + timedelta(days=60)
             staff = datetime.now() + timedelta(days=14)
-            data = {'title': bookInfo.title.name,
+            data = {'title': book_info.title.name,
                     'author': author,
-                    'book_status': bookInfo.status,
-                    'week_price': bookInfo.title.week_price,
-                    'sem_price': bookInfo.title.sem_price,
-                    'due_date_week': str(week.year) + '-' + str(week.month) + '-' + str(week.day) + ' ' +
-                                     str(week.hour) + ':' + str(week.minute) + ':' + str(week.second),
-                    'due_date_sem': str(sem.year) + '-' + str(sem.month) + '-' + str(sem.day) + ' ' +
-                                    str(sem.hour) + ':' + str(sem.minute) + ':' + str(sem.second),
-                    'due_date_staff': str(staff.year) + '-' + str(staff.month) + '-' + str(staff.day) + ' ' +
-                                      str(staff.hour) + ':' + str(staff.minute) + ':' + str(staff.second)}
+                    'book_status': book_info.status,
+                    'week_price': book_info.title.week_price,
+                    'sem_price': book_info.title.sem_price,
+                    'due_date_week': str(week.year) + '-' + str(week.month) + '-' + str(week.day) + ' ' + str(
+                        week.hour) + ':' + str(week.minute) + ':' + str(week.second),
+                    'due_date_sem': str(sem.year) + '-' + str(sem.month) + '-' + str(sem.day) + ' ' + str(
+                        sem.hour) + ':' + str(sem.minute) + ':' + str(sem.second),
+                    'due_date_staff': str(staff.year) + '-' + str(staff.month) + '-' + str(staff.day) + ' ' + str(
+                        staff.hour) + ':' + str(staff.minute) + ':' + str(staff.second)}
             return JsonResponse({'status': 200, 'data': data})
         else:
             return JsonResponse({'status': 199, 'message': 'This title is disable'})

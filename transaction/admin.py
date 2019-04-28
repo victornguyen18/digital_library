@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import master, detail
+from .models import Master, Detail
 
 # Register your models here.
-admin.site.register(master)
-admin.site.register(detail)
+admin.site.register(Master)
+admin.site.register(Detail)

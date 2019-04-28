@@ -1,16 +1,19 @@
-import json
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
-from title.models import Author, Publisher, Title
-from transaction.models import master, detail, book
 from django.db.models import Count, Q
 from django.http import HttpResponse
 from django.http import JsonResponse
 from django.contrib import messages
+
+# Import Library
 from datetime import datetime
 import json
+
+# Import Models
+from django.contrib.auth.models import User
+from title.models import Author, Publisher, Title, Book
+from transaction.models import Master, Detail
 
 
 def index(request):
@@ -23,7 +26,7 @@ def logout(request):
 
 
 def login(request):
-    if (request.user.is_authenticated()):
+    if request.user.is_authenticated():
         return redirect('/dashboard')
     if request.method == "POST":
         username = request.POST['username']
@@ -37,7 +40,8 @@ def login(request):
                 return render(request, 'user/login.html', {'error_message': 'Your account has been disabled'})
         else:
             return render(request, 'user/login.html', {
-                'error_message': 'Wrong account or password. Please try again or click Forgot Password to reset password.'})
+                'error_message': 'Wrong account or password. Please try again or click Forgot Password to reset '
+                                 'password.'})
     return render(request, 'user/login.html')
 
 
@@ -50,12 +54,12 @@ def session_set_json(request):
 
 @login_required(login_url='/log-in')
 def dashboard(request):
-    detail_tran_list = detail.objects.filter(status__in=[2, 3]) \
+    detail_tran_list = Detail.objects.filter(status__in=[2, 3]) \
         .order_by('book__status', '-transaction__date', 'id')
     total_title = Title.objects.count()
-    total_book = book.objects.count()
-    total_book_hiring = book.objects.filter(status=3).count()
-    total_book_overdue = detail.objects.filter(due_date__lte=datetime.now(), status=3).count()
+    total_book = Book.objects.count()
+    total_book_hiring = Book.objects.filter(status=3).count()
+    total_book_overdue = Detail.objects.filter(status=3, due_date__lte=datetime.now()).count()
     return render(request, 'dashboard/index.html', {
         'detail_tran_list': detail_tran_list,
         'total_book': total_book,

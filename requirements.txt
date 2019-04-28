@@ -1,0 +1,7 @@
+Django==1.11.20
+PyMySQL==0.9.3
+pandas
+numpy
+scipy
+datetime
+django-debug-permissions

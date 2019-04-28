@@ -1,20 +1,19 @@
+# Import django
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.decorators import permission_required
 
-from django.http import HttpResponse
-# Model
+# Import Models
 from django.contrib.auth.models import User
-from transaction.models import master, detail, book
+from transaction.models import Master, Detail, Book
 from django.contrib import messages
+
+# Import Python Library
 from datetime import datetime
-from django.core import serializers
-import json
 
 
 @permission_required('can_view_all_transactions', login_url='/log-in')
 def transaction_index(request):
-    transaction = detail.objects.all() \
+    transaction = Detail.objects.all() \
         .order_by('-status', '-transaction__date', 'id')
     return render(request, 'transaction/index.html', {
         'transactions': transaction,
@@ -23,11 +22,13 @@ def transaction_index(request):
 
 @permission_required('transaction.can_create_transaction', login_url='/log-in')
 def transaction_create(request):
-    if (request.POST):
+    if request.POST:
+        # Post method -> save to database
         barcode = request.POST.getlist('barcode[]')
         if len(barcode) > 0:
             try:
-                userInput = User.objects.get(username=request.POST.get('username'))
+                # Find username
+                user_input = User.objects.get(username=request.POST.get('username'))
             except User.DoesNotExist:
                 messages.error(request, 'Your username does not exist')
                 return render(request, 'transaction/create.html')
@@ -39,12 +40,12 @@ def transaction_create(request):
                 tmp = set()
                 for x in barcode:
                     try:
-                        bookInfo = book.objects.get(barcode=x)
-                    except book.DoesNotExist:
+                        book_info = Book.objects.get(barcode=x)
+                    except Book.DoesNotExist:
                         messages.error(request, 'Your barcode does not exist')
                         return redirect('transaction:transaction.create')
                     else:
-                        if (bookInfo.status != 1):
+                        if book_info.status != 1:
                             messages.error(request, "Your book's barcode does not available")
                             return redirect('transaction:transaction.create')
                         if x in tmp:
@@ -52,30 +53,30 @@ def transaction_create(request):
                             return redirect('transaction:transaction.create')
                     tmp.add(x)
                 try:
-                    data = master.objects.create(date=request.POST.get('transaction_date'), user=userInput)
+                    data = Master.objects.create(date=request.POST.get('transaction_date'), user=user_input)
                     for i in range(len(barcode)):
-                        bookInfo = book.objects.get(barcode=barcode[i])
-                        detail.objects.create(transaction_id=data.id,
-                                              book=bookInfo,
+                        book_info = Book.objects.get(barcode=barcode[i])
+                        Detail.objects.create(transaction_id=data.id,
+                                              book=book_info,
                                               hire_type=hire_type[i],
                                               price=price[i],
                                               due_date=due_date[i],
                                               status=2)
-                        bookInfo.status = 2
-                        bookInfo.save()
+                        book_info.status = 2
+                        book_info.save()
                         if 'transaction' in request.session:
                             del request.session['transaction']
                     messages.success(request, 'Create new transaction success')
                     return redirect('transaction:transaction')
-                except:
+                except Exception as e:
+                    print(e)
                     messages.error(request, 'Some input is wrong format in detail')
-                else:
-                    messages.success(request, 'Create new transaction success')
                 return redirect('transaction:transaction.create')
         else:
             messages.error(request, 'Input some detail of transaction')
             return redirect('transaction:transaction.create')
     else:
+        # Load create transaction form
         transaction = request.session[
             'transaction'] if 'transaction' in request.session else {'username': '', 'detail': {}}
         username = User.objects.get(username=transaction['username']) if (
@@ -92,13 +93,13 @@ def transaction_create(request):
 
 @permission_required('transaction.can_mark_hiring', login_url='/log-in')
 def approved_hire(request, detail_id):
-    tran_detail = detail.objects.get(id=detail_id)
+    tran_detail = Detail.objects.get(id=detail_id)
     if tran_detail.status == 2:
         # Change status in detail
         tran_detail.status = 3
         tran_detail.save()
         # Change status in book
-        book_obj = book.objects.get(barcode=tran_detail.book_id)
+        book_obj = Book.objects.get(barcode=tran_detail.book_id)
         book_obj.status = 3
         book_obj.save()
         messages.success(request, 'Change status to hiring successful')
@@ -109,13 +110,13 @@ def approved_hire(request, detail_id):
 
 @permission_required('transaction.can_reject_hiring', login_url='/log-in')
 def reject(request, detail_id):
-    tran_detail = detail.objects.get(id=detail_id)
+    tran_detail = Detail.objects.get(id=detail_id)
     if tran_detail.status == 2:
         # Change status in detail
         tran_detail.status = 0
         tran_detail.save()
         # Change status in book
-        book_obj = book.objects.get(barcode=tran_detail.book_id)
+        book_obj = Book.objects.get(barcode=tran_detail.book_id)
         book_obj.status = 1
         book_obj.save()
         messages.success(request, 'Change status to rejected successful')
@@ -126,14 +127,14 @@ def reject(request, detail_id):
 
 @permission_required('transaction.can_mark_returned', login_url='/log-in')
 def return_book(request, detail_id):
-    tran_detail = detail.objects.get(id=detail_id)
+    tran_detail = Detail.objects.get(id=detail_id)
     if tran_detail.status == 3:
         # Change status in detail
         tran_detail.status = 1
         tran_detail.return_date = datetime.now()
         tran_detail.save()
         # Change status in book
-        book_obj = book.objects.get(barcode=tran_detail.book_id)
+        book_obj = Book.objects.get(barcode=tran_detail.book_id)
         book_obj.status = 1
         book_obj.save()
         messages.success(request, 'Change status to rejected successful')

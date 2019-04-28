@@ -34,7 +34,7 @@ class Title(models.Model):
         return self.name
 
 
-class book(models.Model):
+class Book(models.Model):
     barcode = models.CharField(max_length=20, primary_key=True)
     title = models.ForeignKey(Title)
     status = models.IntegerField(default=0)

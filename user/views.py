@@ -1,11 +1,15 @@
+# Import django
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
-# Model
-from django.contrib.auth.models import User, Group
-from user.models import detail
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password
+from django.http import HttpResponse
+
+# Import Models
+from django.contrib.auth.models import User, Group
+from user.models import Detail
+
+# Import python lib
 from datetime import datetime
 
 
@@ -19,8 +23,8 @@ def user_index(request):
 
 
 def user_create(request):
-    if (request.POST):
-        dataUser = User.objects.create(
+    if request.POST:
+        data_user = User.objects.create(
             password=make_password(request.POST.get('username')),
             is_superuser=0,
             username=request.POST.get('username'),
@@ -31,14 +35,14 @@ def user_create(request):
             is_active=1,
         )
         try:
-            dataUser.save()
-            detailUser = detail.object.create(
+            data_user.save()
+            detail_user = Detail.object.create(
                 address=request.POST.get('address'),
                 phone=request.POST.get('phone'),
-                user_id=dataUser.id
+                user_id=data_user.id
             )
             try:
-                detailUser.save()
+                detail_user.save()
             except:
                 messages.error(request, 'Some input is wrong format')
             else:
