@@ -14,6 +14,14 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
+from .recommendation import my_recommend
+
+
+def recommend(request):
+    print('running')
+    object_my_recommened = my_recommend()
+    return render(request, 'index_recommed.html')
+
 
 def index(request):
     return render(request, 'index.html')
