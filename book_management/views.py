@@ -1,4 +1,5 @@
 # Import django lib
+from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
@@ -31,16 +32,22 @@ def login(request):
         password = request.POST['password']
         user = authenticate(username=username, password=password)
         if user is not None:
-            if user.is_active:
+            if User.objects.filter(pk=user.id, groups__name__in=['Part-time', 'Staff']).exists():
                 dj_login(request, user)
+                if not request.POST.get('remember', None):
+                    # not check remember -> set session time 0
+                    request.session.set_expiry(0)
                 return redirect('/dashboard')
             else:
-                return render(request, 'user/login.html', {'error_message': 'Your account has been disabled'})
+                messages.error(request,
+                               "You don't have permission to access. "
+                               "Please contact your administrator to request access")
         else:
-            return render(request, 'user/login.html', {
-                'error_message': 'Wrong account or password. Please try again or click Forgot Password to reset '
-                                 'password.'})
-    return render(request, 'user/login.html')
+            messages.error(request, 'Wrong account or password. Please try again or click Forgot Password to reset '
+                                    'password.')
+        return redirect('/log-in')
+    else:
+        return render(request, 'user/login.html')
 
 
 @login_required(login_url='/log-in')
