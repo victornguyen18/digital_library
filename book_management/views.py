@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 # Import python lib
 from datetime import datetime
@@ -14,13 +14,15 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-from .recommendation import my_recommend
+from recommendation.collaborative_filtering import my_recommend
+import pandas as pd
 
 
 def recommend(request):
-    print('running')
-    object_my_recommened = my_recommend()
-    return render(request, 'index_recommed.html')
+    transaction = pd.DataFrame(my_recommend())
+    print(transaction)
+    return HttpResponse(transaction.to_html())
+    # return render(request, 'index_recommed.html', {'transaction': object_my_recommened})
 
 
 def index(request):

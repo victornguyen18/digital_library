@@ -47,6 +47,19 @@ def my_recommend():
         Thetagrad += my_lambda * my_theta
         return flatten_params(x_grad, Thetagrad)
 
+    def process_date(sample):
+        date_obj = sample.return_date - sample.hire_date
+        # year = int(date_obj[:4])
+        # month = int(date_obj[4:6])
+        # day = int(date_obj[6:8])
+        # sample['year'] = year
+        # sample['month'] = month
+        sample['hire_date_length_temp'] = date_obj
+        sample['due_date_length_temp'] = sample.due_date - sample.hire_date
+        return sample
+
+    # Change book to data frame
+    book_df = pd.DataFrame(list(Book.objects.all().values()))
     # Change transaction_master_db to data frame
     transaction_master_df = pd.DataFrame(list(Master.objects.all().values()))
     # Change name column
@@ -56,11 +69,15 @@ def my_recommend():
     transaction_detail_df = pd.DataFrame(list(Detail.objects.all().values()))
     # Join two data frame to one
     transaction_df = pd.merge(transaction_master_df, transaction_detail_df, left_on='id', right_on='transaction_id')
-    transaction_df = transaction_df.drop(['id_x', 'id_y', 'transaction_id'], axis=1)
-    transaction_df = transaction_df.dropna().reset_index()
-    transaction_df['hire_date_length'] = transaction_df['return_date'] - transaction_df['hire_date']
-    # transaction_df.to_csv(r'book_management/transaction.csv')
+    transaction_df = pd.merge(transaction_df, book_df[['barcode', 'title_id']], left_on="book_id", right_on="barcode",
+                              how="left")
+    transaction_df = transaction_df.drop(['id_x', 'transaction_id'], axis=1)
+    transaction_df = transaction_df.dropna().reset_index(drop=True)
+    # transaction_df = transaction_df.groupby('index').apply(process_date)
+    transaction_df.to_csv(r'recommendation/transaction.csv')
     print(transaction_df)
+    print(transaction_df.columns.values)
+    return transaction_df
 
     # mynu = df.user_id.unique().shape[0]
     # mynm = df.movie_id.unique().shape[0]
