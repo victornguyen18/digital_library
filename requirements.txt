@@ -5,3 +5,4 @@ numpy
 scipy
 datetime
 django-debug-permissions
+py4j
