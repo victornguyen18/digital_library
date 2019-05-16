@@ -27,7 +27,7 @@ li {
   -moz-border-radius: 0 !important;
   border-radius: 0 !important; }
 
-/* except below bootstrap elements */
+/* except below plugins elements */
 .img-circle {
   border-radius: 50% !important; }
 
@@ -2039,7 +2039,7 @@ Dropdown Menu Badges
   border-radius: 0 !important; }
 
 /***
-Custom buttons based on bootstrap SASS
+Custom buttons based on plugins SASS
 ***/
 .btn {
   outline: none !important;
