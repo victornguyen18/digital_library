@@ -4,13 +4,9 @@
 {% load helps %}
 
 {% block header %}
-    <link rel="stylesheet"
-          href="{% static 'admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
-
     <!-- bootstrap-plugin datepicker -->
-    <link
-            rel="stylesheet"
-            href="{% static 'admin/bower_components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -74,12 +70,10 @@
 {% endblock %}
 
 {% block footer %}
-    <script src="{% static 'admin/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script type="text/javascript">
-        var transactionSession = {{ transaction|safe}};
-        var transaction_row = Object.keys(transactionSession.detail).length;
+        let transactionSession = {{ transaction|safe}};
+        let transaction_row = Object.keys(transactionSession.detail).length;
 
         function run_ajax_get_info_book(num, barcode, hire_type, elementRow, elementBarcodeInput, save_sesion = false) {
             $.ajax({
@@ -88,20 +82,18 @@
                 "url": '/book/api/' + barcode,
                 "data": {},
                 "success": function (result) {
-                    if (result.status == '200') {
+                    if (result.status === '200') {
                         elementBarcodeInput.find('.help-block').html('');
                         elementRow.find('.title').val(result.data.title);
                         elementRow.find('.author').val(result.data.author);
                         elementRow.find('.book_status').val(result.data.book_status);
-                        if (hire_type == '1') {
+                        if (hire_type === '1') {
                             elementRow.find('.price').val(result.data.week_price);
                             elementRow.find('.due_date').val(result.data.due_date_week);
-                        }
-                        else if (hire_type == '2') {
+                        } else if (hire_type === '2') {
                             elementRow.find('.price').val(result.data.sem_price);
                             elementRow.find('.due_date').val(result.data.due_date_sem);
-                        }
-                        else {
+                        } else {
                             elementRow.find('.price').val(0);
                             elementRow.find('.due_date').val(result.data.due_date_staff);
                         }
@@ -124,8 +116,7 @@
                                 }
                             });
                         }
-                    }
-                    else {
+                    } else {
                         elementBarcodeInput.find('.help-block').html(result.message);
                         elementRow.find('.title').val('');
                         elementRow.find('.author').val('');
@@ -259,37 +250,28 @@
 
             $(document).ready(function () {
                 for (i = 0; i < transaction_row; i++) {
-                    var elementRow = $('#transaction-row' + i);
-                    var barcode = elementRow.find('.barcode').val();
-                    var elementBarcodeInput = elementRow.find('.barcode').parent();
-                    var hire_type = elementRow.find('.hire_type').val();
+                    let elementRow = $('#transaction-row' + i);
+                    let barcode = elementRow.find('.barcode').val();
+                    let elementBarcodeInput = elementRow.find('.barcode').parent();
+                    let hire_type = elementRow.find('.hire_type').val();
                     if (barcode !== '') {
                         run_ajax_get_info_book(i, barcode, hire_type, elementRow, elementBarcodeInput);
                     }
                 }
             });
 
-            $('#example2').DataTable({
-                'paging': true,
-                'lengthChange': false,
-                'searching': false,
-                'ordering': true,
-                'info': true,
-                'autoWidth': false
-            })
             $('.datepicker').datetimepicker({
                 format: "YYYY-MM-DD hh:mm:ss",
                 defaultDate: new Date(),
             });
             $("#username").change(function () {
-                var username = $(this).val();
-                var element = $(this).parent();
+                let username = $(this).val();
+                let element = $(this).parent();
                 $.getJSON('/user/api/' + username, function (result) {
-                    if (result.status == '404') {
+                    if (result.status === '404') {
                         element.addClass('has-error');
                         element.find('.help-block').html('Can not find this username');
-                    }
-                    else {
+                    } else {
                         element.removeClass('has-error');
                         element.find('.help-block').html('');
                         $('#firstname').val(result.data.first_name);
@@ -314,11 +296,11 @@
             });
 
             $(".barcode").change(function () {
-                var barcode = $(this).val();
-                var dataid = $(this).attr('data-id');
-                var elementBarcodeInput = $(this).parent();
-                var elementRow = $(this).parent().parent();
-                var hire_type = elementRow.find('.hire_type').val();
+                let barcode = $(this).val();
+                {#let dataid = $(this).attr('data-id');#}
+                let elementBarcodeInput = $(this).parent();
+                let elementRow = $(this).parent().parent();
+                let hire_type = elementRow.find('.hire_type').val();
                 elementBarcodeInput.find('.help-block').html('');
                 elementRow.find('.title').val('');
                 elementRow.find('.author').val('');
@@ -330,19 +312,19 @@
             });
 
             $(".hire_type").change(function () {
-                var hire_type = $(this).val();
-                var elementRow = $(this).parent().parent();
-                var elementBarcodeInput = elementRow.find('.barcode').parent();
-                var barcode = elementRow.find('.barcode').val();
+                let hire_type = $(this).val();
+                let elementRow = $(this).parent().parent();
+                let elementBarcodeInput = elementRow.find('.barcode').parent();
+                let barcode = elementRow.find('.barcode').val();
                 if (barcode !== '') {
                     run_ajax_get_info_book(0, barcode, hire_type, elementRow, elementBarcodeInput, true)
                 }
             });
 
             $('.remove').click(function () {
-                var dataid = $(this).attr('data-id');
-                var elementRow = $(this).parent().parent();
-                var barcode = elementRow.find('.barcode').val();
+                let dataid = $(this).attr('data-id');
+                let elementRow = $(this).parent().parent();
+                let barcode = elementRow.find('.barcode').val();
                 delete transactionSession['detail'][barcode];
                 $.ajax({
                     "type": "POST",
@@ -357,7 +339,7 @@
                     "beforeSend": function (xhr, settings) {
                         $.ajaxSettings.beforeSend(xhr, settings);
                     },
-                    "success": function (result) {
+                    "success": function () {
                         $('#transaction-row' + dataid).remove();
                     }
                 });
