@@ -3,15 +3,13 @@
 {% load static from staticfiles %}
 
 {% block header %}
-    <link rel="stylesheet"
-          href="{% static 'admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 
 {% block content %}
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Dashboard
+            Group
         </h1>
         <ol class="breadcrumb">
             <li>
@@ -19,7 +17,7 @@
                     <i class="fa fa-dashboard"></i> Dashboard
                 </a>
             </li>
-            <li class="active">User</li>
+            <li class="active">Group</li>
         </ol>
     </section>
 
@@ -69,7 +67,7 @@
                                             {% endfor %}
                                         </td>
                                         <td>
-                                           
+
                                         </td>
                                     </tr>
                                 {% endfor %}
@@ -88,8 +86,6 @@
 {% endblock %}
 
 {% block footer %}
-    <script src="{% static 'admin/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script>
         $(function () {
             $('#transaction').DataTable({

@@ -3,13 +3,11 @@
 {% load static from staticfiles %}
 
 {% block header %}
-    <link rel="stylesheet"
-          href="{% static 'admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 
     <!-- bootstrap-plugin datepicker -->
-    <link
-            rel="stylesheet"
-            href="{% static 'admin/bower_components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}">
+    <link rel="stylesheet"
+          href="{% static 'bower_components/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css' %}">
+
 {% endblock %}
 
 {% block content %}
@@ -73,9 +71,7 @@
 {% endblock %}
 
 {% block footer %}
-    <script src="{% static 'admin/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
+    <script src="{% static 'bower_components/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js' %}"></script>
     <script type="text/javascript">
         var transaction_row = 0;
 
@@ -170,17 +166,14 @@
                             if (hire_type == '1') {
                                 elementRow.find('.price').val(result.data.week_price);
                                 elementRow.find('.due_date').val(result.data.due_date_week);
-                            }
-                            else if (hire_type == '2') {
+                            } else if (hire_type == '2') {
                                 elementRow.find('.price').val(result.data.sem_price);
                                 elementRow.find('.due_date').val(result.data.due_date_sem);
-                            }
-                            else {
+                            } else {
                                 elementRow.find('.price').val(0);
                                 elementRow.find('.due_date').val(result.data.due_date_staff);
                             }
-                        }
-                        else {
+                        } else {
                             elementBarcodeInput.find('.help-block').html(result.message);
                         }
                     });
@@ -203,17 +196,14 @@
                             if (hire_type == '1') {
                                 elementRow.find('.price').val(result.data.week_price);
                                 elementRow.find('.due_date').val(result.data.due_date_week);
-                            }
-                            else if (hire_type == '2') {
+                            } else if (hire_type == '2') {
                                 elementRow.find('.price').val(result.data.sem_price);
                                 elementRow.find('.due_date').val(result.data.due_date_sem);
-                            }
-                            else {
+                            } else {
                                 elementRow.find('.price').val(0);
                                 elementRow.find('.due_date').val(result.data.due_date_staff);
                             }
-                        }
-                        else {
+                        } else {
                             elementBarcodeInput.find('.help-block').html(result.message);
                             elementRow.find('.title').val('');
                             elementRow.find('.author').val('');
@@ -247,8 +237,7 @@
                     if (result.status == '404') {
                         element.addClass('has-error');
                         element.find('.help-block').html('Can not find this username');
-                    }
-                    else {
+                    } else {
                         element.removeClass('has-error');
                         element.find('.help-block').html('');
                         $('#firstname').val(result.data.first_name);
