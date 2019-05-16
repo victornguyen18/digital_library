@@ -75,7 +75,7 @@
         let transactionSession = {{ transaction|safe}};
         let transaction_row = Object.keys(transactionSession.detail).length;
 
-        function run_ajax_get_info_book(num, barcode, hire_type, elementRow, elementBarcodeInput, save_sesion = false) {
+        function run_ajax_get_info_book(num, barcode, hire_type, elementRow, elementBarcodeInput, save_session = false) {
             $.ajax({
                 "type": "GET",
                 "dataType": "json",
@@ -97,7 +97,7 @@
                             elementRow.find('.price').val(0);
                             elementRow.find('.due_date').val(result.data.due_date_staff);
                         }
-                        if (save_sesion) {
+                        if (save_session) {
                             transactionSession['detail'][barcode] = hire_type;
                             $.ajax({
                                 "type": "POST",
