@@ -57,7 +57,7 @@ def login(request):
                                     'password.')
         return redirect('/log-in')
     else:
-        return render(request, 'user/login.html')
+        return render(request, 'auth/login.html')
 
 
 @login_required(login_url='/log-in')
