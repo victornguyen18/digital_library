@@ -3,8 +3,6 @@
 {% load static from staticfiles %}
 
 {% block header %}
-    <link rel="stylesheet"
-          href="{% static 'admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -65,8 +63,6 @@
 {% endblock %}
 
 {% block footer %}
-    <script src="{% static 'admin/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script>
         $(function () {
             $('#example2').DataTable({

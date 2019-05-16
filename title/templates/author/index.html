@@ -3,15 +3,13 @@
 {% load static from staticfiles %}
 
 {% block header %}
-    <link rel="stylesheet"
-          href="{% static 'admin/bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css' %}">
 {% endblock %}
 
 {% block content %}
     <!-- Content Header (Page header) -->
     <section class="content-header">
         <h1>
-            Dashboard
+            Author
         </h1>
         <ol class="breadcrumb">
             <li>
@@ -70,8 +68,6 @@
 {% endblock %}
 
 {% block footer %}
-    <script src="{% static 'admin/bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-    <script src="{% static 'admin/bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
     <script>
         $(function () {
             $('#example2').DataTable({
