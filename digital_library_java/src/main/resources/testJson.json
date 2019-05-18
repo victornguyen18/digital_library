@@ -1,0 +1,168 @@
+{
+  "adult":[
+
+  ],
+  "application": [
+    "application",
+    "practical application",
+    "coating",
+    "covering",
+    "application program",
+    "applications programmer"
+  ],
+  "apply":[
+  	"applied",
+  	"use",
+  	"apply"
+  ],
+  "architecture": [
+  	"computer architecture", 
+  	"architecture"
+  ],
+  "analysis": [
+    "analysis",
+    "analytic"
+  ],
+  "analytic":[
+  	"analysis",
+    "analytic",
+    "analytic thinking"
+  ],
+  "biology": [
+    "biology",
+    "biological science",
+    "biological"
+  ],
+  "biological science":[
+  	"biology",
+    "biological science",
+    "biological"
+  ],
+  "biological":[
+  	"biology",
+    "biological science",
+    "biological"
+  ],
+  "circuit": [
+    "circuit",
+    "electrical circuit",
+    "electric circuit"
+  ],
+  "chemistry":[
+  	"chemistry","chemical science","alchemy","chemical"
+  ],
+  "chemical":[
+  	"chemistry","chemical science","alchemy","chemical","analytical chemistry","photochemistry","multi photon","fire safety","Biotechnology","Biology","Biochemistry","biomedical engineering"
+  ],
+  "computer": [
+    "computing machine",
+    "computing device",
+    "data processor",
+    "data processing",
+    "electronic computer",
+    "information processing system",
+    "calculating"
+  ],
+  "design":[
+  	"design","designing","plan","pattern","innovation","conception" 
+  ],
+  "electric":[
+  	"electric","electrical","electronic","electric automobile"
+  ],
+  "electrical circuit":[
+  	"circuit",
+    "electrical circuit",
+    "electric circuit",
+    "racing circuit"
+  ],
+  "electric circuit":[
+  	"circuit",
+    "electrical circuit",
+    "electric circuit",
+    "racing circuit"
+  ],
+  "engineering": [
+  	"engineering","engineering science","applied science","technology","electrical engineering"
+  ],
+  "history":[
+  	"times","story",""
+  ],
+  "introduction": [
+    "introduction",
+    "presentation",
+    "intro",
+    "foundation",
+    "institution",
+    "origination",
+    "innovation"
+  ],
+  "guide": [
+  	"template",
+  	"templet",
+  	"guide","direct","point"
+  ],
+  "management": [
+  	"direction",
+  	"manage",
+  	"management"
+  ],
+  "math":[
+  	"math","mathematicsematics","mathematics","calculus","algorithms","mathematicsematical","statistics and probability","differential equations"
+  ],
+  "mathematics":[
+  	"math","mathematicsematics","mathematics","calculus","algorithms","mathematicsematical","statistics and probability","differential equations"
+  ],
+  "natural":[
+  	"nature","science"
+  ],
+  "operation":[
+  	"process","procedure","processing","mathematical process"
+  ],
+  "operate":[
+  	"run","work","control"
+  ],
+  "resources": [
+  	"resource",
+  	"resources",
+  	"resourcefulness"
+  ],
+  "resource": [
+  	"resource",
+  	"resources",
+  	"resourcefulness"
+  ],
+  "technique": [
+    "technique",
+    "proficiency"
+  ],
+  "technology": [
+  	"engineering", 
+  	"engineering science", 
+  	"applied science", 
+  	"technology"
+  ],
+  "process":[
+  	"process","procedure","mental process","operation","physical process"
+  ],
+  "procedure":[
+  	"process","operation","procedure"
+  ],
+  "program":[
+  	"programming","programmers","programmer","program","Java programming","Java","pascal","Java programming","C","Algorithms in C++","Perl","Windows","computer architecture","SQL"
+  ],
+  "programming":[
+  	"program","programmer","programmers","programming","Java programming","Java","pascal","Java programming","C","Algorithms in C++","Perl","Windows","computer architecture","SQL"
+  ],
+  "programmer":[
+  	"programming","programmers","programmer","program","Java programming","Java","pascal","Java programming","C","Algorithms in C++","Perl","Windows","computer architecture","SQL"
+  ],
+  "programmers":[
+  	"programming","programmers","programmer","program","Java programming","Java","pascal","Java programming","C","Algorithms in C++","Perl","Windows","computer architecture","SQL"
+  ],
+  "web": [
+  	 "World Wide Web", 
+  	 "WWW", 
+  	 "web",
+  	 "network" 
+  ]
+}

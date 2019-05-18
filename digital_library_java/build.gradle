@@ -1,0 +1,70 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'idea'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+version = '1.0'
+group = 'py4j.examples'
+//mainClassName = "py4j.examples.StackEntryPoint"
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'http://acrab.ics.muni.cz/~makub/m2repo/'
+    }
+
+    maven {
+        url = 'http://cogcomp.org/m2repo/'
+    }
+
+    maven {
+        url = 'http://repo.maven.apache.org/maven2'
+    }
+}
+
+dependencies {
+    //Connection gateway with python
+    compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.8.1'
+    compile 'net.jcip:jcip-annotations:1.0'
+    compile 'com.github.ansell.pellet:pellet-query:2.3.6-ansell'
+    compile 'pellet:pellet-core:2.2.2'
+    compile 'pellet:pellet-datatypes:2.2.2'
+    compile 'pellet:pellet-el:2.2.2'
+    compile 'pellet:pellet-rules:2.2.2'
+    compile 'pellet:pellet-owlapiv3:2.2.2'
+    compile 'org.antlr:antlr-runtime:3.2'
+    compile 'aterm:aterm:1.6'
+    compile 'com.github.relaxng:relaxngDatatype:2011.1'
+    compile 'org.jgrapht:jgrapht-jdk1.5:0.7.3'
+    compile 'net.sourceforge.owlapi:owlapi-distribution:4.3.1'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+    compile 'org.apache.maven.plugins:maven-dependency-plugin:3.0.0'
+    compile 'org.apache.poi:poi-ooxml-schemas:3.16'
+    compile 'org.apache.poi:poi-ooxml:3.16'
+    compile 'org.apache.poi:poi:3.16'
+    compile 'org.jblas:jblas:1.2.4'
+    compile 'edu.illinois.cs.cogcomp:jwnl-prime:1.0.3'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    compile 'com.google.code.gson:gson:2.8.5'
+    compile 'org.jsoup:jsoup:1.11.3'
+    testCompile 'junit:junit:3.8.1'
+//    providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
+//    providedCompile 'javax.servlet.jsp:javax.servlet.jsp-api:2.3.1'
+}
+
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from(sourceSets.main.allJava)
+}
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from(javadoc.destinationDir)
+}
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
