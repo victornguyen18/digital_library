@@ -273,6 +273,7 @@
                         $('#firstname').val(result.data.first_name);
                         $('#lastname').val(result.data.last_name);
                         transactionSession['username'] = username;
+                        //Save session
                         $.ajax({
                             "type": "POST",
                             "dataType": "json",
