@@ -82,7 +82,7 @@
                 "url": '/book/api/' + barcode,
                 "data": {},
                 "success": function (result) {
-                    if (result.status === '200') {
+                    if (result.status === 200) {
                         elementBarcodeInput.find('.help-block').html('');
                         elementRow.find('.title').val(result.data.title);
                         elementRow.find('.author').val(result.data.author);
@@ -170,9 +170,6 @@
                 '                    </td>';
             html += '<td class="text-left">\n' +
                 '                        <div class="input-group date">\n' +
-                '                            <div class="input-group-addon">\n' +
-                '                                <i class="fa fa-calendar"></i>\n' +
-                '                            </div>\n' +
                 '                            <input type="text"\n' +
                 '                                   class="form-control pull-right datepicker due_date"\n' +
                 '                                   name="due_date[]"\n' +
@@ -189,7 +186,7 @@
             $('#transaction tbody').append(html);
 
             $('.datepicker').datetimepicker({
-                format: "YYYY-MM-DD HH:MM:SS",
+                format: 'YYYY-MM-DD HH:mm:ss',
                 defaultDate: new Date(),
             });
 
@@ -220,7 +217,7 @@
             });
 
             $('.remove').click(function () {
-                var dataid = $(this).attr('data-id');
+                var data_id = $(this).attr('data-id');
                 var elementRow = $(this).parent().parent();
                 var barcode = elementRow.find('.barcode').val();
                 delete transactionSession['detail'][barcode];
@@ -237,8 +234,8 @@
                     "beforeSend": function (xhr, settings) {
                         $.ajaxSettings.beforeSend(xhr, settings);
                     },
-                    "success": function (result) {
-                        $('#transaction-row' + dataid).remove();
+                    "success": function () {
+                        $('#transaction-row' + data_id).remove();
                     }
                 });
             });
@@ -247,9 +244,8 @@
         }
 
         $(function () {
-
             $(document).ready(function () {
-                for (i = 0; i < transaction_row; i++) {
+                for (var i = 0; i < transaction_row; i++) {
                     let elementRow = $('#transaction-row' + i);
                     let barcode = elementRow.find('.barcode').val();
                     let elementBarcodeInput = elementRow.find('.barcode').parent();
@@ -261,14 +257,14 @@
             });
 
             $('.datepicker').datetimepicker({
-                format: "YYYY-MM-DD hh:mm:ss",
+                format: 'YYYY-MM-DD HH:mm:ss',
                 defaultDate: new Date(),
             });
             $("#username").change(function () {
                 let username = $(this).val();
                 let element = $(this).parent();
                 $.getJSON('/user/api/' + username, function (result) {
-                    if (result.status === '404') {
+                    if (result.status === 404) {
                         element.addClass('has-error');
                         element.find('.help-block').html('Can not find this username');
                     } else {
@@ -297,7 +293,7 @@
 
             $(".barcode").change(function () {
                 let barcode = $(this).val();
-                {#let dataid = $(this).attr('data-id');#}
+                {#let data_id = $(this).attr('data-id');#}
                 let elementBarcodeInput = $(this).parent();
                 let elementRow = $(this).parent().parent();
                 let hire_type = elementRow.find('.hire_type').val();
@@ -322,7 +318,7 @@
             });
 
             $('.remove').click(function () {
-                let dataid = $(this).attr('data-id');
+                let data_id = $(this).attr('data-id');
                 let elementRow = $(this).parent().parent();
                 let barcode = elementRow.find('.barcode').val();
                 delete transactionSession['detail'][barcode];
@@ -340,7 +336,7 @@
                         $.ajaxSettings.beforeSend(xhr, settings);
                     },
                     "success": function () {
-                        $('#transaction-row' + dataid).remove();
+                        $('#transaction-row' + data_id).remove();
                     }
                 });
             });
