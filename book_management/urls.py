@@ -1,30 +1,29 @@
-from django.conf.urls import url, include
+from django.urls import path, re_path, include
 from django.contrib import admin
+from django.views.generic import RedirectView
+
 from . import views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
+    path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
+    path('', views.index),
     # Session
-    url(r'^session/create$', views.session_set_json, name='session.create_json'),
+    path('session/create', views.session_set_json, name='session.create_json'),
     # Title
-    url(r'^admin/', include('title.urls')),
+    path('admin/', include('title.urls')),
     # User
-    url(r'^admin/', include('user.urls')),
-    url(r'^', include('title.urls_api')),
-
+    path('admin/', include('user.urls')),
+    path('', include('title.urls_api')),
     # Transaction
-    url(r'^admin/', include('transaction.urls')),
-
-    url(r'^admin2/', admin.site.urls),
-    url(r'^recommend$', views.recommend, name='recommend'),
-    url(r'^log-in$', views.login, name='log-in'),
-    url(r'^log-out$', views.logout, name='log-out'),
-    url(r'^dashboard$', views.dashboard, name='dashboard'),
-    url(r'^user/api/(?P<username>[a-zA_Z0-9]+)$', views.get_user_info),
-    # url(r'^dashboard2$', views.get_user_info),
-    url(r'^', views.index),
+    path('admin/', include('transaction.urls')),
+    path('admin2/', admin.site.urls),
+    path('recommend', views.recommend, name='recommend'),
+    path('log-in', views.login, name='log-in'),
+    path('log-out', views.logout, name='log-out'),
+    path('dashboard', views.dashboard, name='dashboard'),
+    re_path('user/api/(?P<username>[a-zA_Z0-9]+)$', views.get_user_info),
     # API
-    # url(r'^songs/(?P<filter_by>[a-zA_Z]+)/$', views.songs, name='songs'),
 
 ]
 

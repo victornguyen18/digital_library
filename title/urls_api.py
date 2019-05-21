@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path, re_path
 from . import views
 
 app_name = 'title_api'
 
 urlpatterns = [
     # Title
-    url(r'^book/api/(?P<barcode>[a-zA_Z0-9-]+)$', views.get_book_info),
+    re_path(r'^book/api/(?P<barcode>[a-zA_Z0-9-]+)$', views.get_book_info),
     # url(r'^book/api$', views.get_book_info),
 ]
