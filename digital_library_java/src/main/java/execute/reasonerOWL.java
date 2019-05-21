@@ -511,7 +511,7 @@ public class reasonerOWL {
          * System.out.println(title); }
          */
         FileOutputStream outputStream = new FileOutputStream(
-                "/Users/victornguyen/Sites/BookDigital/allAuthorValue.txt");
+                "/Users/victornguyen/Sites/BookDigital/scr/main/resouces/allAuthorValue.txt");
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-16");
         BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 

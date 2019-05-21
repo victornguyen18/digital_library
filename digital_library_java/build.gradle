@@ -6,7 +6,7 @@ apply plugin: 'application'
 sourceCompatibility = 1.8
 version = '1.0'
 group = 'py4j.examples'
-//mainClassName = "py4j.examples.StackEntryPoint"
+mainClassName = "entry_point.SearchEntryPoint"
 
 repositories {
     mavenCentral()
