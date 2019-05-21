@@ -56,8 +56,7 @@ def login(request):
             messages.error(request, 'Wrong account or password. Please try again or click Forgot Password to reset '
                                     'password.')
         return redirect('/log-in')
-    else:
-        return render(request, 'auth/login.html')
+    return render(request, 'auth/login.html')
 
 
 @login_required(login_url='/log-in')

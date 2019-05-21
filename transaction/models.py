@@ -7,17 +7,17 @@ from datetime import datetime
 # Create your models here.
 class Master(models.Model):
     date = models.DateTimeField()
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
 
 
 class Detail(models.Model):
-    book = models.ForeignKey(Book)
+    book = models.ForeignKey(Book, on_delete=models.PROTECT)
     hire_type = models.IntegerField(default=0)
     due_date = models.DateTimeField(null=False)
     return_date = models.DateTimeField(null=True)
     price = models.FloatField(default=0)
     status = models.IntegerField(default=2)
-    transaction = models.ForeignKey(Master, default=1)
+    transaction = models.ForeignKey(Master, default=1, on_delete=models.PROTECT)
 
     class Meta:
         permissions = (("can_mark_returned", "Set book as returned"),

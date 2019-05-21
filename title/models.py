@@ -36,7 +36,7 @@ class Title(models.Model):
 
 class Book(models.Model):
     barcode = models.CharField(max_length=20, primary_key=True)
-    title = models.ForeignKey(Title)
+    title = models.ForeignKey(Title, on_delete=models.PROTECT)
     status = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)

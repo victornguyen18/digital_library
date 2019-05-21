@@ -1,8 +1,8 @@
-Django==1.11.20
-PyMySQL==0.9.3
+Django
 pandas
 numpy
 scipy
 datetime
 django-debug-permissions
 py4j
+mysqlclient
