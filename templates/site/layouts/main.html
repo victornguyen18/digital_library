@@ -9,69 +9,35 @@
     </title>
     <meta name="description" content="Digital Library">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" type="text/css" href="styles/bootstrap4/bootstrap.min.css">
-    <link href="plugins/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.carousel.css">
-    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/owl.theme.default.css">
-    <link rel="stylesheet" type="text/css" href="plugins/OwlCarousel2-2.2.1/animate.css">
-    <link rel="stylesheet" type="text/css" href="styles/main_styles.css">
-    <link rel="stylesheet" type="text/css" href="styles/responsive.css">
-    {% block header %}
-    {% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static "bower_components/bootstrap4/bootstrap.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "bower_components/font-awesome/css/font-awesome.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "bower_components/OwlCarousel2-2.2.1/owl.carousel.css" %}">
+    <link rel="stylesheet" type="text/css"
+          href="{% static "bower_components/OwlCarousel2-2.2.1/owl.theme.default.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "bower_components/OwlCarousel2-2.2.1/animate.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "site/styles/main_styles.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "site/styles/responsive.css" %}">
 </head>
-<body class="hold-transition skin-black sidebar-mini">
-<div class="wrapper">
-    {#Header#}
-    {% include 'admin/layouts/header.html' %}
-    <!-- Left side column. contains the logo and sidebar -->
-    {% include 'admin/layouts/sidebar.html' %}
-    <!-- Content Wrapper. Contains page content -->
-    <div class="content-wrapper">
-        {% block content %}
-        {% endblock %}
-    </div>
-    <!-- /.content-wrapper -->
-    {#Footer#}
-    {% include 'admin/layouts/footer.html' %}
-    <!-- Add the sidebar's background. This div must be placed
-         immediately after the control sidebar -->
-    <div class="control-sidebar-bg"></div>
+<body>
+<div class="super_container">
+    <!-- Header && Menu -->
+    {% include 'site/layouts/header.html' %}
+    <!-- Home -->
+    {% block content %}
+    {% endblock %}
+    <!-- Footer -->
+    {% include 'site/layouts/footer.html' %}
 
 </div>
-<!-- ./wrapper -->
-
-<!-- jQuery 3 -->
-<script src="{% static 'bower_components/jquery/dist/jquery.min.js' %}"></script>
-<!-- Bootstrap 3.3.7 -->
-<script src="{% static 'bower_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
-<!-- Moment -->
-<script src="{% static 'bower_components/moment/moment.js' %}"></script>
-<!-- FastClick -->
-<script src="{% static 'bower_components/fastclick/lib/fastclick.js' %}"></script>
-<!-- AdminLTE App -->
-<script src="{% static 'admin/dist/js/adminlte.min.js' %}"></script>
-<!-- Sparkline -->
-<script src="{% static 'bower_components/jquery-sparkline/dist/jquery.sparkline.min.js' %}"></script>
-<!-- jvectormap  -->
-{#<script src="{% static 'admin/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js' %}"></script>#}
-{#<script src="{% static 'admin/plugins/jvectormap/jquery-jvectormap-world-mill-en.js' %}"></script>#}
-<!-- SlimScroll -->
-<script src="{% static 'bower_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
-<!-- ChartJS -->
-<script src="{% static 'bower_components/chart.js/Chart.js' %}"></script>
-<!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-{#<script src="{% static 'admin/dist/js/pages/dashboard2.js' %}"></script>#}
-<!-- Bootstrap Confirmation -->
-<script src="{% static 'bower_components/bootstrap-confirmation/bootstrap-confirmation.min.js' %}"></script>
-<!-- AdminLTE for demo purposes -->
-<script src="{% static 'admin/dist/js/demo.js' %}"></script>
-<!-- datatables-->
-<script src="{% static 'bower_components/datatables.net/js/jquery.dataTables.min.js' %}"></script>
-<script src="{% static 'bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js' %}"></script>
-{# Jquery validation#}
-<script src="{% static 'bower_components/jquery-validation/jquery.validate.min.js' %}"></script>
-<!-- Custom js -->
-<script src="{% static 'admin/custom.js' %}"></script>
+<script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "bower_components/bootstrap4/popper.js" %}"></script>
+<script src="{% static "bower_components/bootstrap4/bootstrap.min.js" %}"></script>
+<script src="{% static "bower_components/OwlCarousel2-2.2.1/owl.carousel.js" %}"></script>
+<script src="{% static "plugins/Isotope/isotope.pkgd.min.js" %}"></script>
+<script src="{% static "plugins/scrollTo/jquery.scrollTo.min.js" %}"></script>
+<script src="{% static "plugins/easing/easing.js" %}"></script>
+<script src="{% static "plugins/parallax-js-master/parallax.min.js" %}"></script>
+<script src="{% static "site/js/custom.js" %}"></script>
 {% block footer %}
 {% endblock %}
 </body>

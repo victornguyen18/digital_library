@@ -26,7 +26,7 @@ def recommend(request):
 
 
 def index(request):
-    return render(request, 'site/index.html')
+    return render(request, 'site/homepage.html')
 
 
 def logout(request):
