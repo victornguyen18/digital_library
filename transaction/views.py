@@ -15,7 +15,7 @@ from datetime import datetime
 def transaction_index(request):
     transaction = Detail.objects.all() \
         .order_by('-status', '-transaction__date', 'id')
-    return render(request, 'transaction/index.html', {
+    return render(request, 'admin/transaction/index.html', {
         'transactions': transaction,
     })
 
@@ -31,7 +31,7 @@ def transaction_create(request):
                 user_input = User.objects.get(username=request.POST.get('username'))
             except User.DoesNotExist:
                 messages.error(request, 'Your username does not exist')
-                return render(request, 'transaction/create.html')
+                return render(request, 'admin/transaction/create.html')
             else:
                 barcode = request.POST.getlist('barcode[]')
                 hire_type = request.POST.getlist('hire_type[]')
@@ -85,7 +85,7 @@ def transaction_create(request):
         last_name = username.last_name if username else ''
         detail_tran = transaction['detail'] if ('detail' in transaction) else {}
 
-    return render(request, 'transaction/create.html', {
+    return render(request, 'admin/transaction/create.html', {
         'transaction': transaction,
         'username': username, 'first_name': first_name, 'last_name': last_name,
         'detail_tran': detail_tran})

@@ -57,14 +57,14 @@ def get_book_info(request, barcode):
 @login_required(login_url='/log-in')
 def author_index(request):
     author = Author.objects.all()
-    return render(request, 'author/index.html', {
+    return render(request, 'admin/author/index.html', {
         'authors': author,
     })
 
 
 def publisher_index(request):
     publishers = Publisher.objects.all()
-    return render(request, 'publisher/index.html', {
+    return render(request, 'admin/publisher/index.html', {
         'publishers': publishers,
     })
 
@@ -89,11 +89,11 @@ def publisher_create(request):
     # context = {
     #     "form": form,
     # }
-    return render(request, 'publisher/create.html')
+    return render(request, 'admin/publisher/create.html')
 
 
 def title_index(request):
     titles = Title.objects.all()
-    return render(request, 'title/index.html', {
+    return render(request, 'admin/title/index.html', {
         'titles': titles,
     })

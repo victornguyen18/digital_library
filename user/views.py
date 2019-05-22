@@ -15,7 +15,7 @@ from user.models import Detail
 def user_index(request):
     items = User.objects.all() \
         .order_by('-id')
-    return render(request, 'user/index.html', {
+    return render(request, 'admin/user/index.html', {
         'items': items,
     })
 
@@ -56,6 +56,6 @@ def user_create(request):
     else:
         # Render create user form
         groups = Group.objects.all().order_by('id')
-        return render(request, 'user/create.html', {
+        return render(request, 'admin/user/create.html', {
             'groups': groups,
         })

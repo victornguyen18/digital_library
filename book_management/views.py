@@ -26,7 +26,7 @@ def recommend(request):
 
 
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'site/index.html')
 
 
 def logout(request):
@@ -35,7 +35,7 @@ def logout(request):
 
 
 def login(request):
-    if request.user.is_authenticated():
+    if request.user.is_authenticated:
         return redirect('/dashboard')
     if request.method == "POST":
         username = request.POST['username']
@@ -56,7 +56,7 @@ def login(request):
             messages.error(request, 'Wrong account or password. Please try again or click Forgot Password to reset '
                                     'password.')
         return redirect('/log-in')
-    return render(request, 'auth/login.html')
+    return render(request, 'admin/auth/login.html')
 
 
 @login_required(login_url='/log-in')
@@ -74,7 +74,7 @@ def dashboard(request):
     total_book = Book.objects.count()
     total_book_hiring = Book.objects.filter(status=3).count()
     total_book_overdue = Detail.objects.filter(status=3, due_date__lte=datetime.now()).count()
-    return render(request, 'dashboard/index.html', {
+    return render(request, 'admin/dashboard/index.html', {
         'detail_tran_list': detail_tran_list,
         'total_book': total_book,
         'total_title': total_title,

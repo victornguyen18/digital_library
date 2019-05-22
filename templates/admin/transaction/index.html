@@ -1,0 +1,133 @@
+{% extends 'admin/layouts/main.html' %}
+{% load static from staticfiles %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Book Loans
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'dashboard' %}">
+                    <i class="fa fa-dashboard"></i> Dashboard
+                </a>
+            </li>
+            <li class="active">Book Loans</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <div class="pull-right">
+                            <a href="{% url 'transaction:transaction.create' %}" data-toggle="tooltip" title="Tạo mới"
+                               class="btn btn-primary"><i
+                                    class="fa fa-plus"></i></a>
+                        </div>
+                        <h3 class="box-title">List of transaction</h3>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="row box-body">
+                        <div class="col-md-12">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                        </button>
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <div class="col-md-12">
+                            <table id="transaction" class="table table-bordered table-hover transaction">
+                                <thead>
+                                <tr>
+                                    <th class="text-center">Tran ID</th>
+                                    <th class="text-center">User</th>
+                                    <th class="text-center">Barcode-Title</th>
+                                    <th>Hire Date</th>
+                                    <th>Due Datex</th>
+                                    <th>Return Date</th>
+                                    <th>Status</th>
+                                    <th width="10%">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for item in transactions %}
+                                    <tr {% if item.check_overdue %}
+                                        class="warning"{% endif %}>
+                                        <td>{{ item.transaction_id }}</td>
+                                        <td class="text-uppercase">{{ item.transaction.user }}</td>
+                                        <td>
+                                            <b>{{ item.book_id }}</b><br/>
+                                            {{ item.book.title }}<br/>
+                                            <b>Author: </b>
+                                            {% for author in item.book.title.author.all %}
+                                                {{ author.name }},
+                                            {% endfor %}
+                                        </td>
+                                        <td>{{ item.transaction.date }}</td>
+                                        <td>{{ item.due_date }}</td>
+                                        <td>{{ item.return_date }}</td>
+                                        <td>
+                                            {{ item.get_status_html | safe }}
+                                        </td>
+                                        <td>
+                                            {% if item.status == 2 %}
+                                                <a href="/admin/transaction/hired/{{ item.id }}"
+                                                   data-toggle="confirmation"
+                                                   data-title="Change to Hired?"
+                                                   class="btn btn-xs btn-outline btn-circle btn-sm blue">
+                                                    <i class="fa fa-check"></i> Hired</a>
+                                                <a href="/admin/transaction/reject/{{ item.id }}"
+                                                   data-toggle="confirmation"
+                                                   data-title="Reject?"
+                                                   class="btn btn-xs btn-outline btn-circle btn-sm red">
+                                                    <i class="fa fa-ban"></i> </a>
+                                            {% endif %}
+                                            {% if item.status == 3 %}
+                                                <a href="/admin/transaction/return/{{ item.id }}"
+                                                   data-toggle="confirmation"
+                                                   data-title="Return book?"
+                                                   class="btn btn-xs btn-outline btn-circle btn-sm purple">
+                                                    <i class="fa fa-reply"></i> Return</a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block footer %}
+    <script>
+        $(function () {
+            $('#transaction').DataTable({
+                'paging': true,
+                'lengthChange': false,
+                'searching': true,
+                'ordering': false,
+                'info': true,
+                'autoWidth': false
+            })
+        })
+    </script>
+{% endblock %}
