@@ -7,7 +7,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
-    path('', views.index),
+    path('', views.homepage, name='homepage'),
+    path('index', views.index),
     # Session
     path('session/create', views.session_set_json, name='session.create_json'),
     # Title

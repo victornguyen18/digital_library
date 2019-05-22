@@ -77,61 +77,6 @@
         </div>
     </div>
 
-    <!-- Intro -->
-
-    <div class="intro">
-        <div class="intro_background" style="background-image:url({% static "site/images/intro.png" %})"></div>
-        <div class="container">
-            <div class="row">
-                <div class="col">
-                    <div class="intro_container">
-                        <div class="row">
-
-                            <!-- Intro Item -->
-                            <div class="col-lg-4 intro_col">
-                                <div class="intro_item d-flex flex-row align-items-end justify-content-start">
-                                    <div class="intro_icon">
-                                        <img src="{% static "site/images/beach.svg" %}" alt="">
-                                    </div>
-                                    <div class="intro_content">
-                                        <div class="intro_title">Top Destinations</div>
-                                        <div class="intro_subtitle"><p>Nulla pretium tincidunt felis, nec.</p></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Intro Item -->
-                            <div class="col-lg-4 intro_col">
-                                <div class="intro_item d-flex flex-row align-items-end justify-content-start">
-                                    <div class="intro_icon">
-                                        <img src="{% static "site/images/wallet.svg" %}" alt="">
-                                    </div>
-                                    <div class="intro_content">
-                                        <div class="intro_title">The Best Prices</div>
-                                        <div class="intro_subtitle"><p>Sollicitudin mauris lobortis in.</p></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Intro Item -->
-                            <div class="col-lg-4 intro_col">
-                                <div class="intro_item d-flex flex-row align-items-end justify-content-start">
-                                    <div class="intro_icon"><img src="{% static "site/images/suitcase.svg" %}" alt="">
-                                    </div>
-                                    <div class="intro_content">
-                                        <div class="intro_title">Amazing Services</div>
-                                        <div class="intro_subtitle"><p>Nulla pretium tincidunt felis, nec.</p></div>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Destinations -->
 
     <div class="destinations" id="destinations">
@@ -153,7 +98,8 @@
                                 <div class="spec_offer text-center"><a href="#">Special Offer</a></div>
                             </div>
                             <div class="destination_content">
-                                <div class="destination_title"><a href="destinations.html">Bali</a></div>
+                                <div class="destination_title">
+                                    <a href="destinations.html">Bali</a></div>
                                 <div class="destination_subtitle"><p>Nulla pretium tincidunt felis, nec.</p></div>
                                 <div class="destination_price">From $679</div>
                             </div>
@@ -230,7 +176,7 @@
     <div class="testimonials" id="testimonials">
         <div class="parallax_background parallax-window"
              data-parallax="scroll"
-             data-image-src="{% static "site/images/testimonials.jpg" %}"
+             data-image-src="{% static "images/library-background-2.jpg" %}"
              data-speed="0.8">
         </div>
         <div class="container">
@@ -403,4 +349,7 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block footer %}
 {% endblock %}

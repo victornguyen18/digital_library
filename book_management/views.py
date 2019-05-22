@@ -26,6 +26,10 @@ def recommend(request):
 
 
 def index(request):
+    return render(request, 'index.html')
+
+
+def homepage(request):
     return render(request, 'site/homepage.html')
 
 
