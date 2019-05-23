@@ -8,17 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    {% for item in items %}
-        {{ item | get_image_book_google }}<br>
-        {{ item | get_title_book_google }}<br>
-        {{ item | get_author_book_google }}<br>
-        {{ item | get_des_book_google }}<br>
-        <hr>
-        {#        {{ user.username }}<br>#}
-        {#    {% empty %}#}
-        {#        Nothing found#}
-    {% endfor %}
-    <div class="destinations" id="destinations">
+    <div class="books" id="books">
         <div class="container">
             <div class="row">
                 <div class="col text-center">
@@ -26,9 +16,9 @@
                     <div class="section_title"><h2>Popular Destinations</h2></div>
                 </div>
             </div>
-            <div class="row destination_sorting_row">
+            <div class="row book_sorting_row">
                 <div class="col">
-                    <div class="destination_sorting d-flex flex-row align-items-start justify-content-start">
+                    <div class="book_sorting d-flex flex-row align-items-start justify-content-start">
                         <div class="sorting">
                             <ul class="item_sorting">
                                 <li>
@@ -59,24 +49,24 @@
                     </div>
                 </div>
             </div>
-            <div class="row destinations_row">
+            <div class="row books_row">
                 <div class="col">
-                    <div class="destinations_container item_grid">
+                    <div class="row books_container item_grid col-md-12">
                         {% for item in items %}
-
                             <!-- Destination -->
-                            <div class="destination item">
-                                <div class="destination_image">
-                                    <img src="{{ item | get_image_book_google }}&h=261" alt="">
+                            <div class="book item col-md-3">
+                                <div class=" book_image">
+                                    <img src="{{ item | get_image_book_google }}&h=261"
+                                         alt="{{ item | get_title_book_google }}">
                                 </div>
-                                <div class=" destination_content">
-                                    <div class="destination_title">
+                                <div class=" book_content">
+                                    <div class="book_title">
                                         <a href="#">{{ item | get_title_book_google }}</a>
                                     </div>
-                                    <div class="destination_subtitle">
+                                    <div class="book_subtitle">
                                         <p>{{ item | get_des_book_google }}</p>
                                     </div>
-                                    {#                                    <div class="destination_price">From $679</div>#}
+                                    {#                                    <div class="book_price">From $679</div>#}
                                 </div>
                             </div>
                         {% endfor %}

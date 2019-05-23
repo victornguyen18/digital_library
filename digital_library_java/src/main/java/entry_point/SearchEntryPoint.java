@@ -23,10 +23,10 @@ public class SearchEntryPoint {
     SearchEntryPoint() {
     }
 
-    public String searchGoogleBook(String search, int page) {
+    public String searchGoogleBook(String search, int num, int start) {
         try {
             GoogleBookSearch merge = new GoogleBookSearch();
-            return merge.getBookJson(search, page);
+            return merge.getBookJson(search, num, start);
         } catch (Exception e) {
             return e.getMessage();
         }

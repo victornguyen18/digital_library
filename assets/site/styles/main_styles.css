@@ -11,11 +11,11 @@
 5. Home
 6. Home Search
 7. Intro
-8. Destinations
+8. books
 9. Testimonials
 10. News
 11. Footer
-Destinations
+books
 
 
 ******************************/
@@ -817,10 +817,10 @@ section {
 }
 
 /*********************************
-8. Destinations
+8. books
 *********************************/
 
-.destinations {
+.books {
     width: 100%;
     background: #FFFFFF;
     padding-top: 115px;
@@ -842,11 +842,11 @@ section {
     margin-top: 26px;
 }
 
-.destination_sorting_row {
+.book_sorting_row {
     margin-top: 100px;
 }
 
-.destination_sorting {
+.book_sorting {
     width: 100%;
 }
 
@@ -964,16 +964,21 @@ section {
     color: #181818;
 }
 
-.destinations_row {
+.books_row {
     margin-top: 45px;
 }
 
-.destination_image {
+.book_image {
+    max-height: 261px;
     width: 100%;
 }
 
-.destination_image img {
-    max-width: 100%;
+.book_image img {
+    max-height: 261px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: auto;
 }
 
 .spec_offer {
@@ -994,49 +999,52 @@ section {
     font-weight: 400;
 }
 
-.destinations_container {
+.books_container {
     width: calc(100% + 30px);
     left: -15px;
 }
 
-.destination {
+.book {
     width: calc(100% / 3);
     padding-left: 15px;
     padding-right: 15px;
     margin-bottom: 58px;
 }
 
-.destination_content {
+.book_content {
 
 }
 
-.destination_title {
-    margin-top: 15px;
+.book_title {
+    margin: 15px 0px;
+    text-align: center;
 }
 
-.destination_title a {
+.book_title a {
     font-family: 'Oswald', sans-serif;
-    font-size: 30px;
+    padding: 10px 5px;
+    font-size: 25px;
     font-weight: 400;
     color: #181818;
 }
 
-.destination_subtitle {
+.book_subtitle {
     margin-top: -4px;
 }
 
-.destination_price {
+.book_price {
     font-size: 16px;
     font-weight: 700;
     color: #181818;
     margin-top: 16px;
+    text-align: justify;
 }
 
-.destination_list {
+.book_list {
     margin-top: 41px;
 }
 
-.destination_list ul li {
+.book_list ul li {
     position: relative;
     font-size: 15px;
     font-weight: 600;
@@ -1044,11 +1052,11 @@ section {
     padding-left: 36px;
 }
 
-.destination_list ul li:not(:last-child) {
+.book_list ul li:not(:last-child) {
     margin-bottom: 14px;
 }
 
-.destination_list ul li::before {
+.book_list ul li::before {
     display: block;
     position: absolute;
     top: 50%;

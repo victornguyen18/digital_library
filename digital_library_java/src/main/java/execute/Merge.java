@@ -28,7 +28,7 @@ public class Merge {
         //get google book
         GoogleBookSearch search = new GoogleBookSearch();
         ArrayList<GoogleBook> books = new ArrayList<GoogleBook>();
-        books.addAll(search.getBook(searchterm, 10));
+        books.addAll(search.getBook(searchterm, 10, 0));
         Collections.sort(books, new GoogleBook.CompValue());
 
         //get IU book

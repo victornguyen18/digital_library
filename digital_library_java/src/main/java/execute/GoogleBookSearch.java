@@ -24,10 +24,9 @@ public class GoogleBookSearch {
     private static final String remove = "- Ấn bản khác ";
 
     //get html
-    public Document getSearchResults(String searchTerm, int page) throws IOException {
+    public Document getSearchResults(String searchTerm, int num, int start) throws IOException {
         //Get page
-        int start = 10 * page;
-        String searchURL = GOOGLE_SEARCH_URL + "?q=" + searchTerm + "&start=" + start + "&tbm=bks&num=10";
+        String searchURL = GOOGLE_SEARCH_URL + "?q=" + searchTerm + "&start=" + start + "&tbm=bks&num=" + num;
         Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").get();
         System.out.println(searchURL);
         return doc;
@@ -101,13 +100,12 @@ public class GoogleBookSearch {
         return images;
     }
 
-    public List<GoogleBook> getBook(String searchTerm, int page) throws IOException {
-        int num = page * 10;
+    public List<GoogleBook> getBook(String searchTerm, int num, int start) throws IOException {
         Cosine cosine = new Cosine();
         ArrayList<GoogleBook> books = new ArrayList<GoogleBook>();
         GoogleBookSearch merge = new GoogleBookSearch();
 
-        Document doc = merge.getSearchResults(searchTerm, page);
+        Document doc = merge.getSearchResults(searchTerm, num, start);
         List<String> titles = merge.getTitles(doc);
         List<String> authors = merge.getAuthors(doc);
         List<String> years = merge.getYears(doc);
@@ -126,12 +124,11 @@ public class GoogleBookSearch {
         return books;
     }
 
-    public String getBookJson(String searchTerm, int page) throws IOException {
-        int num = 10;
+    public String getBookJson(String searchTerm, int num, int start) throws IOException {
         JsonArray bookJsons = new JsonArray();
         Cosine cosine = new Cosine();
         GoogleBookSearch merge = new GoogleBookSearch();
-        Document doc = merge.getSearchResults(searchTerm.replace(' ', '+'), page);
+        Document doc = merge.getSearchResults(searchTerm.replace(' ', '+'), num, start);
         List<String> titles = merge.getTitles(doc);
         List<String> authors = merge.getAuthors(doc);
         List<String> years = merge.getYears(doc);
@@ -164,50 +161,11 @@ public class GoogleBookSearch {
         // TODO Auto-generated method stub
         GoogleBookSearch merge = new GoogleBookSearch();
         int page = 0;
-        int num = page * 10;
-//		Document doc=merge.getSearchResults("technology", 10);
-//		merge.getBook("technology", 10);
+        int num = 10;
+        int start = page * num;
         ArrayList<GoogleBook> books = new ArrayList<GoogleBook>();
-        String jsonBooks = merge.getBookJson("Abstract data types in Java", page);
+        String jsonBooks = merge.getBookJson("Abstract data types in Java", num, start);
         System.out.println(jsonBooks);
-//		Cosine cosine = new Cosine();
-//		double numCosin=cosine.similarity("Expanding Access to Science and Technology", "technology");
-//		System.out.println(numCosin);
-//        for (int i = 0; i < num; i++) {
-//            System.out.println("Num " + i + " id: " + books.get(i).getId());
-//            System.out.println("Num " + i + " Title: " + books.get(i).getTitle());
-//            System.out.println("Num " + i + " Author: " + books.get(i).getAuthors());
-//            System.out.println("Num " + i + " Year: " + books.get(i).getYear());
-//            System.out.println("Num " + i + " Descriptions: " + books.get(i).getDescription());
-//            System.out.println(" Cosine num:" + books.get(i).getNumCosine());
-//            System.out.println("----------");
-//        }
-//        for (GoogleBook book : books) {
-//            System.out.println(" Id: " + book.getId());
-//            System.out.println(" Title: " + book.getTitle());
-//            System.out.println(" Author: " + book.getAuthors());
-//            System.out.println(" Year: " + book.getYear());
-//            System.out.println(" Descriptions: " + book.getDescription());
-//            System.out.println(" Cosine num:" + book.getNumCosine());
-//            System.out.println("----------");
-//        }
-//		System.out.println(doc);
-//		List<String> titles=merge.getTitles(doc);
-
-//		System.out.println(titles);
-//		List<String> authors=merge.getAuthors(doc);
-//		for(int i=0;i<authors.size();i++) {
-//			System.out.println("Num "+i+" Author: "+authors.get(i));
-//		}
-//
-//		List<String> years=merge.getYears(doc);
-//		for(int i=0;i<years.size();i++) {
-//			System.out.println("Num "+i+" Author: "+years.get(i));
-//		}
-//		List<String> descriptions=merge.getDescriptions(doc);
-//		for(int i=0;i<descriptions.size();i++) {
-//			System.out.println("Num "+i+" Author: "+descriptions.get(i));
-//		}
     }
 
 }

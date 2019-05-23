@@ -159,11 +159,11 @@
         margin-top: 10px;
     }
 
-    .destinations {
+    .books {
         padding-top: 50px;
     }
 
-    .destination {
+    .book {
         width: calc(100% / 2);
     }
 
@@ -210,12 +210,12 @@
         padding-right: 0;
     }
 
-    .destinations_container {
+    .books_container {
         width: 100%;
         left: auto;
     }
 
-    .destination {
+    .book {
         width: 100%;
         padding-left: 0;
         padding-right: 0;
@@ -343,11 +343,11 @@
         font-size: 12px;
     }
 
-    .destination_title a {
-        font-size: 24px;
+    .book_title a {
+        font-size: 20px;
     }
 
-    .destination_price {
+    .book_price {
         font-size: 14px;
     }
 

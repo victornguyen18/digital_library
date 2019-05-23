@@ -30,8 +30,10 @@ def search(request):
     search_term = request.GET.get('search_term')
     search_option = request.GET.get('search_option')
     if search_option == '1':
+        num = 12
         page = int(request.GET.get('page')) if request.GET.get('page') is not None else 0
-        items = ps.get_search_book_google(search_term, page)
+        start = num * page
+        items = ps.get_search_book_google(search_term, num, start)
         books = []
         for item in items:
             books.append(json.loads(item))
@@ -40,8 +42,7 @@ def search(request):
             print(book['image'])
             print('-----')
     else:
-        items = None
-        books = None
+        items = []
     return render(request, 'site/search results.html', {
         'search_term': search_term, 'items': items
     })
