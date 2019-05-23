@@ -9,7 +9,10 @@
 
 {% block content %}
     {% for item in items %}
-        {{ item | pretty_json }}
+        {{ item | get_image_book_google }}<br>
+        {{ item | get_title_book_google }}<br>
+        {{ item | get_author_book_google }}<br>
+        {{ item | get_des_book_google }}<br>
         <hr>
         {#        {{ user.username }}<br>#}
         {#    {% empty %}#}
@@ -64,20 +67,16 @@
                             <!-- Destination -->
                             <div class="destination item">
                                 <div class="destination_image">
-                                    <img src="{{ item.image }}" alt="">
+                                    <img src="{{ item | get_image_book_google }}&h=261" alt="">
                                 </div>
                                 <div class=" destination_content">
-                                    <div class="destination_title"><a href="#">Bali</a></div>
-                                    <div class="destination_subtitle"><p>Nulla pretium tincidunt felis, nec.</p></div>
-                                    <div class="destination_price">From $679</div>
-                                    <div class="destination_list">
-                                        <ul>
-                                            <li>5 Stars Hotel</li>
-                                            <li>All Inclusive</li>
-                                            <li>Flight tickets included</li>
-                                            <li>Guided visits</li>
-                                        </ul>
+                                    <div class="destination_title">
+                                        <a href="#">{{ item | get_title_book_google }}</a>
                                     </div>
+                                    <div class="destination_subtitle">
+                                        <p>{{ item | get_des_book_google }}</p>
+                                    </div>
+                                    {#                                    <div class="destination_price">From $679</div>#}
                                 </div>
                             </div>
                         {% endfor %}

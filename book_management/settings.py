@@ -65,6 +65,7 @@ TEMPLATES = [
             ],
             'builtins': [
                 'templatetags.helps',
+                'templatetags.helps_site',
             ]
         },
     },

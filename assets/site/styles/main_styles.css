@@ -1066,9 +1066,34 @@ section {
 }
 
 .load_more_button {
+    width: 161px;
+    height: 52px;
+    background: rgba(24, 24, 24, 1);
+    text-align: center;
+    border-radius: 20px;
+    cursor: pointer;
+    -webkit-transition: all 200ms ease;
+    -moz-transition: all 200ms ease;
+    -ms-transition: all 200ms ease;
+    -o-transition: all 200ms ease;
+    transition: all 200ms ease;
     margin-left: auto;
     margin-right: auto;
     margin-top: 51px;
+}
+
+.load_more_button a {
+    display: block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    text-transform: uppercase;
+    color: #FFFFFF;
+    line-height: 52px;
+}
+
+.load_more_button:hover {
+    background: rgba(24, 24, 24, 0.7);
 }
 
 /*********************************
