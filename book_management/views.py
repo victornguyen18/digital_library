@@ -18,13 +18,6 @@ from recommendation.collaborative_filtering import my_recommend
 import pandas as pd
 
 
-def recommend(request):
-    transaction = pd.DataFrame(my_recommend())
-    print(transaction)
-    return HttpResponse(transaction.to_html())
-    # return render(request, 'index_recommed.html', {'transaction': object_my_recommened})
-
-
 def index(request):
     return render(request, 'index.html')
 

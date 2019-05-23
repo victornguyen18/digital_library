@@ -5,7 +5,7 @@ import json;
 
 def main():
     gateway = JavaGateway()
-    google_book = gateway.entry_point.searchGoogleBook("application", 10)
+    google_book = gateway.entry_point.searchGoogleBook("application", 1)
     google_book_obj = json.loads(google_book)
     print(google_book_obj)
     # gateway = JavaGateway.launch_gateway(die_on_exit=True)

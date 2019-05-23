@@ -8,6 +8,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
     path('', views.homepage, name='homepage'),
+    path('', include('main_site.urls')),
     path('index', views.index),
     # Session
     path('session/create', views.session_set_json, name='session.create_json'),
@@ -19,7 +20,6 @@ urlpatterns = [
     # Transaction
     path('admin/', include('transaction.urls')),
     path('admin2/', admin.site.urls),
-    path('recommend', views.recommend, name='recommend'),
     path('log-in', views.login, name='log-in'),
     path('log-out', views.logout, name='log-out'),
     path('dashboard', views.dashboard, name='dashboard'),

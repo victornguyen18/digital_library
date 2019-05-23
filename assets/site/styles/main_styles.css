@@ -15,6 +15,7 @@
 9. Testimonials
 10. News
 11. Footer
+Destinations
 
 
 ******************************/
@@ -572,7 +573,6 @@ section {
 
 .home {
     width: 100%;
-    height: 834px;
 }
 
 .home_slider_container {
@@ -582,7 +582,7 @@ section {
 
 .home_slider_content_container {
     position: absolute;
-    top: 25%;
+    top: 35%;
     left: 0;
     width: 100%;
     z-index: 1;
@@ -668,7 +668,7 @@ section {
 
 .home_search_container {
     position: absolute;
-    top: -500px;
+    top: -325px;
     width: calc(100% + 122px);
     left: -61px;
     padding-top: 47px;
@@ -709,7 +709,7 @@ section {
     background: #f2f5f6;
     border: none;
     outline: none;
-    padding: 17px;
+    padding: 10px;
     margin-left: 10px;
     font-family: 'Oswald', sans-serif;
     font-size: 14px !important;
@@ -842,8 +842,130 @@ section {
     margin-top: 26px;
 }
 
+.destination_sorting_row {
+    margin-top: 100px;
+}
+
+.destination_sorting {
+    width: 100%;
+}
+
+.item_sorting > li {
+    display: inline-block;
+    position: relative;
+    width: 123px;
+    height: 33px;
+    background: #f2f5f6;
+    line-height: 33px;
+    cursor: pointer;
+    padding-left: 20px;
+    padding-right: 17px;
+    margin-right: 8px;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+    color: #7c7c94;
+    margin-bottom: 10px;
+}
+
+.item_sorting > li:last-child {
+    margin-right: 0;
+}
+
+.num_sorting_text {
+    padding-right: 11px;
+}
+
+.item_sorting li i {
+    float: right;
+    line-height: 33px;
+    font-size: 12px;
+    color: #7c7c94;
+}
+
+.item_sorting li ul {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 120%;
+    margin: 0;
+    width: 100%;
+    background: #FFFFFF;
+    visibility: hidden;
+    opacity: 0;
+    z-index: 1;
+    box-shadow: 0 15px 25px rgba(63, 78, 100, 0.15);
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.item_sorting > li:hover ul {
+    visibility: visible;
+    opacity: 1;
+    top: calc(100% + 1px);
+}
+
+.item_sorting li ul li {
+    display: block;
+    text-align: left;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+.item_sorting li ul li span {
+    display: block;
+    height: 36px;
+    line-height: 36px;
+    border-bottom: solid 1px #dddddd;
+    color: #131a2f;
+    text-align: right;
+    padding-right: 22px;
+    -webkit-transition: opacity 0.3s ease;
+    -moz-transition: opacity 0.3s ease;
+    -ms-transition: opacity 0.3s ease;
+    -o-transition: opacity 0.3s ease;
+    transition: all 0.3s ease;
+}
+
+.item_sorting li ul li span:hover {
+    color: #b5aec4;
+}
+
+.item_sorting li ul li:last-child span {
+    border-bottom: none;
+}
+
+.item_sorting li span:nth-child(2) {
+    margin-left: 63px;
+}
+
+.sort_box {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.sort_box i {
+    width: 100%;
+    height: 100%;
+    font-size: 18px;
+    color: #7c7c94;
+    -webkit-transition: all 200ms ease;
+    -moz-transition: all 200ms ease;
+    -ms-transition: all 200ms ease;
+    -o-transition: all 200ms ease;
+    transition: all 200ms ease;
+}
+
+.sort_box i:hover {
+    color: #181818;
+}
+
 .destinations_row {
-    margin-top: 99px;
+    margin-top: 45px;
 }
 
 .destination_image {
@@ -881,7 +1003,7 @@ section {
     width: calc(100% / 3);
     padding-left: 15px;
     padding-right: 15px;
-    margin-bottom: 33px;
+    margin-bottom: 58px;
 }
 
 .destination_content {
@@ -908,6 +1030,45 @@ section {
     font-weight: 700;
     color: #181818;
     margin-top: 16px;
+}
+
+.destination_list {
+    margin-top: 41px;
+}
+
+.destination_list ul li {
+    position: relative;
+    font-size: 15px;
+    font-weight: 600;
+    color: #72728c;
+    padding-left: 36px;
+}
+
+.destination_list ul li:not(:last-child) {
+    margin-bottom: 14px;
+}
+
+.destination_list ul li::before {
+    display: block;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -moz-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    -o-transform: translateY(-50%);
+    transform: translateY(-50%);
+    left: 0;
+    width: 7px;
+    height: 7px;
+    background: #181818;
+    border-radius: 50%;
+    content: '';
+}
+
+.load_more_button {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 51px;
 }
 
 /*********************************

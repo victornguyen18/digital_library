@@ -1,0 +1,35 @@
+{% load static from staticfiles %}
+
+<!-- Search -->
+
+<div class="home_search">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <div class="home_search_container">
+                    <div class="home_search_title">Search book</div>
+                    <div class="home_search_content">
+                        <form class="home_search_form" id="home_search_form"
+                              action="{% url 'search' %}" method="get">
+                            <div class="d-flex flex-lg-row flex-column align-items-start justify-content-lg-between justify-content-start">
+                                <select type="text" class="search_input col-md-3"
+                                        required="required" name="search_option">
+                                    <option class="search_input_option" value="1">Google</option>
+                                    <option class="search_input_option" value="saab">Saab</option>
+                                    <option class="search_input_option" value="mercedes">Mercedes</option>
+                                    <option class="search_input_option" value="audi">Audi</option>
+                                </select>
+                                <input type="text" class="search_input col-md-7"
+                                       name="search_term"
+                                       placeholder="Key word"
+                                       value="{{ search_term }}"
+                                       required="required">
+                                <button class="home_search_button col-md-2">search</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

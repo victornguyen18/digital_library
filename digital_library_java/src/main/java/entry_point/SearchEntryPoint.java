@@ -23,16 +23,16 @@ public class SearchEntryPoint {
     SearchEntryPoint() {
     }
 
-    public String searchGoogleBook(String search, int num) {
+    public String searchGoogleBook(String search, int page) {
         try {
             GoogleBookSearch merge = new GoogleBookSearch();
-            return merge.getBookJson(search, num - 1);
+            return merge.getBookJson(search, page);
         } catch (Exception e) {
             return e.getMessage();
         }
     }
 
-    public String searchOntology(String search, int num) {
+    public String searchOntology(String search, int page) {
         return "";
     }
 
