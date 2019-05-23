@@ -1,9 +1,11 @@
 package execute;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
 import similarity.Cosine;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.*;
 
 import java.io.IOException;
@@ -22,14 +24,27 @@ public class GoogleBookSearch {
 
     private static final String GOOGLE_SEARCH_URL = "https://www.google.com/search";
     private static final String remove = "- Ấn bản khác ";
+    private static final String remove1 = "-Xem trước";
 
     //get html
     public Document getSearchResults(String searchTerm, int num, int start) throws IOException {
         //Get page
         String searchURL = GOOGLE_SEARCH_URL + "?q=" + searchTerm + "&start=" + start + "&tbm=bks&num=" + num;
-        Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").get();
-        System.out.println(searchURL);
-        return doc;
+        try {
+            Document doc = Jsoup.connect(searchURL)
+                    .userAgent("Mozilla/5.0")
+                    .maxBodySize(0)
+                    .get();
+//            Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").maxBodySize(0)
+//                    .timeout(600000).get();
+            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/victornguyen/Desktop/test.html"));
+            writer.write(doc.toString());
+            System.out.println(searchURL);
+            return doc;
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 
     ;
@@ -49,7 +64,12 @@ public class GoogleBookSearch {
         ArrayList<String> authors = new ArrayList<String>();
         for (Element result : results) {
             String linkText = result.text();
-            String text = linkText.substring(6, linkText.indexOf("-"));
+            String text = "";
+            if (linkText.indexOf('-') != -1 && linkText.indexOf('-') > 6) {
+                text = linkText.substring(6, linkText.indexOf('-'));
+            } else {
+                text = "Cannot find author";
+            }
             String author = text.replace("google.com", "");
             authors.add(author);
         }
@@ -63,9 +83,13 @@ public class GoogleBookSearch {
             String linkText = result.text();
             Pattern pattern = Pattern.compile("\\-(.*?)\\-");
             Matcher matcher = pattern.matcher(linkText);
+            String year = "";
             if (matcher.find()) {
-                years.add(matcher.group(1).trim());
+                year = matcher.group(1).trim();
+            } else {
+                year = "None";
             }
+            years.add(year);
         }
         return years;
     }
@@ -75,7 +99,13 @@ public class GoogleBookSearch {
         ArrayList<String> descriptions = new ArrayList<String>();
         for (Element result : results) {
             String linkText = result.text();
-            String des = linkText.substring(linkText.lastIndexOf("-"));
+            String des = "";
+            if (linkText.lastIndexOf('-') != -1) {
+                des = linkText.substring(linkText.lastIndexOf('-'));
+            } else {
+                des = "Cannot find descriptions";
+            }
+//            String des = linkText.substring(linkText.lastIndexOf("-"));
             String description;
             if (des.contains(remove)) {
                 description = des.replace(remove, "");
@@ -125,7 +155,7 @@ public class GoogleBookSearch {
     }
 
     public String getBookJson(String searchTerm, int num, int start) throws IOException {
-        JsonArray bookJsons = new JsonArray();
+        JSONArray bookJsons = new JSONArray();
         Cosine cosine = new Cosine();
         GoogleBookSearch merge = new GoogleBookSearch();
         Document doc = merge.getSearchResults(searchTerm.replace(' ', '+'), num, start);
@@ -137,21 +167,13 @@ public class GoogleBookSearch {
         for (int i = 0; i < num; i++) {
             JSONObject tmpJson = new JSONObject();
             String bookTitle = titles.get(i);
-//            String json_tmp = "";
-//            json_tmp += "'title':'" + titles.get(i) + "',";
-            tmpJson.put("title", titles.get(i));
-//            json_tmp += "'author':'" + authors.get(i) + "',";
+            tmpJson.put("title", bookTitle);
             tmpJson.put("author", authors.get(i));
-//            json_tmp += "'year':'" + years.get(i) + "',";
             tmpJson.put("year", years.get(i));
-//            json_tmp += "'descriptions':'" + descriptions.get(i) + "',";
             tmpJson.put("des", descriptions.get(i));
-//            json_tmp += "'image':'" + images.get(i) + "',";
             tmpJson.put("image", images.get(i));
             double numCosine = cosine.similarity(searchTerm.toLowerCase(), bookTitle.toLowerCase());
-//            json_tmp += "'num_cosine':'" + numCosine + "'";
             tmpJson.put("num_cosine", numCosine);
-            System.out.println(tmpJson.toJSONString());
             bookJsons.add(tmpJson.toString());
         }
         return bookJsons.toString();
@@ -161,10 +183,10 @@ public class GoogleBookSearch {
         // TODO Auto-generated method stub
         GoogleBookSearch merge = new GoogleBookSearch();
         int page = 0;
-        int num = 10;
+        int num = 50;
         int start = page * num;
-        ArrayList<GoogleBook> books = new ArrayList<GoogleBook>();
-        String jsonBooks = merge.getBookJson("Abstract data types in Java", num, start);
+        String jsonBooks = merge.getBookJson("technology", num, start);
+//        String jsonBooks = merge.getBookJson("Abstract data types in Java", num, start);
         System.out.println(jsonBooks);
     }
 

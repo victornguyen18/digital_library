@@ -18,17 +18,23 @@ import org.semanticweb.owlapi.model.OWLOntology;
 import org.semanticweb.owlapi.apibinding.OWLManager;
 import org.jblas.DoubleMatrix;
 
-
 public class SearchEntryPoint {
     SearchEntryPoint() {
     }
 
     public String searchGoogleBook(String search, int num, int start) {
+        JSONObject result = new JSONObject();
         try {
             GoogleBookSearch merge = new GoogleBookSearch();
-            return merge.getBookJson(search, num, start);
+            result.put("status", 200);
+            String data = merge.getBookJson(search, num, start);
+            result.put("data", data);
+            return result.toJSONString();
         } catch (Exception e) {
-            return e.getMessage();
+            result.put("status", 404);
+            result.put("message", e.getMessage());
+            System.out.println(e.getMessage());
+            return result.toJSONString();
         }
     }
 

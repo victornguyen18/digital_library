@@ -31,16 +31,15 @@ def search(request):
     search_option = request.GET.get('search_option')
     if search_option == '1':
         num = 12
-        page = int(request.GET.get('page')) if request.GET.get('page') is not None else 0
+        page = int(request.GET.get('page')) - 1 if request.GET.get('page') is not None else 0
         start = num * page
-        items = ps.get_search_book_google(search_term, num, start)
-        books = []
-        for item in items:
-            books.append(json.loads(item))
-        print(books)
-        for book in books:
-            print(book['image'])
-            print('-----')
+        data_book_google = ps.get_search_book_google(search_term, num, start)
+        if data_book_google['status'] == 200:
+            items = json.loads(data_book_google["data"])
+        else:
+            items = []
+            messages.error(request, "Some wrong!! Please try again")
+            print(items["message"])
     else:
         items = []
     return render(request, 'site/search results.html', {
