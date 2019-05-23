@@ -15,7 +15,7 @@
 9. Testimonials
 10. News
 11. Footer
-books
+Pagination
 
 
 ******************************/
@@ -1547,4 +1547,34 @@ section {
 
 .footer_contact_list ul li:not(:last-child) {
     margin-bottom: 7px;
+}
+
+/*********************************
+Pagination
+*********************************/
+
+.pagination {
+    width: 100%;
+    margin-top: 65px;
+}
+
+.pagination ul {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.pagination ul li:not(:last-child) {
+    margin-right: 6px;
+}
+
+.pagination ul li a {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #72728c;
+}
+
+.pagination ul li.active a,
+.pagination ul li:hover a {
+    color: #181818;
 }
