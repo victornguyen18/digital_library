@@ -27,21 +27,32 @@ def recommend(request):
 
 def search(request):
     # Post method -> save to database
-    search_term = request.GET.get('search_term')
-    search_option = request.GET.get('search_option')
+    num = 12
+    search_term = request.GET.get('search_term') if request.GET.get('search_term') is not None else ""
+    search_option = request.GET.get('search_option') if request.GET.get('search_option') is not None else ""
+    page = int(request.GET.get('page')) - 1 if request.GET.get('page') is not None else 1
     if search_option == '1':
-        num = 12
-        page = int(request.GET.get('page')) - 1 if request.GET.get('page') is not None else 0
-        start = num * page
-        data_book_google = ps.get_search_book_google(search_term, num, start)
+        data_book_google = ps.get_search_book_google(search_term, num, page)
+        if data_book_google['status'] == 200:
+            items = json.loads(data_book_google["data"])
+            total_page = -1
+        else:
+            items = []
+            messages.error(request, "Some wrong!! Please try again")
+            total_page = 0
+    elif search_option == '2':
+        data_book_google = ps.get_search_book_ontology(search_term, num, page)
         if data_book_google['status'] == 200:
             items = json.loads(data_book_google["data"])
         else:
             items = []
+            total_page = 0
             messages.error(request, "Some wrong!! Please try again")
-            print(items["message"])
     else:
         items = []
+        total_page = -1
     return render(request, 'site/search results.html', {
-        'search_term': search_term, 'items': items
+        'search_term': search_term,
+        'items': items,
+        'total_page': total_page
     })

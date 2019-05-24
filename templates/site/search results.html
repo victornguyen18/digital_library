@@ -12,8 +12,16 @@
         <div class="container">
             <div class="row">
                 <div class="col text-center">
-                    <div class="section_subtitle">simply amazing places</div>
-                    <div class="section_title"><h2>Popular Destinations</h2></div>
+                    {#                    <div class="section_subtitle">simply amazing places</div>#}
+                    <div class="section_title">
+                        <h2>
+                            {% if search_option == '1' %}
+                                Google search {{ search_option }}
+                            {% else %}
+                                Search Result {{ search_option }}
+                            {% endif %}
+                        </h2>
+                    </div>
                 </div>
             </div>
             <div class="row book_sorting_row">
@@ -63,6 +71,10 @@
                                     <div class="book_title">
                                         <a href="#">{{ item | get_title_book_google }}</a>
                                     </div>
+                                    <div class="book_author">
+                                        <a href="#">{{ item | get_author_book_google }}</a> -
+                                        <a href="#">{{ item | get_year_book_google }}</a>
+                                    </div>
                                     <div class="book_subtitle">
                                         <p>{{ item | get_des_book_google }}</p>
                                     </div>
@@ -73,11 +85,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row load_more_row">
-                <div class="col">
-                    <div class="button load_more_button"><a href="#">load more</a></div>
-                </div>
-            </div>
+            <!-- Pagination -->
+            {{ request | get_pagination:10 | safe }}
         </div>
     </div>
 {% endblock %}

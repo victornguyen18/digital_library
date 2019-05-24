@@ -1,5 +1,6 @@
 package execute;
 
+import com.google.gson.Gson;
 import similarity.Cosine;
 
 import com.clarkparsia.pellet.owlapiv3.PelletReasonerFactory;
@@ -310,20 +311,21 @@ public class Search {
         String input = "Java";
         System.out.println("final Results");
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        File inputFile = new File("/Users/victornguyen/Sites/BookDigital/src/main/resources/bookOWL.owl");
+        File inputFile = new File("src/main/resources/bookOWL.owl");
         // Load ontology
         OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
         List<sortData> listOp3 = searchGloVe(input, m, o);
         Collections.sort(listOp3, new sortData.CompValue());
-        int num = 0;
-        for (sortData sortData : listOp3) {
-            num = num + 1;
-            System.out.println("Num of books :" + num);
-            String id = sortData.getbID();
-            double cosine = sortData.getCosineRate();
-            String title = sortData.getTitle();
-            System.out.println("Title : " + "'" + title + "' with Cosine Index: " + cosine);
-        }
+
+//        int num = 0;
+//        for (sortData sortData : listOp3) {
+//            num = num + 1;
+//            System.out.println("Num of books :" + num);
+//            String id = sortData.getbID();
+//            double cosine = sortData.getCosineRate();
+//            String title = sortData.getTitle();
+//            System.out.println("Title : " + "'" + title + "' with Cosine Index: " + cosine);
+//        }
 
     }
 

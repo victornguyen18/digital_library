@@ -23,3 +23,8 @@ def get_author_book_google(value):
 @register.filter(name='get_des_book_google')
 def get_des_book_google(value):
     return json.loads(value)['des']
+
+
+@register.filter(name='get_year_book_google')
+def get_year_book_google(value):
+    return json.loads(value)['year']

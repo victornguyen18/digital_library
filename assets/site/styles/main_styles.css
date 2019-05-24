@@ -1016,13 +1016,13 @@ section {
 }
 
 .book_title {
-    margin: 15px 0px;
+    margin: 15px 0px 0px 0px;
     text-align: center;
 }
 
 .book_title a {
     font-family: 'Oswald', sans-serif;
-    padding: 10px 5px;
+    padding: 10px 5px 0px 5px;
     font-size: 25px;
     font-weight: 400;
     color: #181818;
@@ -1030,6 +1030,19 @@ section {
 
 .book_subtitle {
     margin-top: -4px;
+}
+
+.book_author {
+    margin-bottom: 10px;
+}
+
+.book_author a {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    color: #8f8f8f;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
 }
 
 .book_price {
