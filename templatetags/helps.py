@@ -31,7 +31,7 @@ def get_pagination(request, total_page):
 
         begin = current_page - 5 if (current_page - 5 > 1) else 1
         end = current_page + 5 if (current_page + 5 < total_page or total_page == -1) else total_page
-        for i in range(begin, end):
+        for i in range(begin, end + 1):
             link = url_request + "&page=" + str(i)
             if current_page == i:
                 html += '<li class="active"><a href="' + link + '">' + str(i) + '.</a></li>'

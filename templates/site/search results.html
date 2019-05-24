@@ -86,7 +86,7 @@
                 </div>
             </div>
             <!-- Pagination -->
-            {{ request | get_pagination:10 | safe }}
+            {{ request | get_pagination:total_page | safe }}
         </div>
     </div>
 {% endblock %}

@@ -30,7 +30,7 @@ def search(request):
     num = 12
     search_term = request.GET.get('search_term') if request.GET.get('search_term') is not None else ""
     search_option = request.GET.get('search_option') if request.GET.get('search_option') is not None else ""
-    page = int(request.GET.get('page')) - 1 if request.GET.get('page') is not None else 1
+    page = int(request.GET.get('page')) if request.GET.get('page') is not None else 1
     if search_option == '1':
         data_book_google = ps.get_search_book_google(search_term, num, page)
         if data_book_google['status'] == 200:
@@ -44,6 +44,7 @@ def search(request):
         data_book_google = ps.get_search_book_ontology(search_term, num, page)
         if data_book_google['status'] == 200:
             items = json.loads(data_book_google["data"])
+            total_page = data_book_google['totalPage']
         else:
             items = []
             total_page = 0

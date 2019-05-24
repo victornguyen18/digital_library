@@ -52,13 +52,28 @@ public class SearchEntryPoint {
             OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
             List<sortData> list = searchMethod.searchGloVe(search, m, o);
             Collections.sort(list, new sortData.CompValue());
-            System.out.println("Running Glove");
+            int sizeList = list.size();
+            int totalPage = (sizeList / num) + 1;
             int start = num * (page - 1);
-            List<sortData> listPage = list.subList(start, start + num);
-            data = gson.toJson(listPage);
-            result.put("status", 200);
-            result.put("data", data);
-            return result.toJSONString();
+            int finish = start + num;
+            if (start < sizeList) {
+                System.out.println("Running Glove");
+                System.out.println(sizeList);
+                if (sizeList < finish) {
+                    finish = start + sizeList;
+                }
+                List<sortData> listPage = list.subList(start, finish);
+                data = gson.toJson(listPage);
+                System.out.println(data);
+                result.put("status", 200);
+                result.put("data", data);
+                result.put("totalPage", totalPage);
+                return result.toJSONString();
+            } else {
+                result.put("status", 404);
+                result.put("message", "Out of page");
+                return result.toJSONString();
+            }
         } catch (Exception e) {
             result.put("status", 404);
             result.put("message", e.getMessage());
