@@ -16,9 +16,9 @@
                     <div class="section_title">
                         <h2>
                             {% if search_option == '1' %}
-                                Google search {{ search_option }}
+                                Google search of  {{ search_term }}
                             {% else %}
-                                Search Result {{ search_option }}
+                                Result search of  {{ search_term }}
                             {% endif %}
                         </h2>
                     </div>
@@ -64,7 +64,7 @@
                             <!-- Destination -->
                             <div class="book item col-md-3">
                                 <div class=" book_image">
-                                    <img src="{{ item | get_image_book_google }}&h=261"
+                                    <img src="{{ item | get_image_book_google }}"
                                          alt="{{ item | get_title_book_google }}">
                                 </div>
                                 <div class=" book_content">

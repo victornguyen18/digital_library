@@ -14,9 +14,24 @@
                             <div class="d-flex flex-lg-row flex-column align-items-start justify-content-lg-between justify-content-start">
                                 <select type="text" class="search_input col-md-3"
                                         required="required" name="search_option">
-                                    <option class="search_input_option" value="1">Google</option>
-                                    <option class="search_input_option" value="2">By Glove</option>
-                                    <option class="search_input_option" value="3">Google & Glove</option>
+                                    <option class="search_input_option" value="1"
+                                            {% if search_option == '1' %}
+                                            selected
+                                            {% endif %} >
+                                        Google
+                                    </option>
+                                    <option class="search_input_option" value="2"
+                                            {% if search_option == '2' %}
+                                            selected
+                                            {% endif %} >
+                                        By Glove
+                                    </option>
+                                    <option class="search_input_option" value="3"
+                                            {% if search_option == '3' %}
+                                            selected
+                                            {% endif %} >
+                                        Google & Glove
+                                    </option>
                                     <option class="search_input_option" value="saab">Saab</option>
                                     <option class="search_input_option" value="mercedes">Mercedes</option>
                                     <option class="search_input_option" value="audi">Audi</option>

@@ -14,7 +14,7 @@ def get_image_book_google(value):
     if "image" in tmp:
         return tmp["image"]
     else:
-        return ""
+        return "/static/images/logo-IU.jpg"
 
 
 @register.filter(name='get_title_book_google')

@@ -54,6 +54,7 @@ def search(request):
         total_page = -1
     return render(request, 'site/search results.html', {
         'search_term': search_term,
+        'search_option': search_option,
         'items': items,
         'total_page': total_page
     })
