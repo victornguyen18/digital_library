@@ -27,7 +27,7 @@ public class GoogleBookSearch {
     private static final String remove1 = "-Xem trước";
 
     //get html
-    public Document getSearchResults(String searchTerm, int num, int start) throws IOException {
+    public Document getSearchResults(String searchTerm, int num, int start) {
         //Get page
         String searchURL = GOOGLE_SEARCH_URL + "?q=" + searchTerm + "&start=" + start + "&tbm=bks&num=" + num;
         try {
@@ -37,8 +37,8 @@ public class GoogleBookSearch {
                     .get();
 //            Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").maxBodySize(0)
 //                    .timeout(600000).get();
-            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/victornguyen/Desktop/test.html"));
-            writer.write(doc.toString());
+//            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/victornguyen/Desktop/test.html"));
+//            writer.write(doc.toString());
             System.out.println(searchURL);
             return doc;
         } catch (IOException e) {
