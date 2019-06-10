@@ -17,12 +17,23 @@ from transaction.models import Detail
 from recommendation.collaborative_filtering import my_recommend
 import digital_library_java.python_seach.search_library as ps
 import pandas as pd
+import numpy as np
+from django.db.models import Case, When
 
 
 def recommend(request):
-    transaction = pd.DataFrame(my_recommend())
-    print(transaction)
-    return HttpResponse(transaction.to_html())
+    current_user_id = 7
+    # current_user_id = 20
+    print("Current user id: ", current_user_id)
+    prediction_matrix, Ymean = my_recommend()
+    my_predictions = prediction_matrix[:, current_user_id] + Ymean.flatten()
+    pred_idxs_sorted = np.argsort(my_predictions)
+    pred_idxs_sorted[:] = pred_idxs_sorted[::-1]
+    pred_idxs_sorted = pred_idxs_sorted + 1
+    print(pred_idxs_sorted)
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_idxs_sorted)])
+    movie_list = Title.objects.filter(id__in=pred_idxs_sorted, ).order_by(preserved)[:10]
+    return HttpResponse(movie_list)
 
 
 def search(request):

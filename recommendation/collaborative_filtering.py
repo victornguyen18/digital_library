@@ -4,8 +4,7 @@ import pandas as pd
 import scipy.optimize
 
 # Import Models
-from django.contrib.auth.models import User
-from title.models import Title, Book
+from title.models import Book
 from transaction.models import Master, Detail
 
 
@@ -48,14 +47,27 @@ def my_recommend():
         return flatten_params(x_grad, Thetagrad)
 
     def process_date(sample):
-        date_obj = sample.return_date - sample.hire_date
+        hire_date_length = sample.return_date - sample.hire_date
+        due_date_length = sample.due_date - sample.hire_date
+        ratio = hire_date_length / due_date_length
         # year = int(date_obj[:4])
         # month = int(date_obj[4:6])
         # day = int(date_obj[6:8])
         # sample['year'] = year
         # sample['month'] = month
-        sample['hire_date_length_temp'] = date_obj
-        sample['due_date_length_temp'] = sample.due_date - sample.hire_date
+        sample['test'] = str(hire_date_length).split()[1]
+        sample['hire_date_length'] = hire_date_length
+        sample['due_date_length'] = due_date_length
+        sample['ratio_hire_date'] = round(ratio, 3)
+        if (ratio > 2).bool():
+            sample['point'] = 4.50
+        elif (ratio > 1).bool():
+            ratio_overdue = abs(1 - ratio)
+            sample['point'] = 3 + (7 - (7 * ratio_overdue))
+        else:
+            sample['test'] = abs((1 - ratio) / (ratio - 1))
+            sample['point'] = 3 + (7 * ratio)
+        sample['point'] = round(sample['point'], 2)
         return sample
 
     # Change book to data frame
@@ -72,33 +84,37 @@ def my_recommend():
     transaction_df = pd.merge(transaction_df, book_df[['barcode', 'title_id']], left_on="book_id", right_on="barcode",
                               how="left")
     transaction_df = transaction_df.drop(['id_x', 'transaction_id'], axis=1)
-    transaction_df = transaction_df.dropna().reset_index(drop=True)
-    # transaction_df = transaction_df.groupby('index').apply(process_date)
-    transaction_df.to_csv(r'recommendation/transaction.csv')
-    print(transaction_df)
-    print(transaction_df.columns.values)
-    return transaction_df
+    transaction_df = transaction_df.dropna().reset_index()
+    transaction_df = transaction_df.groupby('index').apply(process_date).reset_index(drop=True)
 
-    # mynu = df.user_id.unique().shape[0]
-    # mynm = df.movie_id.unique().shape[0]
-    # mynf = 10
-    # Y = np.zeros((mynm, mynu))
-    # for row in df.itertuples():
-    #     Y[row[2] - 1, row[4] - 1] = row[3]
-    # R = np.zeros((mynm, mynu))
-    # for i in range(Y.shape[0]):
-    #     for j in range(Y.shape[1]):
-    #         if Y[i][j] != 0:
-    #             R[i][j] = 1
-    #
-    # Ynorm, Ymean = normalize_ratings(Y, R)
-    # X = np.random.rand(mynm, mynf)
-    # Theta = np.random.rand(mynu, mynf)
-    # myflat = flatten_params(X, Theta)
-    # mylambda = 12.2
-    # result = scipy.optimize.fmin_cg(cofi_cost_func, x0=myflat, fprime=cofi_grad,
-    #                                 args=(Y, R, mynu, mynm, mynf, mylambda),
-    #                                 maxiter=40, disp=True, full_output=True)
-    # resX, resTheta = reshape_params(result[0], mynm, mynu, mynf)
-    # prediction_matrix = resX.dot(resTheta.T)
-    # return prediction_matrix, Ymean
+    # New data frame with user_id, title_id, point
+    user_rating = pd.DataFrame()
+    user_rating['user_id'] = transaction_df.user_id
+    user_rating['title_id'] = transaction_df.title_id
+    user_rating['point'] = transaction_df.point
+
+    df = user_rating.groupby(['user_id', 'title_id']).mean().reset_index()
+    mynu = df.user_id.max()
+    my_nm = df.title_id.max()
+    my_nf = 5
+    Y = np.zeros((my_nm, mynu))
+    for row in df.itertuples():
+        Y[row[2] - 1, row[1] - 1] = row[3]
+    R = np.zeros((my_nm, mynu))
+    for i in range(Y.shape[0]):
+        for j in range(Y.shape[1]):
+            if Y[i][j] != 0:
+                R[i][j] = 1
+
+    Ynorm, Ymean = normalize_ratings(Y, R)
+    X = np.random.rand(my_nm, my_nf)
+    Theta = np.random.rand(mynu, my_nf)
+    myflat = flatten_params(X, Theta)
+    mylambda = 12.2
+    result = scipy.optimize.fmin_cg(cofi_cost_func, x0=myflat, fprime=cofi_grad,
+                                    args=(Y, R, mynu, my_nm, my_nf, mylambda),
+                                    maxiter=40, disp=True, full_output=True)
+    resX, resTheta = reshape_params(result[0], my_nm, mynu, my_nf)
+    prediction_matrix = resX.dot(resTheta.T)
+    return prediction_matrix, Ymean
+    # return user_rating_df
