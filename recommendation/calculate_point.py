@@ -70,5 +70,5 @@ def process_detail_data():
         user_rating['user_id'] = transaction_df.user_id
         user_rating['title_id'] = transaction_df.title_id
         user_rating['point'] = transaction_df.point
-        user_rating_df = user_rating.groupby(['user_id', 'title_id']).mean().reset_index()
+        user_rating_df = user_rating.groupby(['user_id', 'title_id']).mean().round(3).reset_index()
         user_rating_df.to_csv(r'recommendation/user_point_title.csv', index=False)
