@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-from recommendation.collaborative_filtering import my_recommend
+import recommendation.recommender_system as rs
 import digital_library_java.python_seach.search_library as ps
 import pandas as pd
 import numpy as np
@@ -25,7 +25,7 @@ def recommend(request):
     # current_user_id = 8
     current_user_id = 20
     print("Current user id: ", current_user_id)
-    prediction_matrix, Ymean = my_recommend()
+    prediction_matrix, Ymean = rs.recommend_cf()
     my_predictions = prediction_matrix[:, current_user_id] + Ymean.flatten()
     pred_idxs_sorted = np.argsort(my_predictions)
     pred_idxs_sorted[:] = pred_idxs_sorted[::-1]

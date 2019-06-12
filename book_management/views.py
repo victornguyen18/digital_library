@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-from recommendation.collaborative_filtering import my_recommend
+from recommendation.recommender_system import my_recommend
 import pandas as pd
 import recommendation.calculate_point as cp
 
@@ -27,14 +27,6 @@ def index(request):
 
 def homepage(request):
     cp.process_detail_data()
-    file = "r'recommendation/user_point_title.csv'"
-    try:
-        st = os.stat(file)
-    except IOError:
-        print("failed to get information about", file)
-    else:
-        print("file size:", st[ST_SIZE])
-        print("file modified:", time.asctime(time.localtime(st[ST_MTIME])))
     return render(request, 'site/homepage.html')
 
 

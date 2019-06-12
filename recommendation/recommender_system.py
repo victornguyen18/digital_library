@@ -10,7 +10,7 @@ from transaction.models import Master, Detail
 import calculate_point as cp
 
 
-def my_recommend():
+def recommend_cf():
     def normalize_ratings(my_y, my_r):
         # The mean is only counting movies that were rated
         y_mean = np.sum(my_y, axis=1) / np.sum(my_r, axis=1)
@@ -48,28 +48,33 @@ def my_recommend():
         Thetagrad += my_lambda * my_theta
         return flatten_params(x_grad, Thetagrad)
 
-    df = pd.read_csv('recommendation/user_point_title.csv')
-    mynu = df.user_id.max()
-    my_nm = df.title_id.max()
-    my_nf = 5
-    Y = np.zeros((my_nm, mynu))
-    for row in df.itertuples():
-        Y[row[2] - 1, row[1] - 1] = row[3]
-    R = np.zeros((my_nm, mynu))
-    for i in range(Y.shape[0]):
-        for j in range(Y.shape[1]):
-            if Y[i][j] != 0:
-                R[i][j] = 1
+    try:
+        df = pd.read_csv('recommendation/user_point_title.csv')
+    except Exception as e:
+        print("Something wrong:", str(e))
+        return None
+    else:
+        my_nu = df.user_id.max()
+        my_nm = df.title_id.max()
+        my_nf = 5
+        Y = np.zeros((my_nm, my_nu))
+        for row in df.itertuples():
+            Y[row[2] - 1, row[1] - 1] = row[3]
+        R = np.zeros((my_nm, my_nu))
+        for i in range(Y.shape[0]):
+            for j in range(Y.shape[1]):
+                if Y[i][j] != 0:
+                    R[i][j] = 1
 
-    Ynorm, Ymean = normalize_ratings(Y, R)
-    X = np.random.rand(my_nm, my_nf)
-    Theta = np.random.rand(mynu, my_nf)
-    myflat = flatten_params(X, Theta)
-    mylambda = 12.2
-    result = scipy.optimize.fmin_cg(cofi_cost_func, x0=myflat, fprime=cofi_grad,
-                                    args=(Y, R, mynu, my_nm, my_nf, mylambda),
-                                    maxiter=40, disp=True, full_output=True)
-    resX, resTheta = reshape_params(result[0], my_nm, mynu, my_nf)
-    prediction_matrix = resX.dot(resTheta.T)
-    return prediction_matrix, Ymean
+        Ynorm, Ymean = normalize_ratings(Y, R)
+        X = np.random.rand(my_nm, my_nf)
+        Theta = np.random.rand(my_nu, my_nf)
+        myflat = flatten_params(X, Theta)
+        mylambda = 12.2
+        result = scipy.optimize.fmin_cg(cofi_cost_func, x0=myflat, fprime=cofi_grad,
+                                        args=(Y, R, my_nu, my_nm, my_nf, mylambda),
+                                        maxiter=40, disp=True, full_output=True)
+        resX, resTheta = reshape_params(result[0], my_nm, my_nu, my_nf)
+        prediction_matrix = resX.dot(resTheta.T)
+        return prediction_matrix, Ymean
     # return user_rating_df
