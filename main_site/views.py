@@ -22,8 +22,8 @@ from django.db.models import Case, When
 
 
 def recommend(request):
-    current_user_id = 7
-    # current_user_id = 20
+    # current_user_id = 8
+    current_user_id = 20
     print("Current user id: ", current_user_id)
     prediction_matrix, Ymean = my_recommend()
     my_predictions = prediction_matrix[:, current_user_id] + Ymean.flatten()
@@ -33,7 +33,12 @@ def recommend(request):
     print(pred_idxs_sorted)
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_idxs_sorted)])
     movie_list = Title.objects.filter(id__in=pred_idxs_sorted, ).order_by(preserved)[:10]
-    return HttpResponse(movie_list)
+    return render(request, 'site/search results.html', {
+        'search_term': '',
+        'search_option': '',
+        'movie_list': movie_list,
+        'total_page': 1
+    })
 
 
 def search(request):
