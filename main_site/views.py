@@ -9,14 +9,13 @@ from django.core.serializers.json import DjangoJSONEncoder
 
 # Import python lib
 import json
-
+import numpy as np
+import recommendation.recommender_system as rs
 # Import Models
 from django.db.models import Case, When, QuerySet
 from django.contrib.auth.models import User
 from title.models import Title, Publisher, Author
-import recommendation.recommender_system as rs
-import digital_library_java.python_seach.search_library as ps
-import numpy as np
+import digital_library_java.python_seach.search_library as p
 
 
 def recommend(request):

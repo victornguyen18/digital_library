@@ -8,16 +8,12 @@ from django.http import JsonResponse, HttpResponse
 # Import python lib
 from datetime import datetime
 import json
-import os, time
-from stat import *  # ST_SIZE etc
 
 # Import Models
 from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-import recommendation.recommender_system as rs
-import pandas as pd
 import recommendation.calculate_point as cp
 
 

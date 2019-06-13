@@ -7,12 +7,24 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
 
 class Publisher(models.Model):
     name = models.CharField(max_length=256)
 
     def __str__(self):
         return self.name
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
 
 
 class Title(models.Model):
@@ -32,6 +44,17 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
+    def as_dict(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "faculty": self.faculty,
+            "location": self.location,
+            "year": self.year,
+            "isbn": self.isbn,
+            "author": self.author,
+        }
 
 
 class Book(models.Model):

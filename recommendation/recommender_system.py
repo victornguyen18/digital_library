@@ -7,7 +7,7 @@ import scipy.optimize
 from title.models import Book
 from transaction.models import Master, Detail
 
-import calculate_point as cp
+import recommendation.calculate_point as cp
 
 
 def recommend_cf():
