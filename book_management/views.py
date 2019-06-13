@@ -16,7 +16,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-from recommendation.recommender_system import my_recommend
+import recommendation.recommender_system as rs
 import pandas as pd
 import recommendation.calculate_point as cp
 

@@ -50,6 +50,9 @@ def recommend_cf():
 
     try:
         df = pd.read_csv('recommendation/user_point_title.csv')
+    except IOError:
+        cp.process_detail_data()
+        recommend_cf()
     except Exception as e:
         print("Something wrong:", str(e))
         return None
@@ -78,3 +81,21 @@ def recommend_cf():
         prediction_matrix = resX.dot(resTheta.T)
         return prediction_matrix, Ymean
     # return user_rating_df
+
+
+def get_popular_book():
+    try:
+        df = pd.read_csv('recommendation/user_point_title.csv')
+    except IOError:
+        cp.process_detail_data()
+        get_popular_book()
+    except Exception as e:
+        print("Something wrong:", str(e))
+        return None
+    else:
+        popular_book_df = (df.groupby(by=['title_id'])
+        ['point'].mean().round(3).reset_index().rename(columns={'point': 'total_point'})
+        [['title_id', 'total_point']])
+        popular_book_df = popular_book_df.sort_values(by=['total_point'], ascending=False).reset_index(drop=True)
+        print(popular_book_df)
+        return list(popular_book_df.title_id)

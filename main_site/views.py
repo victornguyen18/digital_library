@@ -2,43 +2,55 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
+from django.core import serializers
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
+from django.core.serializers.json import DjangoJSONEncoder
 
 # Import python lib
-from datetime import datetime
 import json
 
 # Import Models
+from django.db.models import Case, When, QuerySet
 from django.contrib.auth.models import User
-from title.models import Title, Book
-from transaction.models import Detail
-
+from title.models import Title, Publisher, Author
 import recommendation.recommender_system as rs
 import digital_library_java.python_seach.search_library as ps
-import pandas as pd
 import numpy as np
-from django.db.models import Case, When
 
 
 def recommend(request):
     # current_user_id = 8
     current_user_id = 20
     print("Current user id: ", current_user_id)
-    prediction_matrix, Ymean = rs.recommend_cf()
-    my_predictions = prediction_matrix[:, current_user_id] + Ymean.flatten()
-    pred_idxs_sorted = np.argsort(my_predictions)
-    pred_idxs_sorted[:] = pred_idxs_sorted[::-1]
-    pred_idxs_sorted = pred_idxs_sorted + 1
-    print(pred_idxs_sorted)
-    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_idxs_sorted)])
-    movie_list = Title.objects.filter(id__in=pred_idxs_sorted, ).order_by(preserved)[:10]
+    prediction_matrix, Y_mean = rs.recommend_cf()
+    my_predictions = prediction_matrix[:, current_user_id] + Y_mean.flatten()
+    pred_id_xs_sorted = np.argsort(my_predictions)
+    pred_id_xs_sorted[:] = pred_id_xs_sorted[::-1]
+    pred_id_xs_sorted = pred_id_xs_sorted + 1
+    print(pred_id_xs_sorted)
+    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_id_xs_sorted)])
+    book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:10]
     return render(request, 'site/search results.html', {
         'search_term': '',
         'search_option': '',
-        'movie_list': movie_list,
+        'book_list': book_list,
         'total_page': 1
     })
+
+
+def get_popular_book(request):
+    popular_book = rs.get_popular_book()
+    popular_book_12 = popular_book[:12]
+    print(popular_book_12)
+    book_list = Title.objects.all().filter(id__in=popular_book_12)
+    publisher_list_query = Publisher.objects.all().filter(title__id__in=popular_book_12).query
+    publisher_list_query.group_by = ['id']
+    publisher_list = QuerySet(query=publisher_list_query, model=Publisher)
+    data = {'book_list': serializers.serialize('json', book_list),
+            'pub_list': serializers.serialize('json', publisher_list, fields=('pk', 'name'))
+            }
+    return JsonResponse({'status': 200, 'data': data})
 
 
 def search(request):
