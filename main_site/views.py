@@ -15,7 +15,7 @@ import recommendation.recommender_system as rs
 from django.db.models import Case, When, QuerySet
 from django.contrib.auth.models import User
 from title.models import Title, Publisher, Author
-import digital_library_java.python_seach.search_library as p
+import digital_library_java.python_seach.search_library as ps
 
 
 def recommend(request):
