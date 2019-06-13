@@ -26,6 +26,11 @@ class Publisher(models.Model):
             "name": self.name
         }
 
+    def as_dist_id_key(self):
+        return {
+            self.id: self.name
+        }
+
 
 class Title(models.Model):
     name = models.CharField(max_length=256)
@@ -45,7 +50,15 @@ class Title(models.Model):
     def __str__(self):
         return self.name
 
-    def as_dict(self):
+    def book_info_as_dict(self):
+        author_list = []
+        publisher_list = []
+        for author in self.author.select_related():
+            author_list.append(author.name)
+        author_list = ', '.join(author_list)
+        for publisher in self.publisher.select_related():
+            publisher_list.append(publisher.name)
+        publisher_list = ', '.join(publisher_list)
         return {
             "id": self.id,
             "name": self.name,
@@ -53,7 +66,8 @@ class Title(models.Model):
             "location": self.location,
             "year": self.year,
             "isbn": self.isbn,
-            "author": self.author,
+            "author": author_list,
+            "publisher": publisher_list
         }
 
 

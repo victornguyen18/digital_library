@@ -47,7 +47,6 @@ $(document).ready(function () {
 
     initMenu();
     initHomeSlider();
-    initIsotope();
     initTestimonialsSlider();
     initScrolling();
     initInput();

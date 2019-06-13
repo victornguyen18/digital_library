@@ -43,13 +43,9 @@ def get_popular_book(request):
     popular_book = rs.get_popular_book()
     popular_book_12 = popular_book[:12]
     print(popular_book_12)
-    book_list = Title.objects.all().filter(id__in=popular_book_12)
-    publisher_list_query = Publisher.objects.all().filter(title__id__in=popular_book_12).query
-    publisher_list_query.group_by = ['id']
-    publisher_list = QuerySet(query=publisher_list_query, model=Publisher)
-    data = {'book_list': serializers.serialize('json', book_list),
-            'pub_list': serializers.serialize('json', publisher_list, fields=('pk', 'name'))
-            }
+    popular_book_list = Title.objects.all().filter(id__in=popular_book_12)
+    popular_book_list = [Title.book_info_as_dict(book) for book in popular_book_list]
+    data = {'popular_book_list': json.dumps(popular_book_list)}
     return JsonResponse({'status': 200, 'data': data})
 
 

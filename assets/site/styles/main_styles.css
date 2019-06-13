@@ -15,6 +15,7 @@
 9. Testimonials
 10. News
 11. Footer
+12. Popular book
 Pagination
 
 
@@ -1020,7 +1021,7 @@ section {
     text-align: center;
 }
 
-.book_title a {
+.book_title span {
     font-family: 'Oswald', sans-serif;
     padding: 10px 5px 0px 5px;
     font-size: 25px;
@@ -1041,7 +1042,20 @@ section {
     font-family: 'Oswald', sans-serif;
     font-size: 12px;
     color: #8f8f8f;
-    text-transform: uppercase;
+    text-transform: capitalize;
+    letter-spacing: 0.2em;
+}
+
+.book_publisher {
+    text-align: right;
+}
+
+.book_publisher a {
+    display: inline-block;
+    font-family: 'Oswald', sans-serif;
+    font-size: 12px;
+    color: #8f8f8f;
+    text-transform: capitalize;
     letter-spacing: 0.2em;
 }
 
@@ -1590,4 +1604,15 @@ Pagination
 .pagination ul li.active a,
 .pagination ul li:hover a {
     color: #181818;
+}
+
+/*********************************
+12. Popular book
+*********************************/
+
+.popular_book {
+    width: 100%;
+    background: #FFFFFF;
+    padding-top: 50px;
+    padding-bottom: 20px;
 }
