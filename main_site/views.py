@@ -11,11 +11,12 @@ from django.core.serializers.json import DjangoJSONEncoder
 import json
 import numpy as np
 import recommendation.recommender_system as rs
+import digital_library_java.python_seach.search_library as ps
+
 # Import Models
 from django.db.models import Case, When, QuerySet
 from django.contrib.auth.models import User
 from title.models import Title, Publisher, Author
-import digital_library_java.python_seach.search_library as ps
 
 
 def recommend(request):
