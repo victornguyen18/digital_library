@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-import recommendation.calculate_point as cp
+import resc_system.calculate_point as cp
 
 
 def index(request):

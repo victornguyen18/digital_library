@@ -29,7 +29,7 @@ def process_detail_data():
         sample['point'] = round(sample['point'], 2)
         return sample
 
-    file = "recommendation/user_point_title.csv"
+    file = "resc_system/user_point_title.csv"
     # file = "recommendation/transaction.csv"
     try:
         st = os.stat(file)
@@ -71,4 +71,4 @@ def process_detail_data():
         user_rating['title_id'] = transaction_df.title_id
         user_rating['point'] = transaction_df.point
         user_rating_df = user_rating.groupby(['user_id', 'title_id']).mean().round(3).reset_index()
-        user_rating_df.to_csv(r'recommendation/user_point_title.csv', index=False)
+        user_rating_df.to_csv(r'resc_system/user_point_title.csv', index=False)

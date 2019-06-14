@@ -7,7 +7,17 @@ import scipy.optimize
 from title.models import Book
 from transaction.models import Master, Detail
 
-import recommendation.calculate_point as cp
+import resc_system.calculate_point as cp
+import sklearn.metrics as metrics
+from sklearn.metrics import pairwise_distances, mean_squared_error
+from sklearn.neighbors import NearestNeighbors
+from scipy.spatial.distance import correlation, cosine
+import ipywidgets as widgets
+from IPython.display import display, clear_output
+
+from math import sqrt
+import sys, os
+from contextlib import contextmanager
 
 
 def recommend_cf():
@@ -49,7 +59,7 @@ def recommend_cf():
         return flatten_params(x_grad, Thetagrad)
 
     try:
-        df = pd.read_csv('recommendation/user_point_title.csv')
+        df = pd.read_csv('resc_system/user_point_title.csv')
     except IOError:
         cp.process_detail_data()
         recommend_cf()
@@ -80,12 +90,30 @@ def recommend_cf():
         resX, resTheta = reshape_params(result[0], my_nm, my_nu, my_nf)
         prediction_matrix = resX.dot(resTheta.T)
         return prediction_matrix, Ymean
-    # return user_rating_df
+
+
+def user_based_rs():
+    try:
+        df = pd.read_csv('resc_system/user_point_title.csv')
+    except IOError:
+        cp.process_detail_data()
+        user_based_rs()
+    except Exception as e:
+        print("Something wrong:", str(e))
+        return None
+    else:
+        popular_book_df = (df.groupby(by=['title_id'])
+        ['point'].mean().round(3).reset_index().rename(columns={'point': 'total_point'})
+        [['title_id', 'total_point']])
+        popular_book_df = popular_book_df.sort_values(by=['total_point'], ascending=False).reset_index(drop=True)
+        print(popular_book_df)
+        return list(popular_book_df.title_id)
+    return True
 
 
 def get_popular_book():
     try:
-        df = pd.read_csv('recommendation/user_point_title.csv')
+        df = pd.read_csv('resc_system/user_point_title.csv')
     except IOError:
         cp.process_detail_data()
         get_popular_book()

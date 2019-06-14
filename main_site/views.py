@@ -10,7 +10,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 # Import python lib
 import json
 import numpy as np
-import recommendation.recommender_system as rs
+import resc_system.recommender_system as rs
 import digital_library_java.python_seach.search_library as ps
 
 # Import Models
