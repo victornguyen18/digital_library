@@ -1,6 +1,6 @@
 import os
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "prs_project.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
 
 import django
 from django.db.models import Count
@@ -17,25 +17,25 @@ import numpy as np
 
 django.setup()
 
-from analytics.models import Rating, Cluster
+from recommendation.models import Rating, Cluster
 
 
-def plot(user_ratings, kmeans, k):
+def plot(user_ratings, k_means, k):
     print("reduce dimensionality of data")
     h = 0.2
     reduced_data = PCA(n_components=2).fit_transform(user_ratings)
     print("cluster reduced data")
 
-    if not kmeans:
-        kmeans = KMeans(init='k-means++', n_clusters=k, n_init=10)
-        kmeans.fit(reduced_data)
+    if not k_means:
+        k_means = KMeans(init='k-means++', n_clusters=k, n_init=10)
+        k_means.fit(reduced_data)
 
     print("plot clustered reduced data")
     x_min, x_max = reduced_data[:, 0].min() - 1, reduced_data[:, 0].max() + 1
     y_min, y_max = reduced_data[:, 1].min() - 1, reduced_data[:, 1].max() + 1
     xx, yy = np.meshgrid(np.arange(x_min, x_max, h), np.arange(y_min, y_max, h))
 
-    Z = kmeans.predict(np.c_[xx.ravel(), yy.ravel()])
+    Z = k_means.predict(np.c_[xx.ravel(), yy.ravel()])
 
     # Put the result into a color plot
     Z = Z.reshape(xx.shape)
@@ -47,7 +47,7 @@ def plot(user_ratings, kmeans, k):
                cmap=plt.cm.Paired,
                aspect='auto', origin='lower')
 
-    centroids = kmeans.cluster_centers_
+    centroids = k_means.cluster_centers_
     plt.plot(reduced_data[:, 0], reduced_data[:, 1], 'k.', markersize=2)
     plt.scatter(centroids[:, 0], centroids[:, 1],
                 marker='x', s=169, linewidths=3,
@@ -68,11 +68,11 @@ class UserClusterCalculator(object):
 
         user_ids, user_ratings = self.load_data()
         print("running k-means clustering")
-        kmeans = KMeans(n_clusters=k)
+        k_means = KMeans(n_clusters=k)
         print("get k-means clustering")
-        clusters = kmeans.fit(user_ratings.tocsr())
+        clusters = k_means.fit(user_ratings.tocsr())
 
-        plot(user_ratings.todense(), kmeans, k)
+        plot(user_ratings.todense(), k_means, k)
 
         self.save_clusters(clusters, user_ids)
 
@@ -92,20 +92,20 @@ class UserClusterCalculator(object):
         print('loading data')
         user_ids = list(
             Rating.objects.values('user_id')
-                .annotate(movie_count=Count('movie_id'))
-                .order_by('-movie_count'))
-        content_ids = list(Rating.objects.values('movie_id').distinct())
-        content_map = {content_ids[i]['movie_id']: i
+                .annotate(title_count=Count('title_id'))
+                .order_by('-title_count'))
+        content_ids = list(Rating.objects.values('title_id').distinct())
+        content_map = {content_ids[i]['title_id']: i
                        for i in range(len(content_ids))}
         num_users = len(user_ids)
         user_ratings = dok_matrix((num_users,
                                    len(content_ids)),
                                   dtype=np.float32)
-        for i in range(10000):
+        for i in range(num_users):
             # each user corresponds to a row, in the order of all_user_names
             ratings = Rating.objects.filter(user_id=user_ids[i]['user_id'])
             for user_rating in ratings:
-                user_ratings[i, content_map[user_rating.movie_id]] = user_rating.rating
+                user_ratings[i, content_map[user_rating.title_id]] = user_rating.rating
         print('data loaded')
 
         return user_ids, user_ratings
