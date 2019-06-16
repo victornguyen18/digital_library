@@ -7,3 +7,4 @@ py4j
 mysqlclient
 sklearn
 scipy
+matplotlib
