@@ -1,17 +1,18 @@
 import os, time, django
-
-# Import python lib
 import pandas as pd
-from stat import *  # ST_SIZE etc
-import datetime as dt
-
-# Import Models
-from title.models import Book
-from transaction.models import Master, Detail
-
-from recommendation.models import Rating, Cluster
+from datetime import datetime
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
+# Import python lib
+
+
+# Import Models
+
+django.setup()
+from django.db import connection
+from title.models import Book
+from transaction.models import Master, Detail
+from recommendation.models import Rating
 
 
 def cal_point(sample):
@@ -37,14 +38,24 @@ def cal_point(sample):
 class CalculatePointAllUser(object):
 
     def calculate(self):
-        print("Calculate user point in title_id")
-        user_ratings_df = self.load_data()
-        print("Saving")
-        self.save_pointing(user_ratings_df)
+
+        rating_first = Rating.objects.filter(type='calculate').order_by('rating_timestamp').first()
+        time_rating_first = str(rating_first.rating_timestamp)
+        time_rating_first = time_rating_first[0:time_rating_first.find('.')]
+        check_time = datetime.strptime(time_rating_first, '%Y-%m-%d %H:%M:%S')
+        if (datetime.now() - check_time).days > 2:
+            print("Calculate user point in title_id")
+            user_ratings_df = self.load_data()
+            print("Saving")
+            self.save_pointing(user_ratings_df)
+        else:
+            print("Calculate rating before", (datetime.now() - check_time).days, "days")
 
     @staticmethod
     def save_pointing(user_ratings_df):
-        print("Delete all old point")
+        print("TRUNCATE RATING POINT")
+        cur = connection.cursor()
+        cur.execute('TRUNCATE TABLE `recommendation_rating`')
         Rating.objects.filter(type='calculate').delete()
         print("Saving new point")
         for row in user_ratings_df.itertuples():
@@ -52,7 +63,7 @@ class CalculatePointAllUser(object):
                 user_id=row[1],
                 title_id=row[2],
                 rating=row[3],
-                rating_timestamp=dt.datetime.now(),
+                rating_timestamp=datetime.now(),
             ).save()
 
     @staticmethod
