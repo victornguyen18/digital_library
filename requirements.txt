@@ -8,3 +8,8 @@ mysqlclient
 sklearn
 scipy
 matplotlib
+pyLDAvis
+stop_words
+gensim
+tqdm
+nltk
