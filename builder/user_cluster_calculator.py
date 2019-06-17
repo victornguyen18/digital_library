@@ -72,7 +72,7 @@ class UserClusterCalculator(object):
         print("get k-means clustering")
         clusters = k_means.fit(user_ratings.tocsr())
 
-        plot(user_ratings.todense(), k_means, k)
+        # plot(user_ratings.todense(), k_means, k)
 
         self.save_clusters(clusters, user_ids)
 
