@@ -51,6 +51,21 @@ class Similarity(models.Model):
                                               self.similarity)
 
 
+class UserSimilarity(models.Model):
+    created = models.DateField()
+    source = models.IntegerField(db_index=True)
+    target = models.IntegerField()
+    similarity = models.DecimalField(max_digits=8, decimal_places=7)
+
+    class Meta:
+        db_table = 'user_similarity'
+
+    def __str__(self):
+        return "[({} => {}) sim = {}]".format(self.source,
+                                              self.target,
+                                              self.similarity)
+
+
 class SeededRecs(models.Model):
     created = models.DateTimeField()
     source = models.IntegerField()

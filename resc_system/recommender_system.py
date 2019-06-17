@@ -6,6 +6,7 @@ import scipy.optimize
 # Import Models
 from title.models import Book
 from transaction.models import Master, Detail
+from recommendation.models import Rating
 
 import resc_system.calculate_point as cp
 import sklearn.metrics as metrics
@@ -113,17 +114,17 @@ def user_based_rs():
 
 def get_popular_book():
     try:
-        df = pd.read_csv('resc_system/user_point_title.csv')
-    except IOError:
-        cp.process_detail_data()
-        get_popular_book()
-    except Exception as e:
-        print("Something wrong:", str(e))
-        return None
-    else:
+        # df = pd.read_csv('resc_system/user_point_title.csv')
+        df = pd.DataFrame(list(Rating.objects.all().values()))
+        df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce')
+        df['title_id'] = pd.to_numeric(df['title_id'], errors='coerce')
+        df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
         popular_book_df = (df.groupby(by=['title_id'])
-        ['point'].mean().round(3).reset_index().rename(columns={'point': 'total_point'})
-        [['title_id', 'total_point']])
-        popular_book_df = popular_book_df.sort_values(by=['total_point'], ascending=False).reset_index(drop=True)
+        ['rating'].mean().round(3).reset_index().rename(columns={'rating': 'total_rating'})
+        [['title_id', 'total_rating']])
+        popular_book_df = popular_book_df.sort_values(by=['total_rating'], ascending=False).reset_index(drop=True)
         print(popular_book_df)
         return list(popular_book_df.title_id)
+    except Exception as e:
+        print("Something wrong:", str(e))
+        return list()
