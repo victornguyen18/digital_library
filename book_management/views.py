@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-import resc_system.calculate_point as cp
+import builder.calculate_point as cp
 
 
 def index(request):
@@ -22,7 +22,7 @@ def index(request):
 
 
 def homepage(request):
-    cp.process_detail_data()
+    cp.CalculatePointAllUser().calculate()
     return render(request, 'site/homepage.html')
 
 
