@@ -25,6 +25,23 @@
         </div>
     </div>
 
+    <!-- recommendation book -->
+
+    <div class="popular_book" id="destinations">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_subtitle">based on your loans</div>
+                <div class="section_title"><h2>Recommendation Books For You</h2></div>
+            </div>
+        </div>
+        <div class="row books_row">
+            <div class="col">
+                <div id="recommendation_book_list" class="row books_container item_grid col-md-12">
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Testimonials -->
 
     <div class="testimonials" id="testimonials">
@@ -243,6 +260,25 @@
                         console.log(popular_book_list);
                         popular_book_list.forEach(function (element) {
                             $('#popular_book_list').append(get_book_item(element.name, element.year,
+                                element.author, element.publisher));
+                        });
+                    } else {
+                    }
+                }
+            });
+            $.ajax({
+                url: "{% url 'get_user_based_rs' %}",
+                type: "GET",
+                datatype: "json",
+                beforeSend: function () {
+                    $('#recommendation_book_list div').remove();
+                },
+                success: function (response) {
+                    if (response.status === 200) {
+                        var book_list = JSON.parse(response.data.book_list);
+                        console.log(book_list);
+                        book_list.forEach(function (element) {
+                            $('#recommendation_book_list').append(get_book_item(element.name, element.year,
                                 element.author, element.publisher));
                         });
                     } else {

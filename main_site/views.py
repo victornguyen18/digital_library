@@ -19,7 +19,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Publisher, Author
 
 
-def recommend(request):
+def get_user_based_rs(request):
     # current_user_id = 8
     current_user_id = 20
     print("Current user id: ", current_user_id)
@@ -30,13 +30,11 @@ def recommend(request):
     pred_id_xs_sorted = pred_id_xs_sorted + 1
     print(pred_id_xs_sorted)
     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_id_xs_sorted)])
-    book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:10]
-    return render(request, 'site/search results.html', {
-        'search_term': '',
-        'search_option': '',
-        'book_list': book_list,
-        'total_page': 1
-    })
+    book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:12]
+    book_list = [Title.book_info_as_dict(book) for book in book_list]
+    print(book_list)
+    data = {'book_list': json.dumps(book_list)}
+    return JsonResponse({'status': 200, 'data': data})
 
 
 def get_popular_book(request):

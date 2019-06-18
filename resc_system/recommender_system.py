@@ -8,7 +8,7 @@ from title.models import Book
 from transaction.models import Master, Detail
 from recommendation.models import Rating
 
-import resc_system.calculate_point as cp
+import builder.calculate_point as cp
 import sklearn.metrics as metrics
 from sklearn.metrics import pairwise_distances, mean_squared_error
 from sklearn.neighbors import NearestNeighbors
@@ -60,20 +60,16 @@ def recommend_cf():
         return flatten_params(x_grad, Thetagrad)
 
     try:
-        df = pd.read_csv('resc_system/user_point_title.csv')
-    except IOError:
-        cp.process_detail_data()
-        recommend_cf()
-    except Exception as e:
-        print("Something wrong:", str(e))
-        return None
-    else:
+        df = pd.DataFrame(list(Rating.objects.all().values()))
+        df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce')
+        df['title_id'] = pd.to_numeric(df['title_id'], errors='coerce')
+        df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
         my_nu = df.user_id.max()
         my_nm = df.title_id.max()
         my_nf = 5
         Y = np.zeros((my_nm, my_nu))
         for row in df.itertuples():
-            Y[row[2] - 1, row[1] - 1] = row[3]
+            Y[row.title_id - 1, row.user_id - 1] = row.rating
         R = np.zeros((my_nm, my_nu))
         for i in range(Y.shape[0]):
             for j in range(Y.shape[1]):
@@ -91,30 +87,31 @@ def recommend_cf():
         resX, resTheta = reshape_params(result[0], my_nm, my_nu, my_nf)
         prediction_matrix = resX.dot(resTheta.T)
         return prediction_matrix, Ymean
+    except Exception as e:
+        print("Something wrong:", str(e))
+        return None, None
 
 
 def user_based_rs():
     try:
-        df = pd.read_csv('resc_system/user_point_title.csv')
-    except IOError:
-        cp.process_detail_data()
-        user_based_rs()
-    except Exception as e:
-        print("Something wrong:", str(e))
-        return None
-    else:
+        # df = pd.read_csv('resc_system/user_point_title.csv')
+        df = pd.DataFrame(list(Rating.objects.all().values()))
+        df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce')
+        df['title_id'] = pd.to_numeric(df['title_id'], errors='coerce')
+        df['rating'] = pd.to_numeric(df['rating'], errors='coerce')
         popular_book_df = (df.groupby(by=['title_id'])
         ['point'].mean().round(3).reset_index().rename(columns={'point': 'total_point'})
         [['title_id', 'total_point']])
         popular_book_df = popular_book_df.sort_values(by=['total_point'], ascending=False).reset_index(drop=True)
         print(popular_book_df)
         return list(popular_book_df.title_id)
-    return True
+    except Exception as e:
+        print("Something wrong:", str(e))
+        return list()
 
 
 def get_popular_book():
     try:
-        # df = pd.read_csv('resc_system/user_point_title.csv')
         df = pd.DataFrame(list(Rating.objects.all().values()))
         df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce')
         df['title_id'] = pd.to_numeric(df['title_id'], errors='coerce')
