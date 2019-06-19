@@ -4,21 +4,7 @@ import pandas as pd
 import scipy.optimize
 
 # Import Models
-from title.models import Book
-from transaction.models import Master, Detail
 from recommendation.models import Rating
-
-import builder.calculate_point as cp
-import sklearn.metrics as metrics
-from sklearn.metrics import pairwise_distances, mean_squared_error
-from sklearn.neighbors import NearestNeighbors
-from scipy.spatial.distance import correlation, cosine
-import ipywidgets as widgets
-from IPython.display import display, clear_output
-
-from math import sqrt
-import sys, os
-from contextlib import contextmanager
 
 
 def recommend_cf():
