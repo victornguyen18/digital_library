@@ -2,15 +2,14 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
-from django.core import serializers
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse
-from django.core.serializers.json import DjangoJSONEncoder
+from django.http import JsonResponse, HttpResponse, Http404
 
 # Import python lib
 import json
 import numpy as np
 import resc_system.recommender_system as rs
+import builder.user_similarity_calculator as rsnb
 import digital_library_java.python_seach.search_library as ps
 
 # Import Models
@@ -33,6 +32,24 @@ def get_user_based_rs(request):
     book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:12]
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     print(book_list)
+    data = {'book_list': json.dumps(book_list)}
+    return JsonResponse({'status': 200, 'data': data})
+
+
+def get_recommendation(request):
+    if not request.user.is_authenticated:
+        return redirect("log-in")
+    if not request.user.is_active:
+        raise Http404
+    current_user_id = request.user.id
+    print("Current user id: ", current_user_id)
+    rec_list = rsnb.RecommendationNB().get_list_recommendation(current_user_id)
+    print(rec_list)
+    book_id_list = []
+    for i in rec_list:
+        book_id_list.append(int(i[0]))
+    book_list = Title.objects.filter(id__in=book_id_list)[:12]
+    book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
     return JsonResponse({'status': 200, 'data': data})
 

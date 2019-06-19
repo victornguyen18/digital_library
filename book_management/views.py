@@ -46,9 +46,14 @@ def login(request):
                     request.session.set_expiry(0)
                 return redirect('/dashboard')
             else:
-                messages.error(request,
-                               "You don't have permission to access. "
-                               "Please contact your administrator to request access")
+                dj_login(request, user)
+                if not request.POST.get('remember', None):
+                    # not check remember -> set session time 0
+                    request.session.set_expiry(0)
+                return redirect('/')
+                # messages.error(request,
+                #                "You don't have permission to access. "
+                #                "Please contact your administrator to request access")
         else:
             messages.error(request, 'Wrong account or password. Please try again or click Forgot Password to reset '
                                     'password.')
