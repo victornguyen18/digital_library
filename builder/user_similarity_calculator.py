@@ -1,20 +1,19 @@
 import os
-import django
-import logging
 import sys
+import django
+from tqdm import tqdm
+import logging
 import pandas as pd
 import numpy as np
-from tqdm import tqdm
 
-sys.path.insert(0, '/Users/victornguyen/Sites/07.book_management')
+sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
-
-# Setup env
 django.setup()
-from recommendation.models import Rating
-
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 logger = logging.getLogger('User similarity calculator')
+
+# Import Models
+from main_site.models import Rating
 
 
 def specified_rating_indices(u):
@@ -98,8 +97,6 @@ def get_item_similarity_matrix(ratings_matrix):
 
 
 def predict(u_index, i_index, ratings_matrix, mean_centered_ratings_matrix, user_similarity_matrix):
-    # k là số lượng người dùng giống với người dùng cần dự đoán
-    # ta có thể tùy chọn giá trị k này
     # Predict by user - based item
     users_mean_rating = all_user_mean_ratings(ratings_matrix)
     similarity_value = user_similarity_matrix[u_index]
@@ -159,7 +156,7 @@ def predict_top_k_items_of_user(u_index, ratings_matrix, item_ratings_matrix=Non
 
 class RecommendationNB:
     @staticmethod
-    def get_list_recommendation(user_index):
+    def get_list_recommendation(user_id):
         # Load data
         logger.info("Load all rating data")
         rating_df = pd.DataFrame(list(Rating.objects.all().values()))
@@ -176,18 +173,15 @@ class RecommendationNB:
             ratings_matrix[row.user_id - 1, row.title_id - 1] = row.rating
             item_ratings_matrix[row.title_id - 1, row.user_id - 1] = row.rating
 
-        logger.info("Predict for user", user_index)
-        # for user_index in tqdm(range(ratings_matrix.shape[0])):
-        # user_index = 122
-        # logger.info("Print user ratings_matrix")
-        # print(ratings_matrix[user_index])
-        # predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)
-        rec_list = predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)
-        print('\n', user_index + 1, ':', rec_list)
+        logger.info("Predict for user", user_id)
+        rec_list = predict_top_k_items_of_user(user_id, ratings_matrix, item_ratings_matrix)
         return rec_list
 
 
 if __name__ == '__main__':
     # for user_index in tqdm(range(ratings_matrix.shape[0])):
     user_index = 23
+    # logger.info("Print user ratings_matrix")
+    # print(ratings_matrix[user_index])
+    # predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)
     RecommendationNB().get_list_recommendation(user_index)

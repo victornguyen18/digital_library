@@ -4,7 +4,7 @@ import pandas as pd
 import scipy.optimize
 
 # Import Models
-from recommendation.models import Rating
+from main_site.models import Rating
 
 
 def recommend_cf():

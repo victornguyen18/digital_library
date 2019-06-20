@@ -1,18 +1,22 @@
-import os, time, django
+import os
+import sys
+import django
+from django.db import connection
+from tqdm import tqdm
+import logging
 import pandas as pd
 from datetime import datetime
 
+sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
-# Import python lib
-
+django.setup()
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
+logger = logging.getLogger('User similarity calculator')
 
 # Import Models
-
-django.setup()
-from django.db import connection
 from title.models import Book
 from transaction.models import Master, Detail
-from recommendation.models import Rating
+from main_site.models import Rating
 
 
 def cal_point(sample):
@@ -38,27 +42,31 @@ def cal_point(sample):
 class CalculatePointAllUser(object):
 
     def calculate(self):
-
         rating_first = Rating.objects.filter(type='calculate').order_by('rating_timestamp').first()
-        time_rating_first = str(rating_first.rating_timestamp)
-        time_rating_first = time_rating_first[0:time_rating_first.find('.')]
-        check_time = datetime.strptime(time_rating_first, '%Y-%m-%d %H:%M:%S')
-        if (datetime.now() - check_time).days > 2:
-            print("Calculate user point in title_id")
+        # rating_count = Rating.objects.get().count()
+        # transaction = Detail.objects.get()
+        if rating_first is None:
+            diff_time = 3
+        else:
+            time_rating_first = str(rating_first.rating_timestamp)
+            time_rating_first = time_rating_first[0:time_rating_first.find('.')]
+            check_time = datetime.strptime(time_rating_first, '%Y-%m-%d %H:%M:%S')
+            diff_time = (datetime.now() - check_time).days
+        if diff_time > 2:
+            logger.info("Calculate user point in title_id")
             user_ratings_df = self.load_data()
-            print("Saving")
+            logger.info("Save rating into database")
             self.save_pointing(user_ratings_df)
         else:
-            print("Calculate rating before", (datetime.now() - check_time).days, "days")
+            logger.debug("Calculate rating before", diff_time, "days")
 
     @staticmethod
     def save_pointing(user_ratings_df):
-        print("TRUNCATE RATING POINT")
+        logger.info("TRUNCATE RATING TABLE")
         cur = connection.cursor()
-        cur.execute('TRUNCATE TABLE `recommendation_rating`')
+        cur.execute('TRUNCATE TABLE `rating`')
         Rating.objects.filter(type='calculate').delete()
-        print("Saving new point")
-        for row in user_ratings_df.itertuples():
+        for row in tqdm(user_ratings_df.itertuples()):
             Rating(
                 user_id=row[1],
                 title_id=row[2],
@@ -95,7 +103,6 @@ class CalculatePointAllUser(object):
 
 
 if __name__ == '__main__':
-    print("Calculating user point for title_id...")
-
+    logger.info("Calculate user point in title_id")
     cluster = CalculatePointAllUser()
     cluster.calculate()
