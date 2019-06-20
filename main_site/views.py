@@ -43,7 +43,7 @@ def get_recommendation(request):
         raise Http404
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    rec_list = rsnb.RecommendationNB().get_list_recommendation(current_user_id)
+    rec_list = rsnb.RecommendationNB().get_list_recommendation(current_user_id - 1)
     print(rec_list)
     book_id_list = []
     for i in rec_list:

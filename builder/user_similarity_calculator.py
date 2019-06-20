@@ -176,7 +176,7 @@ class RecommendationNB:
             ratings_matrix[row.user_id - 1, row.title_id - 1] = row.rating
             item_ratings_matrix[row.title_id - 1, row.user_id - 1] = row.rating
 
-        logger.info("Predict for user")
+        logger.info("Predict for user", user_index)
         # for user_index in tqdm(range(ratings_matrix.shape[0])):
         # user_index = 122
         # logger.info("Print user ratings_matrix")
@@ -189,5 +189,5 @@ class RecommendationNB:
 
 if __name__ == '__main__':
     # for user_index in tqdm(range(ratings_matrix.shape[0])):
-    user_index = 122
+    user_index = 23
     RecommendationNB().get_list_recommendation(user_index)
