@@ -23,7 +23,7 @@ urlpatterns = [
     path('log-in', views.login, name='log-in'),
     path('log-out', views.logout, name='log-out'),
     path('dashboard', views.dashboard, name='dashboard'),
-    re_path('user/api/(?P<username>[a-zA_Z0-9]+)$', views.get_user_info),
+    re_path('user/api/(?P<username>[a-zA-Z0-9]+)$', views.get_user_info),
     # API
 
 ]

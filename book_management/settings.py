@@ -37,7 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'debug_permissions',
     'title', 'transaction', 'user', 'main_site',
-    'recommendation'
 ]
 
 MIDDLEWARE = [
