@@ -4,6 +4,9 @@ from django.db import models
 class Author(models.Model):
     name = models.CharField(max_length=256)
 
+    class Meta:
+        db_table = 'author'
+
     def __str__(self):
         return self.name
 
@@ -16,6 +19,9 @@ class Author(models.Model):
 
 class Publisher(models.Model):
     name = models.CharField(max_length=256)
+
+    class Meta:
+        db_table = 'publisher'
 
     def __str__(self):
         return self.name
@@ -48,6 +54,9 @@ class Title(models.Model):
     author = models.ManyToManyField('Author')
     publisher = models.ManyToManyField('Publisher')
 
+    class Meta:
+        db_table = 'title'
+
     def __str__(self):
         return self.name
 
@@ -78,6 +87,9 @@ class Book(models.Model):
     status = models.IntegerField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        db_table = 'book'
 
     def __str__(self):
         return self.barcode
