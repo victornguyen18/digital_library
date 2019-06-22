@@ -77,7 +77,8 @@ class Title(models.Model):
             "year": self.year,
             "isbn": self.isbn,
             "author": author_list,
-            "publisher": publisher_list
+            "publisher": publisher_list,
+            "topic": self.topic,
         }
 
 
