@@ -20,10 +20,9 @@ from main_site.models import Rating
 
 
 def cal_point(sample):
-    hire_date_length = sample.return_date - sample.hire_date
-    due_date_length = sample.due_date - sample.hire_date
+    hire_date_length = abs(sample.return_date - sample.hire_date)
+    due_date_length = abs(sample.due_date - sample.hire_date)
     ratio = hire_date_length / due_date_length
-    sample['test'] = str(hire_date_length).split()[1]
     sample['hire_date_length'] = hire_date_length
     sample['due_date_length'] = due_date_length
     sample['ratio_hire_date'] = round(ratio, 3)
@@ -41,10 +40,8 @@ def cal_point(sample):
 
 class CalculatePointAllUser(object):
 
-    def calculate(self):
+    def calculate(self, run_force=False):
         rating_first = Rating.objects.filter(type='calculate').order_by('rating_timestamp').first()
-        # rating_count = Rating.objects.get().count()
-        # transaction = Detail.objects.get()
         if rating_first is None:
             diff_time = 3
         else:
@@ -52,13 +49,14 @@ class CalculatePointAllUser(object):
             time_rating_first = time_rating_first[0:time_rating_first.find('.')]
             check_time = datetime.strptime(time_rating_first, '%Y-%m-%d %H:%M:%S')
             diff_time = (datetime.now() - check_time).days
-        if diff_time > 2:
+
+        if diff_time > 2 or run_force:
             logger.info("Calculate user point in title_id")
             user_ratings_df = self.load_data()
             logger.info("Save rating into database")
             self.save_pointing(user_ratings_df)
         else:
-            logger.debug("Calculate rating before", diff_time, "days")
+            logger.debug("Calculate rating before" + str(diff_time) + "days")
 
     @staticmethod
     def save_pointing(user_ratings_df):
@@ -73,6 +71,7 @@ class CalculatePointAllUser(object):
                 rating=row[3],
                 rating_timestamp=datetime.now(),
             ).save()
+        logger.info("Finished saving " + str(len(user_ratings_df)) + " records")
 
     @staticmethod
     def load_data():
@@ -90,8 +89,10 @@ class CalculatePointAllUser(object):
                                   right_on="barcode",
                                   how="left")
         transaction_df = transaction_df.drop(['id_x', 'transaction_id'], axis=1)
-        transaction_df = transaction_df.dropna().reset_index()
-        transaction_df = transaction_df.groupby('index').apply(cal_point).reset_index(drop=True)
+        # transaction_df = transaction_df.dropna().reset_index()
+        # transaction_df = transaction_df.groupby('index').apply(cal_point).reset_index(drop=True)
+        transaction_df['return_date'] = transaction_df['return_date'].fillna(datetime.now())
+        transaction_df = transaction_df.groupby('id_y').apply(cal_point).reset_index(drop=True)
 
         # New data frame with user_id, title_id, point
         user_rating = pd.DataFrame()
@@ -104,5 +105,5 @@ class CalculatePointAllUser(object):
 
 if __name__ == '__main__':
     logger.info("Calculate user point in title_id")
-    cluster = CalculatePointAllUser()
-    cluster.calculate()
+    obj_call = CalculatePointAllUser()
+    obj_call.calculate(run_force=True)
