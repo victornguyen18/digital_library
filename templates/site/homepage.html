@@ -267,7 +267,7 @@
                 }
             });
             $.ajax({
-                url: "{% url 'get_recommendation' %}",
+                url: "{% url 'get_recommendation_cf' %}",
                 type: "GET",
                 datatype: "json",
                 beforeSend: function () {

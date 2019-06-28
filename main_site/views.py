@@ -7,43 +7,41 @@ from django.http import JsonResponse, HttpResponse, Http404
 
 # Import python lib
 import json
-import numpy as np
-import resc_system.recommender_system as rs
-import builder.user_similarity_calculator as rsnb
 import digital_library_java.python_seach.search_library as ps
+import rs_system.popular_rs as popular_rs
+import rs_system.neighborhood_cf_rs as cf_rs
+import numpy as np
 
 # Import Models
-from django.db.models import Case, When, QuerySet
-from django.contrib.auth.models import User
-from title.models import Title, Publisher, Author
+from title.models import Title
 
 
-def get_user_based_rs(request):
-    # current_user_id = 8
-    current_user_id = 20
-    print("Current user id: ", current_user_id)
-    prediction_matrix, Y_mean = rs.recommend_cf()
-    my_predictions = prediction_matrix[:, current_user_id] + Y_mean.flatten()
-    pred_id_xs_sorted = np.argsort(my_predictions)
-    pred_id_xs_sorted[:] = pred_id_xs_sorted[::-1]
-    pred_id_xs_sorted = pred_id_xs_sorted + 1
-    print(pred_id_xs_sorted)
-    preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_id_xs_sorted)])
-    book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:12]
-    book_list = [Title.book_info_as_dict(book) for book in book_list]
-    print(book_list)
-    data = {'book_list': json.dumps(book_list)}
-    return JsonResponse({'status': 200, 'data': data})
+# def get_user_based_rs(request):
+#     # current_user_id = 8
+#     current_user_id = 20
+#     print("Current user id: ", current_user_id)
+#     prediction_matrix, Y_mean = rs.recommend_cf()
+#     my_predictions = prediction_matrix[:, current_user_id] + Y_mean.flatten()
+#     pred_id_xs_sorted = np.argsort(my_predictions)
+#     pred_id_xs_sorted[:] = pred_id_xs_sorted[::-1]
+#     pred_id_xs_sorted = pred_id_xs_sorted + 1
+#     print(pred_id_xs_sorted)
+#     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_id_xs_sorted)])
+#     book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:12]
+#     book_list = [Title.book_info_as_dict(book) for book in book_list]
+#     print(book_list)
+#     data = {'book_list': json.dumps(book_list)}
+#     return JsonResponse({'status': 200, 'data': data})
 
 
-def get_recommendation(request):
+def get_recommendation_cf(request):
     if not request.user.is_authenticated:
         return redirect("log-in")
     if not request.user.is_active:
         raise Http404
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    rec_list = rsnb.RecommendationNB().get_list_recommendation(current_user_id - 1)
+    rec_list = cf_rs.RecommendationNB().get_list_recommendation(current_user_id - 1)
     print(rec_list)
     book_id_list = []
     for i in rec_list:
@@ -55,7 +53,7 @@ def get_recommendation(request):
 
 
 def get_popular_book(request):
-    popular_book = rs.get_popular_book()
+    popular_book = popular_rs.PopularRS().get_popular_book()
     popular_book_12 = popular_book[:12]
     print(popular_book_12)
     popular_book_list = Title.objects.all().filter(id__in=popular_book_12)
