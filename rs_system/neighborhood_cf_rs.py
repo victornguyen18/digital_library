@@ -133,27 +133,29 @@ def get_item_similarity_matrix(ratings_matrix):
 #     return rating_user_base
 
 def predict(u_index, i_index, ratings_matrix, mean_centered_ratings_matrix, user_similarity_matrix):
-    # Predict by user - based item
+    # Predict rating
     users_mean_rating = all_user_mean_ratings(ratings_matrix)
     similarity_value = user_similarity_matrix[u_index]
+    # If user have not yet rated the book or the item have been rate yet by any user will return NaN value
     if specified_rating_indices(ratings_matrix[:, i_index]) is None:
         return np.nan
+    # Get item which user u_index is rated
     users_rated_item = specified_rating_indices(ratings_matrix[:, i_index])[0]
     # Get mean centering rating of item
     mean_ratings_in_item = mean_centered_ratings_matrix[:, i_index]
+    # Get rating of item which user u_index is rated
     user_rating = mean_ratings_in_item[np.array(users_rated_item)]
     user_rating_similarity_value = similarity_value[np.array(users_rated_item)]
+    # predict rating
     rating_user_base = users_mean_rating[u_index] + np.sum(user_rating * user_rating_similarity_value) / np.sum(
         np.abs(user_rating_similarity_value))
     return rating_user_base
 
 
 def predict_top_items_of_user(u_index, ratings_matrix, item_ratings_matrix=None):
-    # logger.debug("Calculating  mean-centering ratings matrix of user and title")
     mean_centered_ratings_matrix = get_mean_centered_ratings_matrix(ratings_matrix)
     item_mean_centered_ratings_matrix = get_mean_centered_ratings_matrix(item_ratings_matrix)
 
-    # logger.debug("Calculating similarities user and similarities title")
     user_similarity_matrix = get_similarity_matrix(ratings_matrix)
     item_similarity_matrix = get_similarity_matrix(item_ratings_matrix)
     items_list = []
@@ -161,20 +163,24 @@ def predict_top_items_of_user(u_index, ratings_matrix, item_ratings_matrix=None)
     for i_index in tqdm(range(ratings_matrix.shape[1])):
         predicted_rating_user_based = 0
         predicted_rating_item_based = 0
+        # Predict rating base on user-base
         if np.isnan(ratings_matrix[u_index][i_index]):
             predicted_rating_user_based = predict(u_index, i_index, ratings_matrix,
                                                   mean_centered_ratings_matrix, user_similarity_matrix)
             if np.isnan(predicted_rating_user_based):
                 predicted_rating_user_based = 0
+        # Predict rating base on item-base
         if np.isnan(item_ratings_matrix[i_index][u_index]):
             predicted_rating_item_based = predict(i_index, u_index, item_ratings_matrix,
                                                   item_mean_centered_ratings_matrix, item_similarity_matrix)
             if np.isnan(predicted_rating_item_based):
                 predicted_rating_item_based = 0
         predicted_rating = predicted_rating_user_based + predicted_rating_item_based
+        # If rating != 0 add to list
         if predicted_rating != 0:
             items_list.append(i_index)
             items.append((i_index, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
+    # Sorting base on predited rating
     items = sorted(items, key=lambda tup: tup[1])
     return list(reversed(items))
 
