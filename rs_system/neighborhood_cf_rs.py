@@ -83,7 +83,11 @@ def get_similarity_value_for(u_index, ratings_matrix):
 def get_similarity_matrix(ratings_matrix):
     similarity_matrix = []
     for u_index in range(ratings_matrix.shape[0]):
-        similarity_value = get_similarity_value_for(u_index, ratings_matrix)
+        user_ratings = ratings_matrix[u_index, :]
+        similarity_value = []
+        for v_index in range(ratings_matrix.shape[0]):
+            pearson_similarity = pearson(ratings_matrix[v_index, :], user_ratings)
+            similarity_value.append(pearson_similarity)
         similarity_matrix.append(similarity_value)
     return np.array(similarity_matrix)
 
