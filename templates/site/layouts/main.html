@@ -51,22 +51,26 @@
                     </div>
                 </div>
 
-{#                <div class="home_page_nav">#}
-{#                    <ul class="d-flex flex-column align-items-end justify-content-end">#}
-{#                        <li><a href="#" data-scroll-to="#destinations">Offers<span>01</span></a></li>#}
-{#                        <li><a href="#" data-scroll-to="#testimonials">Testimonials<span>02</span></a></li>#}
-{#                        <li><a href="#" data-scroll-to="#news">Latest<span>03</span></a></li>#}
-{#                    </ul>#}
-{#                </div>#}
+                {#                <div class="home_page_nav">#}
+                {#                    <ul class="d-flex flex-column align-items-end justify-content-end">#}
+                {#                        <li><a href="#" data-scroll-to="#destinations">Offers<span>01</span></a></li>#}
+                {#                        <li><a href="#" data-scroll-to="#testimonials">Testimonials<span>02</span></a></li>#}
+                {#                        <li><a href="#" data-scroll-to="#news">Latest<span>03</span></a></li>#}
+                {#                    </ul>#}
+                {#                </div>#}
             </div>
         </div>
     {% else %}
-        <div class="home" style="height: 586px; !important;">
-            <div class="background_image"
-                 style="background-image:url({% static "images/IU-background.jpg" %});">
-                <div class="background_image overlay-bg"></div>
-            </div>
-        </div>
+        {% if request.path == '/' %}
+            <div class="home" style="height: 586px; !important;">
+        {% else %}
+            <div class="home" style="height: 450px; !important;">
+        {% endif %}
+    <div class="background_image"
+         style="background-image:url({% static "images/IU-background.jpg" %});">
+        <div class="background_image overlay-bg"></div>
+    </div>
+    </div>
 
     {% endif %}
 
@@ -80,17 +84,17 @@
     <!-- Footer -->
     {% include 'site/layouts/footer.html' %}
 
-</div>
-<script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-<script src="{% static "bower_components/bootstrap4/popper.js" %}"></script>
-<script src="{% static "bower_components/bootstrap4/bootstrap.min.js" %}"></script>
-<script src="{% static "bower_components/OwlCarousel2-2.2.1/owl.carousel.js" %}"></script>
-<script src="{% static "plugins/Isotope/isotope.pkgd.min.js" %}"></script>
-<script src="{% static "plugins/scrollTo/jquery.scrollTo.min.js" %}"></script>
-<script src="{% static "plugins/easing/easing.js" %}"></script>
-<script src="{% static "plugins/parallax-js-master/parallax.min.js" %}"></script>
-<script src="{% static "site/js/custom.js" %}"></script>
-{% block footer %}
-{% endblock %}
+    </div>
+    <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "bower_components/bootstrap4/popper.js" %}"></script>
+    <script src="{% static "bower_components/bootstrap4/bootstrap.min.js" %}"></script>
+    <script src="{% static "bower_components/OwlCarousel2-2.2.1/owl.carousel.js" %}"></script>
+    <script src="{% static "plugins/Isotope/isotope.pkgd.min.js" %}"></script>
+    <script src="{% static "plugins/scrollTo/jquery.scrollTo.min.js" %}"></script>
+    <script src="{% static "plugins/easing/easing.js" %}"></script>
+    <script src="{% static "plugins/parallax-js-master/parallax.min.js" %}"></script>
+    <script src="{% static "site/js/custom.js" %}"></script>
+    {% block footer %}
+    {% endblock %}
 </body>
 </html>
