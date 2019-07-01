@@ -131,7 +131,7 @@ class EvaluationByTransaction:
         res_cb = cb_rs.RecommendationCB()
         error_list = []
         for item in tqdm(test_user_tile):
-            rec_list = res_cb.get_recommendations(item['user_id'])
+            rec_list = res_cb.get_top__recommendations(item['user_id'])
             if len(rec_list) != 0:
                 error_list.append(len(list(set(item['title_id']) & set(rec_list))) / len(rec_list))
         print(error_list)

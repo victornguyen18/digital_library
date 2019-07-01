@@ -17,6 +17,15 @@ import numpy as np
 from title.models import Title
 
 
+def book_detail(request, title_id):
+    data = Title.objects.filter(id__exact=title_id).first()
+    detail = Title.book_info_as_dict(data)
+    return render(request, 'site/book/detail.html', {
+        'detail': detail,
+        'title_id': title_id
+    })
+
+
 # def get_user_based_rs(request):
 #     # current_user_id = 8
 #     current_user_id = 20
@@ -38,8 +47,19 @@ def get_recommendation_cb(request):
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    book_id_list = cb_rs.RecommendationCB().get_recommendations(current_user_id)
+    book_id_list = cb_rs.RecommendationCB().get_top__recommendations(current_user_id)
     book_list = Title.objects.filter(id__in=book_id_list)[:12]
+    book_list = [Title.book_info_as_dict(book) for book in book_list]
+    data = {'book_list': json.dumps(book_list)}
+    return JsonResponse({'status': 200, 'data': data})
+
+
+def get_recommendation_cb_with_title(request):
+    current_user_id = request.user.id
+    print("Current user id: ", current_user_id)
+    title_id = request.GET["title_id"]
+    book_id_list = cb_rs.RecommendationCB().get_top_recommendations_by_title(title_id)
+    book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
     return JsonResponse({'status': 200, 'data': data})

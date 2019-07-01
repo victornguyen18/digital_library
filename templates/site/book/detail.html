@@ -1,0 +1,101 @@
+{% extends 'site/layouts/main.html' %}
+
+{% load static from staticfiles %}
+{% load helps %}
+
+{% block title %}
+    Search Book {{ search_term }}
+{% endblock %}
+
+{% block content %}
+    <div class="popular_book" id="detail_book">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_subtitle">Detail book</div>
+                <div class="section_title"><h4>{{ detail.name }}</h4></div>
+                <div class="book item" style="width: 100%;margin-bottom: 0px;">
+                    <div class=" book_content">
+                        <div class="book_publisher" style="text-align: center">
+                            <a href="#">2010</a> -
+                            <a href="#">Wiley</a>
+                        </div>
+                        <div class="book_author">
+                            <a href="#">J. M. A. Tanchoco, Jame A. Tompkins, John A. White, Yavuz A. Bozer</a> -
+                        </div>
+                    </div>
+                    <div class=" book_image">
+                        <img src="/static/images/logo-IU.jpg" alt="">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row books_row">
+            <div class="col">
+            </div>
+        </div>
+    </div>
+    <div class="popular_book" id="destinations">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_subtitle">based on your loans</div>
+                <div class="section_title"><h2>Content-based Recommendation Books For You</h2></div>
+            </div>
+        </div>
+        <div class="row books_row">
+            <div class="col">
+                <div id="cb_recommendation_book_list" class="row books_container item_grid col-md-12">
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    <script>
+        function get_book_item(title, year, author, publisher) {
+            html = "<div class=\"book item col-md-3\">\n" +
+                "                        <div class=\" book_image\">\n" +
+                "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
+                "                        </div>\n" +
+                "                        <div class=\" book_content\">\n" +
+                "                            <div class=\"book_title\">\n" +
+                "                                <span href=\"#\">" + title +
+                "                                </span>\n" +
+                "                            </div>\n" +
+                "                            <div class=\"book_publisher\">\n" +
+                "                                <a href=\"#\">" + year + "</a> -\n" +
+                "                                <a href=\"#\">" + publisher + "</a>\n" +
+                "                            </div>\n" +
+                "                            <div class=\"book_author\">\n" +
+                "                                <a href=\"#\">" + author + "</a> -\n" +
+                "                            </div>\n" +
+                "                        </div>\n" +
+                "                    </div>";
+            return html;
+        }
+
+        $.ajax({
+            url: "{% url 'get_recommendation_cb_with_title' %}",
+            type: "GET",
+            datatype: "json",
+            "data": {
+                'title_id': {{ title_id }},
+            },
+            beforeSend: function () {
+                $('#cb_recommendation_book_list div').remove();
+            },
+            success: function (response) {
+                if (response.status === 200) {
+                    var book_list = JSON.parse(response.data.book_list);
+                    console.log(book_list);
+                    book_list.forEach(function (element) {
+                        $('#cb_recommendation_book_list').append(get_book_item(element.name, element.year,
+                            element.author, element.publisher));
+                    });
+                } else {
+                }
+            }
+        });
+    </script>
+
+{% endblock %}
