@@ -9,14 +9,24 @@
                         <div class="logo"><a href="{% url 'homepage' %}">Digital Library</a></div>
                         <nav class="main_nav">
                             <ul class="d-flex flex-row align-items-start justify-content-start">
-                                <li class="active"><a href="{% url 'homepage' %}">Home</a></li>
-                                <li><a href="about.html">About us</a></li>
-                                <li><a href="#">Services</a></li>
-                                <li><a href="news.html">News</a></li>
-                                <li><a href="contact.html">Contact</a></li>
+                                {# <li class="active"><a href="{% url 'homepage' %}">Home</a></li>#}
+                                <li><a href="{% url 'homepage' %}">Home</a></li>
+                                {# <li><a href="about.html">About us</a></li>#}
+                                {# <li><a href="#">Services</a></li>#}
+                                {# <li><a href="news.html">News</a></li>#}
+                                {% if not user.is_authenticated %}
+                                    <li><a href="{% url 'log-in' %}">Login</a></li>
+                                {% else %}
+                                    <li>
+                                        <a href="{% url 'log-out' %}">
+                                            <span class="hidden-xs text-uppercase bold">{{ user.get_username }}</span>
+                                            - Logout
+                                        </a>
+                                    </li>
+                                {% endif %}
                             </ul>
                         </nav>
-                        <div class="header_phone ml-auto">Call us: 00-56 445 678 33</div>
+                        {#                        <div class="header_phone ml-auto">Call us: 00-56 445 678 33</div>#}
 
                         <!-- Hamburger -->
 
