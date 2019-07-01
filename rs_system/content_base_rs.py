@@ -13,37 +13,41 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 logger = logging.getLogger('User similarity calculator')
 
 # Import Models
-from main_site.models import Rating
+from main_site.models import Rating, Similarity
 from title.models import Title
-
-
-def load_all_title():
-    db_book_list = Title.objects.all()
-    db_book_list = [Title.book_info_as_dict(book) for book in db_book_list]
-    db_book_list = pd.DataFrame.from_dict(db_book_list, orient='columns')
-    db_book_list['type'] = 'database'
-    csv_book_list_df = pd.read_csv('BookData.csv',
-                                   names=['id', 'name', 'author', 'pricing', 'pub_year', 'publisher', 'topic',
-                                          'type', 'quantility'], header=None)
-    csv_book_list_df['faculty'] = ''
-    csv_book_list_df['type'] = 'csv'
-    csv_book_list_df['id'] = csv_book_list_df['id'] + db_book_list.id.count() - 1
-    csv_book_list_df.set_index('id', drop=False, inplace=True)
-    book_list_df = pd.concat([db_book_list, csv_book_list_df])
-    return book_list_df
 
 
 class RecommendationCB:
 
     @staticmethod
-    def load_rating(user_id):
-        return None
+    def get_recommendations(user_id):
+        rating_list = list(Rating.objects.filter(user_id=user_id).order_by('-rating').values())
+        title_list = list()
+        for rating in rating_list:
+            if rating['rating'] > 5:
+                title_id = rating['title_id']
+                cosine_sim_title_id = Similarity.objects.filter(source=title_id)
+                cosine_sim_title_id = [Similarity.get_similarity_as_list(similarity) for similarity in
+                                       cosine_sim_title_id]
+                # Get the pairwsie similarity scores of all movies with that movie
+                sim_scores = list(enumerate(cosine_sim_title_id))
+                # Sort the movies based on the similarity scores
+                sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+                # Get the scores of the 10 most similar movies
+                sim_scores = sim_scores[1:11]
+                title_list.extend(sim_scores)
+
+        title_list = sorted(title_list, key=lambda x: x[1], reverse=True)
+        title_list = list(dict.fromkeys(title_list))
+        # Get the title indices
+        title_indices = [i[0] for i in title_list]
+        return title_indices
 
 
 if __name__ == '__main__':
     # for user_index in tqdm(range(ratings_matrix.shape[0])):
-    user_index = 23
-    # logger.info("Print user ratings_matrix")
-    # print(ratings_matrix[user_index])
-    # predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)
-    RecommendationCB.load_rating(user_index)
+    # for user_index in tqdm(range(8, 124)):
+    user_index = 8
+    print('===========')
+    RecommendationCB.get_recommendations(user_index)
+    print('===========\n')

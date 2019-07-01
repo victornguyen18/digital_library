@@ -13,8 +13,9 @@ class Rating(models.Model):
     type = models.CharField(max_length=10, default='calculate')
 
     def __str__(self):
-        return "user_id: {}, title_id: {}, rating: {}, type: {}" \
-            .format(self.user_id, self.title_id, self.rating, self.type)
+        return str(self.id)
+        # return "user_id: {}, title_id: {}, rating: {}, type: {}" \
+        #     .format(self.user_id, self.title_id, self.rating, self.type)
 
 
 class Similarity(models.Model):
@@ -27,9 +28,11 @@ class Similarity(models.Model):
         db_table = 'similarity'
 
     def __str__(self):
-        return "[({} => {}) sim = {}]".format(self.source,
-                                              self.target,
-                                              self.similarity)
+        # return [self.similarity]
+        return "[]".format(self.similarity)
+
+    def get_similarity_as_list(self):
+        return float(self.similarity)
 
 # class Cluster(models.Model):
 #     cluster_id = models.IntegerField()

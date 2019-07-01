@@ -10,6 +10,7 @@ import json
 import digital_library_java.python_seach.search_library as ps
 import rs_system.popular_rs as popular_rs
 import rs_system.neighborhood_cf_rs as cf_rs
+import rs_system.content_base_rs as cb_rs
 import numpy as np
 
 # Import Models
@@ -32,13 +33,21 @@ from title.models import Title
 #     print(book_list)
 #     data = {'book_list': json.dumps(book_list)}
 #     return JsonResponse({'status': 200, 'data': data})
+def get_recommendation_cb(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
+    current_user_id = request.user.id
+    print("Current user id: ", current_user_id)
+    book_id_list = cb_rs.RecommendationCB().get_recommendations(current_user_id)
+    book_list = Title.objects.filter(id__in=book_id_list)[:12]
+    book_list = [Title.book_info_as_dict(book) for book in book_list]
+    data = {'book_list': json.dumps(book_list)}
+    return JsonResponse({'status': 200, 'data': data})
 
 
 def get_recommendation_cf(request):
     if not request.user.is_authenticated:
-        return redirect("log-in")
-    if not request.user.is_active:
-        raise Http404
+        return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
     rec_list = cf_rs.RecommendationNB().get_list_recommendation(current_user_id - 1)
