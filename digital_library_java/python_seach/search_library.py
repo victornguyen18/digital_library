@@ -4,7 +4,9 @@ import json
 
 def get_search_book_google(search_term, num, page):
     try:
+        # Initialize Java Gateway
         gateway = JavaGateway()
+        # Call function
         google_book = gateway.entry_point.searchGoogleBook(search_term, num, page)
         google_book_obj = json.loads(google_book)
         return google_book_obj
@@ -18,7 +20,9 @@ def get_search_book_google(search_term, num, page):
 
 def get_search_book_ontology(search_term, num, page):
     try:
+        # Initialize Java Gateway
         gateway = JavaGateway()
+        # Call function
         books = gateway.entry_point.searchOntology(search_term, num, page)
         books_obj = json.loads(books)
         return books_obj

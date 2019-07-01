@@ -85,8 +85,10 @@ public class SearchEntryPoint {
 
     public static void main(String[] args) {
         SearchEntryPoint application = new SearchEntryPoint();
+        //Create new entry point JVM
         GatewayServer server = new GatewayServer(application);
         System.out.println("Open JavaGatewayServer: " + server.getPort());
+        //Start the gateway
         server.start();
     }
 }
