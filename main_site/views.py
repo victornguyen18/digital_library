@@ -54,7 +54,7 @@ def get_recommendation_cf(request):
     print(rec_list)
     book_id_list = []
     for i in rec_list:
-        book_id_list.append(int(i[0]))
+        book_id_list.append(int(i[0]) + 1)
     book_list = Title.objects.filter(id__in=book_id_list)[:12]
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
