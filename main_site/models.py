@@ -16,6 +16,21 @@ class Rating(models.Model):
         return "user_id: {}, title_id: {}, rating: {}, type: {}" \
             .format(self.user_id, self.title_id, self.rating, self.type)
 
+
+class Similarity(models.Model):
+    created = models.DateField()
+    source = models.IntegerField(db_index=True)
+    target = models.IntegerField()
+    similarity = models.DecimalField(max_digits=8, decimal_places=7)
+
+    class Meta:
+        db_table = 'similarity'
+
+    def __str__(self):
+        return "[({} => {}) sim = {}]".format(self.source,
+                                              self.target,
+                                              self.similarity)
+
 # class Cluster(models.Model):
 #     cluster_id = models.IntegerField()
 #     user_id = models.IntegerField()
@@ -39,19 +54,7 @@ class Rating(models.Model):
 #                                               self.similarity)
 #
 #
-# class Similarity(models.Model):
-#     created = models.DateField()
-#     source = models.IntegerField(db_index=True)
-#     target = models.IntegerField()
-#     similarity = models.DecimalField(max_digits=8, decimal_places=7)
-#
-#     class Meta:
-#         db_table = 'similarity'
-#
-#     def __str__(self):
-#         return "[({} => {}) sim = {}]".format(self.source,
-#                                               self.target,
-#                                               self.similarity)
+
 #
 #
 # class UserSimilarity(models.Model):
