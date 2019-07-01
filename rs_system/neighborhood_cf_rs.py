@@ -10,10 +10,11 @@ sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
 django.setup()
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
-logger = logging.getLogger('User similarity calculator')
 
 # Import Models
 from main_site.models import Rating
+from title.models import Title
+from django.contrib.auth.models import User
 
 
 def specified_rating_indices(u):
@@ -32,14 +33,8 @@ def mean(u):
         return m
 
 
-def all_user_mean_ratings(ratings_matrix):
-    return np.array([mean(ratings_matrix[u, :]) for u in range(ratings_matrix.shape[0])])
-
-
-def get_mean_centered_ratings_matrix(ratings_matrix):
-    users_mean_rating = all_user_mean_ratings(ratings_matrix)
-    mean_centered_ratings_matrix = ratings_matrix - np.reshape(users_mean_rating, [-1, 1])
-    return mean_centered_ratings_matrix
+def all_user_mean_ratings(rating_matrix):
+    return np.array([mean(rating_matrix[u, :]) for u in range(rating_matrix.shape[0])])
 
 
 def pearson(u, v):
@@ -74,34 +69,22 @@ def pearson(u, v):
     return result
 
 
-def get_similarity_value_for(u_index, ratings_matrix):
-    user_ratings = ratings_matrix[u_index, :]
-    similarity_value = np.array([pearson(ratings_matrix[i, :], user_ratings) for i in range(ratings_matrix.shape[0])])
+def get_similarity_value_for(u_index, rating_matrix):
+    user_ratings = rating_matrix[u_index, :]
+    similarity_value = np.array([pearson(rating_matrix[i, :], user_ratings) for i in range(rating_matrix.shape[0])])
     return similarity_value
 
 
-def get_similarity_matrix(ratings_matrix):
-    similarity_matrix = []
-    for u_index in range(ratings_matrix.shape[0]):
-        user_ratings = ratings_matrix[u_index, :]
-        similarity_value = []
-        for v_index in range(ratings_matrix.shape[0]):
-            pearson_similarity = pearson(ratings_matrix[v_index, :], user_ratings)
-            similarity_value.append(pearson_similarity)
-        similarity_matrix.append(similarity_value)
-    return np.array(similarity_matrix)
-
-
-def get_item_similarity_value_for(i_index, ratings_matrix):
-    title_ratings = ratings_matrix[:, i_index]
-    similarity_value = np.array([pearson(ratings_matrix[:, i], title_ratings) for i in range(ratings_matrix.shape[1])])
+def get_item_similarity_value_for(i_index, rating_matrix):
+    title_ratings = rating_matrix[:, i_index]
+    similarity_value = np.array([pearson(rating_matrix[:, i], title_ratings) for i in range(rating_matrix.shape[1])])
     return similarity_value
 
 
-def get_item_similarity_matrix(ratings_matrix):
+def get_item_similarity_matrix(rating_matrix):
     similarity_matrix = []
-    for i_index in range(ratings_matrix.shape[1]):
-        similarity_value = get_item_similarity_value_for(i_index, ratings_matrix)
+    for i_index in range(rating_matrix.shape[1]):
+        similarity_value = get_item_similarity_value_for(i_index, rating_matrix)
         similarity_matrix.append(similarity_value)
     return np.array(similarity_matrix)
 
@@ -132,80 +115,106 @@ def get_item_similarity_matrix(ratings_matrix):
 #         np.abs(user_rating_similarity_value))
 #     return rating_user_base
 
-def predict(u_index, i_index, ratings_matrix, mean_centered_ratings_matrix, user_similarity_matrix):
-    # Predict rating
-    users_mean_rating = all_user_mean_ratings(ratings_matrix)
-    similarity_value = user_similarity_matrix[u_index]
-    # If user have not yet rated the book or the item have been rate yet by any user will return NaN value
-    if specified_rating_indices(ratings_matrix[:, i_index]) is None:
-        return np.nan
-    # Get item which user u_index is rated
-    users_rated_item = specified_rating_indices(ratings_matrix[:, i_index])[0]
-    # Get mean centering rating of item
-    mean_ratings_in_item = mean_centered_ratings_matrix[:, i_index]
-    # Get rating of item which user u_index is rated
-    user_rating = mean_ratings_in_item[np.array(users_rated_item)]
-    user_rating_similarity_value = similarity_value[np.array(users_rated_item)]
-    # predict rating
-    rating_user_base = users_mean_rating[u_index] + np.sum(user_rating * user_rating_similarity_value) / np.sum(
-        np.abs(user_rating_similarity_value))
-    return rating_user_base
-
-
-def predict_top_items_of_user(u_index, ratings_matrix, item_ratings_matrix=None):
-    mean_centered_ratings_matrix = get_mean_centered_ratings_matrix(ratings_matrix)
-    item_mean_centered_ratings_matrix = get_mean_centered_ratings_matrix(item_ratings_matrix)
-
-    user_similarity_matrix = get_similarity_matrix(ratings_matrix)
-    item_similarity_matrix = get_similarity_matrix(item_ratings_matrix)
-    items_list = []
-    items = []
-    for i_index in tqdm(range(ratings_matrix.shape[1])):
-        predicted_rating_user_based = 0
-        predicted_rating_item_based = 0
-        # Predict rating base on user-base
-        if np.isnan(ratings_matrix[u_index][i_index]):
-            predicted_rating_user_based = predict(u_index, i_index, ratings_matrix,
-                                                  mean_centered_ratings_matrix, user_similarity_matrix)
-            if np.isnan(predicted_rating_user_based):
-                predicted_rating_user_based = 0
-        # Predict rating base on item-base
-        if np.isnan(item_ratings_matrix[i_index][u_index]):
-            predicted_rating_item_based = predict(i_index, u_index, item_ratings_matrix,
-                                                  item_mean_centered_ratings_matrix, item_similarity_matrix)
-            if np.isnan(predicted_rating_item_based):
-                predicted_rating_item_based = 0
-        predicted_rating = predicted_rating_user_based + predicted_rating_item_based
-        # If rating != 0 add to list
-        if predicted_rating != 0:
-            items_list.append(i_index)
-            items.append((i_index, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
-    # Sorting base on predited rating
-    items = sorted(items, key=lambda tup: tup[1])
-    return list(reversed(items))
-
 
 class RecommendationNB:
-    @staticmethod
-    def get_list_recommendation(user_id):
+    def __init__(self, rating_df=None):
+        if rating_df is None:
+            self.rating_df = pd.DataFrame(list(Rating.objects.all().values()))
+        else:
+            self.rating_df = rating_df
+        self.rating_matrix, self.item_rating_matrix = self.get_rating_matrix()
+        self.mean_centered_ratings_matrix = self.cal_mean_centered_ratings_matrix(self.rating_matrix)
+        self.item_mean_centered_ratings_matrix = self.cal_mean_centered_ratings_matrix(self.item_rating_matrix)
+        self.user_similarity_matrix = self.cal_similarity_matrix(self.rating_matrix)
+        self.item_similarity_matrix = self.cal_similarity_matrix(self.item_rating_matrix)
+
+    def get_rating_matrix(self):
         # Load data
-        logger.info("Load all rating data")
-        rating_df = pd.DataFrame(list(Rating.objects.all().values()))
-        num_user = rating_df.user_id.max()
-        num_title = rating_df.title_id.max()
+        print("Load all rating data")
+        num_user = User.objects.all().count() + 1
+        num_title = Title.objects.all().count() + 1
         # Creating ratings matrix
-        logger.debug("Creating ratings matrix")
-        ratings_matrix = np.empty((num_user, num_title))
-        ratings_matrix[:] = np.nan
-        item_ratings_matrix = np.empty((num_title, num_user))
-        item_ratings_matrix[:] = np.nan
+        print("Creating ratings matrix")
+        rating_matrix = np.empty((num_user, num_title))
+        rating_matrix[:] = np.nan
+        item_rating_matrix = np.empty((num_title, num_user))
+        item_rating_matrix[:] = np.nan
 
-        for row in tqdm(rating_df.itertuples()):
-            ratings_matrix[row.user_id - 1, row.title_id - 1] = row.rating
-            item_ratings_matrix[row.title_id - 1, row.user_id - 1] = row.rating
+        for row in tqdm(self.rating_df.itertuples()):
+            rating_matrix[row.user_id - 1, row.title_id - 1] = row.rating
+            item_rating_matrix[row.title_id - 1, row.user_id - 1] = row.rating
+        return rating_matrix, item_rating_matrix
 
-        logger.info("Predict for user", user_id)
-        rec_list = predict_top_items_of_user(user_id, ratings_matrix, item_ratings_matrix)
+    @staticmethod
+    def cal_mean_centered_ratings_matrix(rating_matrix):
+        users_mean_rating = all_user_mean_ratings(rating_matrix)
+        mean_centered_ratings_matrix = rating_matrix - np.reshape(users_mean_rating, [-1, 1])
+        return mean_centered_ratings_matrix
+
+    @staticmethod
+    def cal_similarity_matrix(rating_matrix):
+        similarity_matrix = []
+        for u_index in range(rating_matrix.shape[0]):
+            user_ratings = rating_matrix[u_index, :]
+            similarity_value = []
+            for v_index in range(rating_matrix.shape[0]):
+                pearson_similarity = pearson(rating_matrix[v_index, :], user_ratings)
+                similarity_value.append(pearson_similarity)
+            similarity_matrix.append(similarity_value)
+        return np.array(similarity_matrix)
+
+    @staticmethod
+    def predict(u_index, i_index, rating_matrix, mean_centered_ratings_matrix, user_similarity_matrix):
+        # Predict rating
+        users_mean_rating = all_user_mean_ratings(rating_matrix)
+        similarity_value = user_similarity_matrix[u_index]
+        # If user have not yet rated the book or the item have been rate yet by any user will return NaN value
+        if specified_rating_indices(rating_matrix[:, i_index]) is None:
+            return np.nan
+        # Get item which user u_index is rated
+        users_rated_item = specified_rating_indices(rating_matrix[:, i_index])[0]
+        # Get mean centering rating of item
+        mean_ratings_in_item = mean_centered_ratings_matrix[:, i_index]
+        # Get rating of item which user u_index is rated
+        user_rating = mean_ratings_in_item[np.array(users_rated_item)]
+        user_rating_similarity_value = similarity_value[np.array(users_rated_item)]
+        # predict rating
+        rating_user_base = users_mean_rating[u_index] + np.sum(user_rating * user_rating_similarity_value) / np.sum(
+            np.abs(user_rating_similarity_value))
+        return rating_user_base
+
+    def predict_top_items_of_user(self, u_index):
+        items_list = []
+        items = []
+        for i_index in tqdm(range(self.rating_matrix.shape[1])):
+            predicted_rating_user_based = 0
+            predicted_rating_item_based = 0
+            # Predict rating base on user-base
+            if np.isnan(self.rating_matrix[u_index][i_index]):
+                predicted_rating_user_based = self.predict(u_index, i_index, self.rating_matrix,
+                                                           self.mean_centered_ratings_matrix,
+                                                           self.user_similarity_matrix)
+                if np.isnan(predicted_rating_user_based):
+                    predicted_rating_user_based = 0
+            # Predict rating base on item-base
+            if np.isnan(self.item_rating_matrix[i_index][u_index]):
+                predicted_rating_item_based = self.predict(i_index, u_index, self.item_rating_matrix,
+                                                           self.item_mean_centered_ratings_matrix,
+                                                           self.item_similarity_matrix)
+                if np.isnan(predicted_rating_item_based):
+                    predicted_rating_item_based = 0
+            predicted_rating = predicted_rating_user_based + predicted_rating_item_based
+            # If rating != 0 add to list
+            if predicted_rating != 0:
+                items_list.append(i_index)
+                items.append((i_index, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
+        # Sorting base on predited rating
+        items = sorted(items, key=lambda tup: tup[1])
+        return list(reversed(items))
+
+    def get_list_recommendation(self, user_id):
+        print("Predict for user", user_id)
+        rec_list = self.predict_top_items_of_user(user_id)
         return rec_list
 
 
@@ -215,4 +224,6 @@ if __name__ == '__main__':
     # logger.info("Print user ratings_matrix")
     # print(ratings_matrix[user_index])
     # predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)
-    RecommendationNB().get_list_recommendation(user_index)
+    res_nb = RecommendationNB()
+    # ratings_matrix, item_ratings_matrix = res_nb.get_rating_matrix()
+    print(res_nb.get_list_recommendation(user_index))
