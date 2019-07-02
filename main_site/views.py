@@ -47,8 +47,8 @@ def get_recommendation_cb(request):
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    book_id_list = cb_rs.RecommendationCB().get_top__recommendations(current_user_id)
-    book_list = Title.objects.filter(id__in=book_id_list)[:12]
+    book_id_list = cb_rs.RecommendationCB().get_top__recommendations(current_user_id, 8)
+    book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
     return JsonResponse({'status': 200, 'data': data})
@@ -70,12 +70,12 @@ def get_recommendation_cf(request):
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    rec_list = cf_rs.RecommendationNB().get_list_recommendation(current_user_id - 1)
+    rec_list = cf_rs.RecommendationNB().get_list_recommendation(current_user_id - 1, 10)
     print(rec_list)
     book_id_list = []
     for i in rec_list:
         book_id_list.append(int(i[0]) + 1)
-    book_list = Title.objects.filter(id__in=book_id_list)[:12]
+    book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
     return JsonResponse({'status': 200, 'data': data})

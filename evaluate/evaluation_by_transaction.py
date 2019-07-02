@@ -111,7 +111,7 @@ class EvaluationByTransaction:
         error_list = []
         for item in test_user_tile:
             book_id_list = []
-            rec_list = res_nb.get_list_recommendation(item['user_id'] - 1)
+            rec_list = res_nb.get_list_recommendation(item['user_id'] - 1, 10)
             print(rec_list)
             for i in rec_list:
                 book_id_list.append(int(i[0]) + 1)
@@ -131,7 +131,7 @@ class EvaluationByTransaction:
         res_cb = cb_rs.RecommendationCB()
         error_list = []
         for item in test_user_tile:
-            rec_list = res_cb.get_top__recommendations(item['user_id'])
+            rec_list = res_cb.get_top__recommendations(item['user_id'], 10)
             print('user', item['user_id'])
             print(item['title_id'])
             print('predict:', rec_list)

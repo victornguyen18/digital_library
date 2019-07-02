@@ -212,9 +212,9 @@ class RecommendationNB:
         items = sorted(items, key=lambda tup: tup[1])
         return list(reversed(items))
 
-    def get_list_recommendation(self, user_id):
+    def get_list_recommendation(self, user_id, top_item=10):
         print("Predict for user", user_id)
-        rec_list = self.predict_top_items_of_user(user_id)
+        rec_list = self.predict_top_items_of_user(user_id)[top_item]
         return rec_list
 
 
@@ -226,4 +226,4 @@ if __name__ == '__main__':
     # predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)
     res_nb = RecommendationNB()
     # ratings_matrix, item_ratings_matrix = res_nb.get_rating_matrix()
-    print(res_nb.get_list_recommendation(user_index))
+    print(res_nb.get_list_recommendation(user_index, 10))

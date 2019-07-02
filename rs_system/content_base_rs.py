@@ -19,7 +19,7 @@ from title.models import Title
 
 class RecommendationCB:
     @staticmethod
-    def get_top_recommendations_by_title(title_id):
+    def get_top_recommendations_by_title(title_id, top_item=10):
         cosine_sim_title_id = Similarity.objects.filter(source=title_id)
         cosine_sim_title_id = [Similarity.get_similarity_as_list(similarity) for similarity in
                                cosine_sim_title_id]
@@ -32,10 +32,10 @@ class RecommendationCB:
         title_list = sorted(sim_scores, key=lambda x: x[1], reverse=True)
         title_list = list(dict.fromkeys(title_list))
         title_indices = [i[0] for i in title_list]
-        return title_indices
+        return title_indices[:top_item]
 
     @staticmethod
-    def get_top__recommendations(user_id):
+    def get_top__recommendations(user_id, top_item=10):
         rating_list = list(Rating.objects.filter(user_id=user_id).order_by('-rating').values())
         title_list = list()
         for rating in rating_list:
@@ -56,7 +56,7 @@ class RecommendationCB:
         title_list = list(dict.fromkeys(title_list))
         # Get the title indices
         title_indices = [i[0] for i in title_list]
-        return title_indices
+        return title_indices[:top_item]
 
 
 if __name__ == '__main__':
