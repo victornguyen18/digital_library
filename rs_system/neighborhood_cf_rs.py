@@ -186,7 +186,7 @@ class RecommendationNB:
     def predict_top_items_of_user(self, u_index):
         items_list = []
         items = []
-        for i_index in tqdm(range(self.rating_matrix.shape[1])):
+        for i_index in range(self.rating_matrix.shape[1]):
             predicted_rating_user_based = 0
             predicted_rating_item_based = 0
             # Predict rating base on user-base

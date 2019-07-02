@@ -109,7 +109,7 @@ class EvaluationByTransaction:
         train_data_df, test_user_tile = self.slip_data(transaction_df)
         res_nb = nb_rs.RecommendationNB()
         error_list = []
-        for item in tqdm(test_user_tile):
+        for item in test_user_tile:
             book_id_list = []
             rec_list = res_nb.get_list_recommendation(item['user_id'] - 1)
             print(rec_list)
@@ -130,8 +130,12 @@ class EvaluationByTransaction:
         train_data_df, test_user_tile = self.slip_data(transaction_df)
         res_cb = cb_rs.RecommendationCB()
         error_list = []
-        for item in tqdm(test_user_tile):
+        for item in test_user_tile:
             rec_list = res_cb.get_top__recommendations(item['user_id'])
+            print('user', item['user_id'])
+            print(item['title_id'])
+            print('predict:', rec_list)
+            print(list(set(item['title_id']) & set(rec_list)))
             if len(rec_list) != 0:
                 error_list.append(len(list(set(item['title_id']) & set(rec_list))) / len(rec_list))
         print(error_list)
@@ -141,6 +145,10 @@ class EvaluationByTransaction:
 if __name__ == '__main__':
     print('===========')
     evaluation = EvaluationByTransaction()
-    # print(evaluation.evaluation_in_cf())
+    print("Evaluation of CF")
+    print(evaluation.evaluation_in_cf())
+    print('===========\n')
+    print("Evaluation of CB")
     print(evaluation.evaluation_in_cb())
+    print('===========\n')
     print('===========\n')
