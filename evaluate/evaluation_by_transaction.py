@@ -107,37 +107,42 @@ class EvaluationByTransaction:
     def evaluation_in_cf(self):
         transaction_df = self.load_transaction_data()
         train_data_df, test_user_tile = self.slip_data(transaction_df)
+        print(len(test_user_tile))
         res_nb = nb_rs.RecommendationNB()
         error_list = []
         for item in test_user_tile:
             book_id_list = []
-            rec_list = res_nb.get_list_recommendation(item['user_id'] - 1, 10)
+            rec_list = res_nb.get_list_recommendation(item['user_id'], 10)
             print(rec_list)
             for i in rec_list:
                 book_id_list.append(int(i[0]) + 1)
-            # book_id_list = book_id_list + 1
-            print('user', item['user_id'])
-            print(item['title_id'])
-            print('predict:', book_id_list)
-            print(list(set(item['title_id']) & set(book_id_list)))
             if len(book_id_list) != 0:
-                error_list.append(len(list(set(item['title_id']) & set(book_id_list))) / len(book_id_list))
+                print('user', item['user_id'])
+                print(item['title_id'])
+                print('predict:', book_id_list)
+                print(list(set(item['title_id']) & set(rec_list)))
+                error = len(list(set(item['title_id']) & set(book_id_list))) / len(book_id_list)
+                print('ERROR', error)
+                error_list.append(error)
         print(error_list)
         return np.sum(error_list) / len(error_list)
 
     def evaluation_in_cb(self):
         transaction_df = self.load_transaction_data()
         train_data_df, test_user_tile = self.slip_data(transaction_df)
+        print(len(test_user_tile))
         res_cb = cb_rs.RecommendationCB()
         error_list = []
         for item in test_user_tile:
             rec_list = res_cb.get_top__recommendations(item['user_id'], 10)
-            print('user', item['user_id'])
-            print(item['title_id'])
-            print('predict:', rec_list)
-            print(list(set(item['title_id']) & set(rec_list)))
             if len(rec_list) != 0:
-                error_list.append(len(list(set(item['title_id']) & set(rec_list))) / len(rec_list))
+                print('user', item['user_id'])
+                print(item['title_id'])
+                print('predict:', rec_list)
+                print(list(set(item['title_id']) & set(rec_list)))
+                error = len(list(set(item['title_id']) & set(rec_list))) / len(rec_list)
+                print('ERROR', error)
+                error_list.append(error)
         print(error_list)
         return np.sum(error_list) / len(error_list)
 
@@ -145,9 +150,9 @@ class EvaluationByTransaction:
 if __name__ == '__main__':
     print('===========')
     evaluation = EvaluationByTransaction()
-    print("Evaluation of CF")
-    print(evaluation.evaluation_in_cf())
-    print('===========\n')
+    # print("Evaluation of CF")
+    # print(evaluation.evaluation_in_cf())
+    # print('===========\n')
     print("Evaluation of CB")
     print(evaluation.evaluation_in_cb())
     print('===========\n')

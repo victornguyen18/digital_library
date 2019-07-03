@@ -214,7 +214,14 @@ class RecommendationNB:
 
     def get_list_recommendation(self, user_id, top_item=10):
         print("Predict for user", user_id)
-        rec_list = self.predict_top_items_of_user(user_id)[top_item]
+        rec_list = self.predict_top_items_of_user(user_id)
+        # print(len(rec_list))
+        # if len(rec_list) == 0:
+        #     return []
+        # if len(rec_list) - 1 < top_item:
+        #     number_of_item = len(rec_list) - 1
+        # else:
+        #     number_of_item = top_item
         return rec_list
 
 
