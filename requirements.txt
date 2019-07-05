@@ -12,4 +12,3 @@ pyLDAvis
 stop_words
 gensim
 tqdm
-nltk
