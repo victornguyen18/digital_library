@@ -1022,12 +1022,16 @@ section {
     text-align: center;
 }
 
-.book_title span {
+.book_title a {
     font-family: 'Oswald', sans-serif;
     padding: 10px 5px 0px 5px;
     font-size: 25px;
     font-weight: 400;
     color: #181818;
+}
+
+.book_title a:hover {
+    text-decoration: underline;
 }
 
 .book_subtitle {
