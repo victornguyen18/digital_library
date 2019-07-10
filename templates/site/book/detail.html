@@ -52,15 +52,15 @@
 
 {% block footer %}
     <script>
-        function get_book_item(title, year, author, publisher) {
+        function get_book_item(id, title, year, author, publisher) {
             html = "<div class=\"book item col-md-3\">\n" +
                 "                        <div class=\" book_image\">\n" +
                 "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
                 "                        </div>\n" +
                 "                        <div class=\" book_content\">\n" +
                 "                            <div class=\"book_title\">\n" +
-                "                                <span href=\"#\">" + title +
-                "                                </span>\n" +
+                "                                <a href='/book/detail/" + id + "'>" + title +
+                "                                </a>\n" +
                 "                            </div>\n" +
                 "                            <div class=\"book_publisher\">\n" +
                 "                                <a href=\"#\">" + year + "</a> -\n" +
@@ -89,7 +89,7 @@
                     var book_list = JSON.parse(response.data.book_list);
                     console.log(book_list);
                     book_list.forEach(function (element) {
-                        $('#cb_recommendation_book_list').append(get_book_item(element.name, element.year,
+                        $('#cb_recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
                             element.author, element.publisher));
                     });
                 } else {
