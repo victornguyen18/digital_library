@@ -63,10 +63,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
-            'builtins': [
-                'templatetags.helps',
-                'templatetags.helps_site',
-            ]
+            'libraries': {
+                'helps': 'templatetags.helps',
+                'helps_site': 'templatetags.helps_site',
+            },
+            # 'builtins': [
+            #     'templatetags.helps',
+            #     'templatetags.helps_site',
+            # ]
         },
     },
 ]
