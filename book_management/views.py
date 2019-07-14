@@ -87,6 +87,10 @@ def dashboard(request):
         return redirect('/')
 
 
+def error_403(request):
+    return render(request, 'site/403.html')
+
+
 def get_user_info(request, username):
     # return HttpResponse('run')
     try:

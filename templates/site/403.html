@@ -1,0 +1,23 @@
+{% extends 'site/layouts/main.html' %}
+
+{% load static from staticfiles %}
+{% load helps %}
+
+{% block title %}
+    Search Book {{ search_term }}
+{% endblock %}
+
+{% block content %}
+    <div class="container" style="padding: 80px 0px">
+        <div class="row col-md-12">
+            <div class="note note-danger" style="width: 100%">
+                <h4>Oops, an error has occurred. Forbidden!</h4>
+                <p> The server understood the request, but is refusing to fulfill it. Authorization will not
+                    help and the request SHOULD NOT be repeated.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+{% endblock %}
