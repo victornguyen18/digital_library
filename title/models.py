@@ -56,7 +56,6 @@ class Title(models.Model):
 
     class Meta:
         db_table = 'title'
-        permissions = (("login_dashboard", "Login to dashboard"),)
 
     def __str__(self):
         return self.name
