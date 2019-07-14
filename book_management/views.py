@@ -17,10 +17,6 @@ from transaction.models import Detail
 import builder.calculate_point as cp
 
 
-def index(request):
-    return render(request, 'index.html')
-
-
 def homepage(request):
     cp.CalculatePointAllUser().calculate()
     return render(request, 'site/homepage.html')
@@ -70,19 +66,25 @@ def session_set_json(request):
 
 @login_required(login_url='/log-in')
 def dashboard(request):
-    detail_tran_list = Detail.objects.filter(status__in=[2, 3]) \
-        .order_by('book__status', '-transaction__date', 'id')
-    total_title = Title.objects.count()
-    total_book = Book.objects.count()
-    total_book_hiring = Book.objects.filter(status=3).count()
-    total_book_overdue = Detail.objects.filter(status=3, due_date__lte=datetime.now()).count()
-    return render(request, 'admin/dashboard/index.html', {
-        'detail_tran_list': detail_tran_list,
-        'total_book': total_book,
-        'total_title': total_title,
-        'total_book_hiring': total_book_hiring,
-        'total_book_overdue': total_book_overdue,
-    })
+    if User.objects.filter(pk=request.user.id, groups__name__in=['Part-time', 'Staff']).exists():
+        detail_tran_list = Detail.objects.filter(status__in=[2, 3]) \
+            .order_by('book__status', '-transaction__date', 'id')
+        total_title = Title.objects.count()
+        total_book = Book.objects.count()
+        total_book_hiring = Book.objects.filter(status=3).count()
+        total_book_overdue = Detail.objects.filter(status=3, due_date__lte=datetime.now()).count()
+        return render(request, 'admin/dashboard/index.html', {
+            'detail_tran_list': detail_tran_list,
+            'total_book': total_book,
+            'total_title': total_title,
+            'total_book_hiring': total_book_hiring,
+            'total_book_overdue': total_book_overdue,
+        })
+    else:
+        messages.error(request,
+                       "You don't have permission to access dashboard. "
+                       "Please contact your administrator to request access")
+        return redirect('/')
 
 
 def get_user_info(request, username):

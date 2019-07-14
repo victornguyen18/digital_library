@@ -9,7 +9,6 @@ urlpatterns = [
     path('favicon.ico', RedirectView.as_view(url='/static/images/favicon.ico')),
     path('', views.homepage, name='homepage'),
     path('', include('main_site.urls')),
-    path('index', views.index),
     # Session
     path('session/create', views.session_set_json, name='session.create_json'),
     # Title
