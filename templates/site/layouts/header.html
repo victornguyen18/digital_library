@@ -15,10 +15,10 @@
                                 {# <li><a href="#">Services</a></li>#}
                                 {# <li><a href="news.html">News</a></li>#}
                                 {% if not user.is_authenticated %}
-                                    <li><a href="{% url 'log-in' %}">Login</a></li>
+                                    <li><a href="{% url 'login' %}">Login</a></li>
                                 {% else %}
                                     <li>
-                                        <a href="{% url 'log-out' %}">
+                                        <a href="{% url 'logout' %}">
                                             <span class="hidden-xs text-uppercase bold">{{ user.get_username }}</span>
                                             - Logout
                                         </a>

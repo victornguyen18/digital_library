@@ -11,7 +11,7 @@ from django.contrib import messages
 from datetime import datetime
 
 
-@permission_required('can_view_all_transactions', login_url='/log-in')
+@permission_required('can_view_all_transactions', login_url='/login')
 def transaction_index(request):
     transaction = Detail.objects.all() \
         .order_by('-status', '-transaction__date', 'id')
@@ -20,7 +20,7 @@ def transaction_index(request):
     })
 
 
-@permission_required('transaction.can_create_transaction', login_url='/log-in')
+@permission_required('transaction.can_create_transaction', login_url='/login')
 def transaction_create(request):
     if request.POST:
         # Post method -> save to database
@@ -91,7 +91,7 @@ def transaction_create(request):
         'detail_tran': detail_tran})
 
 
-@permission_required('transaction.can_mark_hiring', login_url='/log-in')
+@permission_required('transaction.can_mark_hiring', login_url='/login')
 def approved_hire(request, detail_id):
     tran_detail = Detail.objects.get(id=detail_id)
     if tran_detail.status == 2:
@@ -108,7 +108,7 @@ def approved_hire(request, detail_id):
     return redirect('dashboard')
 
 
-@permission_required('transaction.can_reject_hiring', login_url='/log-in')
+@permission_required('transaction.can_reject_hiring', login_url='/login')
 def reject(request, detail_id):
     tran_detail = Detail.objects.get(id=detail_id)
     if tran_detail.status == 2:
@@ -125,7 +125,7 @@ def reject(request, detail_id):
     return redirect('dashboard')
 
 
-@permission_required('transaction.can_mark_returned', login_url='/log-in')
+@permission_required('transaction.can_mark_returned', login_url='/login')
 def return_book(request, detail_id):
     tran_detail = Detail.objects.get(id=detail_id)
     if tran_detail.status == 3:

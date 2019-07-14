@@ -11,7 +11,7 @@ from django.contrib.auth.models import User, Group
 from user.models import Detail
 
 
-@login_required(login_url='/log-in')
+@login_required(login_url='/login')
 def user_index(request):
     items = User.objects.all() \
         .order_by('-id')

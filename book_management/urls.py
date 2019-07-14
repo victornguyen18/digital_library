@@ -19,8 +19,8 @@ urlpatterns = [
     # Transaction
     path('admin/', include('transaction.urls')),
     path('admin2/', admin.site.urls),
-    path('log-in', views.login, name='log-in'),
-    path('log-out', views.logout, name='log-out'),
+    path('login', views.login, name='login'),
+    path('logout', views.logout, name='logout'),
     path('dashboard', views.dashboard, name='dashboard'),
     re_path('user/api/(?P<username>[a-zA-Z0-9]+)$', views.get_user_info),
     # API

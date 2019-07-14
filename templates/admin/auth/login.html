@@ -61,7 +61,7 @@
             {% endfor %}
         {% endif %}
         <p class="login-box-msg">Log in to start your session</p>
-        <form role="form" action="{% url 'log-in' %}" method="post" enctype="multipart/form-data">
+        <form role="form" action="{% url 'login' %}" method="post" enctype="multipart/form-data">
             {% csrf_token %}
             <div class="form-group has-feedback">
                 <input type="text" name="username"

@@ -10,7 +10,7 @@ from datetime import datetime, timedelta
 from .models import Title, Author, Publisher, Book
 
 
-@login_required(login_url='/log-in')
+@login_required(login_url='/login')
 def author_index(request):
     author = Author.objects.all()
     return render(request, 'admin/author/index.html', {
@@ -18,7 +18,7 @@ def author_index(request):
     })
 
 
-@login_required(login_url='/log-in')
+@login_required(login_url='/login')
 def author_create(request):
     return 0
 
@@ -61,7 +61,7 @@ def title_index(request):
     })
 
 
-@login_required(login_url='/log-in')
+@login_required(login_url='/login')
 def title_create(request):
     return 0
 

@@ -24,7 +24,7 @@ def homepage(request):
 
 def logout(request):
     dj_logout(request)
-    return redirect('/log-in')
+    return redirect('/login')
 
 
 def login(request):
@@ -53,18 +53,18 @@ def login(request):
         else:
             messages.error(request, 'Wrong account or password. Please try again or click Forgot Password to reset '
                                     'password.')
-        return redirect('/log-in')
+        return redirect('/login')
     return render(request, 'admin/auth/login.html')
 
 
-@login_required(login_url='/log-in')
+@login_required(login_url='/login')
 def session_set_json(request):
     for session in json.loads(request.POST['SessionInput']):
         request.session[session['key']] = session['value']
     return JsonResponse({'status': 200})
 
 
-@login_required(login_url='/log-in')
+@login_required(login_url='/login')
 def dashboard(request):
     if User.objects.filter(pk=request.user.id, groups__name__in=['Part-time', 'Staff']).exists():
         detail_tran_list = Detail.objects.filter(status__in=[2, 3]) \
