@@ -20,7 +20,7 @@ from main_site.models import Similarity
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 
-features = ['author', 'faculty', 'publisher', 'topic']
+features = ['author', 'author', 'faculty', 'faculty', 'publisher', 'topic']
 
 
 def clean_data(x):
@@ -36,6 +36,8 @@ def create_bag_of_words(x):
     temp = ''
     for feature in features:
         temp += x[feature + '_clean'] + ' '
+    temp += str.lower(x['name'])
+    temp += str.lower(x['name'])
     temp += str.lower(x['name'])
     return temp
 
