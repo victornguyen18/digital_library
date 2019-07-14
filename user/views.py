@@ -23,12 +23,13 @@ def user_index(request):
 def user_create(request):
     if request.POST:
         # Create user -> save to db
+        print(request.POST)
         data_user = User.objects.create(
             password=make_password(request.POST.get('username')),
             is_superuser=0,
-            username=request.POST.get('username'),
-            first_name=request.POST.get('first_name'),
-            last_name=request.POST.get('last_name'),
+            username=request.POST.get('username').lower(),
+            first_name=request.POST.get('firstname'),
+            last_name=request.POST.get('lastname'),
             email=request.POST.get('email'),
             is_staff=0,
             is_active=1,
