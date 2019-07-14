@@ -52,3 +52,16 @@ def get_pagination(request, total_page):
         html += "</div>"
         # # return "Thang"
     return html
+
+
+@register.filter(name='index')
+def index(item_list, position):
+    return item_list[position]
+
+
+@register.filter(name='check_select')
+def check_select(value_check, value_input):
+    if int(value_check) == int(value_input):
+        return 'selected'
+    else:
+        return ''
