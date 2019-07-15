@@ -718,6 +718,18 @@ section {
     color: #72728c !important;
 }
 
+/*.search_input:hover {*/
+/*    background-color: #dae0e5;*/
+/*    border-color: #d3d9df;*/
+/*}*/
+
+/*.search_input .btn-light:not([disabled]):not(.disabled).active,*/
+/*.search_input .btn-light:not([disabled]):not(.disabled):active,*/
+/*.search_input .show > .btn-light.dropdown-toggle {*/
+/*    border-color: transparent;*/
+/*    box-shadow: none;*/
+/*}*/
+
 .search_input::-webkit-input-placeholder {
     font-family: 'Oswald', sans-serif;
     font-size: 14px !important;

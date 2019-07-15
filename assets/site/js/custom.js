@@ -50,6 +50,7 @@ $(document).ready(function () {
     initTestimonialsSlider();
     initScrolling();
     initInput();
+    initSelection();
 
     /*
 
@@ -202,5 +203,9 @@ $(document).ready(function () {
 
             });
         }
+    }
+
+    function initSelection() {
+        $('select').selectpicker();
     }
 });
