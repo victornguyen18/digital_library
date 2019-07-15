@@ -1,0 +1,13 @@
+.menu_content .active {
+    text-decoration: underline;
+    /*! font-weight: bold; */
+}
+
+.menu_content .active a {
+    font-weight: bold;
+}
+
+.menu_content a:hover {
+    text-decoration: underline !important;
+    color: #72728c !important;
+}

@@ -18,55 +18,21 @@
     <link rel="stylesheet" type="text/css"
           href="{% static "bower_components/OwlCarousel2-2.2.1/owl.theme.default.css" %}">
     <link rel="stylesheet" type="text/css" href="{% static "bower_components/OwlCarousel2-2.2.1/animate.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "site/styles/main_styles.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "site/styles/responsive.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "site/styles/main_styles.css" %}?v=0.0.1">
+    <link rel="stylesheet" type="text/css" href="{% static "site/styles/responsive.css" %}?v=0.0.1">
+    <link rel="stylesheet" type="text/css" href="{% static "site/styles/custom.css" %}?v=0.0.3">
 </head>
 <body>
 <div class="super_container">
     <!-- Header && Menu -->
     {% include 'site/layouts/header.html' %}
     <!-- Home -->
-    {% if request.path == '/' %}
-        <div class="home" style="height: 834px; !important;">
-            <!-- Home Slider -->
-            <div class="home_slider_container">
-                <div class="owl-carousel owl-theme home_slider">
-                    <!-- Slide -->
-                    <div class="owl-item">
-                        <div class="background_image"
-                             style="background-image:url({% static "images/IU-background.jpg" %})">
-                            <div class="background_image overlay-bg"></div>
-                        </div>
-                        <div class="home_slider_content_container">
-                            <div class="container">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="home_slider_content">
-                                            <div class="home_title">
-                                                <h2>When in doubt go to the library</h2>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <div class="home" style="height: 550px; !important;">
+        <div class="background_image"
+             style="background-image:url({% static "images/IU-background.jpg" %});">
+            <div class="background_image overlay-bg"></div>
         </div>
-    {% else %}
-        {% if request.path == '/' %}
-            <div class="home" style="height: 586px; !important;">
-        {% else %}
-            <div class="home" style="height: 450px; !important;">
-        {% endif %}
-    <div class="background_image"
-         style="background-image:url({% static "images/IU-background.jpg" %});">
-        <div class="background_image overlay-bg"></div>
     </div>
-    </div>
-
-    {% endif %}
 
     {% include 'site/layouts/search.html' %}
 
@@ -78,18 +44,18 @@
     <!-- Footer -->
     {% include 'site/layouts/footer.html' %}
 
-    </div>
-    <script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
-    <script src="{% static "bower_components/bootstrap4/popper.js" %}"></script>
-    <script src="{% static "bower_components/bootstrap4/bootstrap.min.js" %}"></script>
-    <script src="{% static "bower_components/OwlCarousel2-2.2.1/owl.carousel.js" %}"></script>
-    <script src="{% static "bower_components/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js" %}"></script>
-    <script src="{% static "plugins/Isotope/isotope.pkgd.min.js" %}"></script>
-    <script src="{% static "plugins/scrollTo/jquery.scrollTo.min.js" %}"></script>
-    <script src="{% static "plugins/easing/easing.js" %}"></script>
-    <script src="{% static "plugins/parallax-js-master/parallax.min.js" %}"></script>
-    <script src="{% static "site/js/custom.js" %}"></script>
-    {% block footer %}
-    {% endblock %}
+</div>
+<script src="{% static "bower_components/jquery/dist/jquery.min.js" %}"></script>
+<script src="{% static "bower_components/bootstrap4/popper.js" %}"></script>
+<script src="{% static "bower_components/bootstrap4/bootstrap.min.js" %}"></script>
+<script src="{% static "bower_components/OwlCarousel2-2.2.1/owl.carousel.js" %}"></script>
+<script src="{% static "bower_components/bootstrap-select-1.13.9/dist/js/bootstrap-select.min.js" %}"></script>
+<script src="{% static "plugins/Isotope/isotope.pkgd.min.js" %}"></script>
+<script src="{% static "plugins/scrollTo/jquery.scrollTo.min.js" %}"></script>
+<script src="{% static "plugins/easing/easing.js" %}"></script>
+<script src="{% static "plugins/parallax-js-master/parallax.min.js" %}"></script>
+<script src="{% static "site/js/custom.js" %}"></script>
+{% block footer %}
+{% endblock %}
 </body>
 </html>
