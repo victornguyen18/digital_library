@@ -19,7 +19,7 @@
         </div>
         <div class="row books_row">
             <div class="col">
-                <div id="popular_book_list" class="row books_container item_grid col-md-12">
+                <div class="owl-carousel owl-theme search_result" id="popular_book_list">
                 </div>
             </div>
         </div>
@@ -63,28 +63,6 @@
 
 {% block footer %}
     <script>
-        function get_book_item(id, title, year, author, publisher) {
-            html = "<div class=\"book item col-md-3\">\n" +
-                "                        <div class=\" book_image\">\n" +
-                "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
-                "                        </div>\n" +
-                "                        <div class=\" book_content\">\n" +
-                "                            <div class=\"book_title\">\n" +
-                "                                <a href='/book/detail/" + id + "'>" + title +
-                "                                </a>\n" +
-                "                            </div>\n" +
-                "                            <div class=\"book_publisher\">\n" +
-                "                                <a href=\"#\">" + year + "</a> -\n" +
-                "                                <a href=\"#\">" + publisher + "</a>\n" +
-                "                            </div>\n" +
-                "                            <div class=\"book_author\">\n" +
-                "                                <a href=\"#\">" + author + "</a> -\n" +
-                "                            </div>\n" +
-                "                        </div>\n" +
-                "                    </div>";
-            return html;
-        }
-
         $(document).ready(function () {
             $.ajax({
                 url: "{% url 'get_popular_book' %}",
@@ -100,6 +78,28 @@
                         popular_book_list.forEach(function (element) {
                             $('#popular_book_list').append(get_book_item(element.id, element.name, element.year,
                                 element.author, element.publisher));
+                        });
+                        var owl = $('#popular_book_list');
+                        owl.owlCarousel({
+                            loop: true,
+                            margin: 10,
+                            responsiveClass: true,
+                            responsive: {
+                                0: {
+                                    items: 1,
+                                    nav: true
+                                },
+                                600: {
+                                    items: 2,
+                                    nav: false
+                                },
+                                1000: {
+                                    items: 4,
+                                    nav: true,
+                                    loop: false,
+                                    margin: 20
+                                }
+                            }
                         });
                     } else {
                     }

@@ -15,6 +15,27 @@
 
 
  ******************************/
+function get_book_item(id, title, year, author, publisher) {
+    html = "<div class=\"book item\">\n" +
+        "                        <div class=\" book_image\">\n" +
+        "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
+        "                        </div>\n" +
+        "                        <div class=\" book_content\">\n" +
+        "                            <div class=\"book_title\">\n" +
+        "                                <a href='/book/detail/" + id + "'>" + title +
+        "                                </a>\n" +
+        "                            </div>\n" +
+        "                            <div class=\"book_publisher\">\n" +
+        "                                <a href=\"#\">" + year + "</a> -\n" +
+        "                                <a href=\"#\">" + publisher + "</a>\n" +
+        "                            </div>\n" +
+        "                            <div class=\"book_author\">\n" +
+        "                                <a href=\"#\">" + author + "</a> -\n" +
+        "                            </div>\n" +
+        "                        </div>\n" +
+        "                    </div>";
+    return html;
+}
 
 $(document).ready(function () {
     "use strict";

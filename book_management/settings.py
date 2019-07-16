@@ -65,7 +65,6 @@ TEMPLATES = [
             ],
             'libraries': {
                 'helps': 'templatetags.helps',
-                'helps_site': 'templatetags.helps_site',
             },
             # 'builtins': [
             #     'templatetags.helps',

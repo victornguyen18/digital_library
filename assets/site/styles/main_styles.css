@@ -995,24 +995,6 @@ section {
     width: auto;
 }
 
-.spec_offer {
-    position: absolute;
-    top: 15px;
-    left: 16px;
-    width: 118px;
-    height: 36px;
-    background: #181818;
-}
-
-.spec_offer a {
-    display: block;
-    font-family: 'Oswald', sans-serif;
-    font-size: 16px;
-    color: #FFFFFF;
-    line-height: 36px;
-    font-weight: 400;
-}
-
 .books_container {
     width: calc(100% + 30px);
     left: -15px;
@@ -1024,6 +1006,16 @@ section {
     padding-right: 15px;
     margin-bottom: 58px;
 }
+
+.book.item {
+    max-width: 25% !important;
+}
+
+.owl-carousel .book {
+    width: auto !important;
+    margin-bottom: 0px !important;
+}
+
 
 .book_content {
 
@@ -1764,4 +1756,8 @@ Notes
     background-color: #fbe1e3;
     border-color: #f6b3b8;
     box-shadow: 5px 5px rgba(246, 184, 189, 0.2);
+}
+
+.owl-theme .owl-nav {
+    background: transparent;
 }

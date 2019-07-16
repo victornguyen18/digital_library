@@ -13,7 +13,7 @@
             <div class="col text-center">
                 <div class="section_subtitle">Detail book</div>
                 <div class="section_title"><h4>{{ detail.name }}</h4></div>
-                <div class="book item" style="width: 100%;margin-bottom: 0px;">
+                <div class="book one_item" style="width: 100%;margin-bottom: 0px;">
                     <div class=" book_content">
                         <div class="book_publisher" style="text-align: center">
                             <a href="#">2010</a> -
@@ -52,28 +52,6 @@
 
 {% block footer %}
     <script>
-        function get_book_item(id, title, year, author, publisher) {
-            html = "<div class=\"book item col-md-3\">\n" +
-                "                        <div class=\" book_image\">\n" +
-                "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
-                "                        </div>\n" +
-                "                        <div class=\" book_content\">\n" +
-                "                            <div class=\"book_title\">\n" +
-                "                                <a href='/book/detail/" + id + "'>" + title +
-                "                                </a>\n" +
-                "                            </div>\n" +
-                "                            <div class=\"book_publisher\">\n" +
-                "                                <a href=\"#\">" + year + "</a> -\n" +
-                "                                <a href=\"#\">" + publisher + "</a>\n" +
-                "                            </div>\n" +
-                "                            <div class=\"book_author\">\n" +
-                "                                <a href=\"#\">" + author + "</a> -\n" +
-                "                            </div>\n" +
-                "                        </div>\n" +
-                "                    </div>";
-            return html;
-        }
-
         $.ajax({
             url: "{% url 'get_recommendation_cb_with_title' %}",
             type: "GET",
