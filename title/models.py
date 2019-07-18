@@ -44,13 +44,14 @@ class Title(models.Model):
     location = models.CharField(max_length=50, blank=True, null=True)
     year = models.CharField(max_length=5)
     isbn = models.CharField(max_length=20, blank=True, null=True)
-    topic = models.CharField(max_length=512, default='')
+    # topic = models.CharField(max_length=512, default='')
     status = models.IntegerField(default=0)
     week_price = models.FloatField(default=0)
     sem_price = models.FloatField(default=0)
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
     ori_quantity = models.IntegerField(blank=True, null=True)
+    rating = models.DecimalField(decimal_places=2, max_digits=4, default=0)
     author = models.ManyToManyField('Author')
     publisher = models.ManyToManyField('Publisher')
 
@@ -78,7 +79,7 @@ class Title(models.Model):
             "isbn": self.isbn,
             "author": author_list,
             "publisher": publisher_list,
-            "topic": self.topic,
+            # "topic": self.topic,
         }
 
 
