@@ -6,6 +6,7 @@ from tqdm import tqdm
 import logging
 import pandas as pd
 from datetime import datetime
+import re
 
 sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
@@ -20,8 +21,7 @@ from main_site.models import Similarity
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
 
-features = ['author', 'author', 'faculty', 'faculty', 'publisher', 'topic']
-
+features = ['author', 'author', 'faculty', 'faculty', 'publisher']
 
 def clean_data(x):
     if isinstance(x, str):
@@ -33,12 +33,19 @@ def clean_data(x):
 
 
 def create_bag_of_words(x):
+    # Remove special character
+    name_temp = re.sub(r"[^a-zA-Z]+", ' ', x['name'])
+    name_temp = name_temp.replace(" st", "")
+    name_temp = name_temp.replace(" nd", "")
+    name_temp = name_temp.replace(" rd", "")
+    name_temp = name_temp.replace(" th", "")
+    name_temp = name_temp.replace(" ed", "")
     temp = ''
+    temp += str.lower(name_temp)
+    temp += str.lower(name_temp)
+    temp += str.lower(name_temp)
     for feature in features:
         temp += x[feature + '_clean'] + ' '
-    temp += str.lower(x['name'])
-    temp += str.lower(x['name'])
-    temp += str.lower(x['name'])
     return temp
 
 
