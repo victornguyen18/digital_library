@@ -23,6 +23,7 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 features = ['author', 'author', 'faculty', 'faculty', 'publisher']
 
+
 def clean_data(x):
     if isinstance(x, str):
         x = str.lower(x.replace(" ", ""))
