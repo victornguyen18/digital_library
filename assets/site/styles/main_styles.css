@@ -1008,7 +1008,7 @@ section {
 }
 
 .book.item {
-    max-width: 25% !important;
+    width: 25% !important;
 }
 
 .owl-carousel .book {
