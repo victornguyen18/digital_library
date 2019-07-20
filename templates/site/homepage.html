@@ -19,7 +19,14 @@
         </div>
         <div class="row books_row">
             <div class="col">
-                <div class="owl-carousel owl-theme search_result" id="popular_book_list">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-dark" role="status"
+                         id="popular_book_load">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="popular_book_list"
+                     class="owl-carousel owl-theme search_result">
                 </div>
             </div>
         </div>
@@ -36,7 +43,14 @@
         </div>
         <div class="row books_row">
             <div class="col">
-                <div id="recommendation_book_list" class="row books_container item_grid col-md-12">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-dark" role="status"
+                         id="recommendation_book_load">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="recommendation_book_list"
+                     class="owl-carousel owl-theme search_result">
                 </div>
             </div>
         </div>
@@ -53,7 +67,14 @@
         </div>
         <div class="row books_row">
             <div class="col">
-                <div id="cb_recommendation_book_list" class="row books_container item_grid col-md-12">
+                <div class="d-flex justify-content-center">
+                    <div class="spinner-border text-dark" role="status"
+                         id="cb_recommendation_book_load">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </div>
+                <div id="cb_recommendation_book_list"
+                     class="owl-carousel owl-theme search_result">
                 </div>
             </div>
         </div>
@@ -70,6 +91,7 @@
                 datatype: "json",
                 beforeSend: function () {
                     $('#popular_book_list div').remove();
+                    $('#popular_book_load').attr('style', '');
                 },
                 success: function (response) {
                     if (response.status === 200) {
@@ -101,6 +123,7 @@
                                 }
                             }
                         });
+                        $('#popular_book_load').attr('style', 'display: none !important');
                     } else {
                     }
                 }
@@ -111,6 +134,7 @@
                 datatype: "json",
                 beforeSend: function () {
                     $('#recommendation_book_list div').remove();
+                    $('#recommendation_book_load').attr('style', '');
                 },
                 success: function (response) {
                     if (response.status === 200) {
@@ -120,6 +144,29 @@
                             $('#recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
                                 element.author, element.publisher));
                         });
+                        var owl = $('#recommendation_book_list');
+                        owl.owlCarousel({
+                            loop: true,
+                            margin: 10,
+                            responsiveClass: true,
+                            responsive: {
+                                0: {
+                                    items: 1,
+                                    nav: true
+                                },
+                                600: {
+                                    items: 2,
+                                    nav: false
+                                },
+                                1000: {
+                                    items: 4,
+                                    nav: true,
+                                    loop: false,
+                                    margin: 20
+                                }
+                            }
+                        });
+                        $('#recommendation_book_load').attr('style', 'display: none !important');
                     } else {
                     }
                 }
@@ -130,6 +177,7 @@
                 datatype: "json",
                 beforeSend: function () {
                     $('#cb_recommendation_book_list div').remove();
+                    $('#cb_recommendation_book_load').attr('style', '');
                 },
                 success: function (response) {
                     if (response.status === 200) {
@@ -139,6 +187,29 @@
                             $('#cb_recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
                                 element.author, element.publisher));
                         });
+                        var owl = $('#cb_recommendation_book_list');
+                        owl.owlCarousel({
+                            loop: true,
+                            margin: 10,
+                            responsiveClass: true,
+                            responsive: {
+                                0: {
+                                    items: 1,
+                                    nav: true
+                                },
+                                600: {
+                                    items: 2,
+                                    nav: false
+                                },
+                                1000: {
+                                    items: 4,
+                                    nav: true,
+                                    loop: false,
+                                    margin: 20
+                                }
+                            }
+                        });
+                        $('#cb_recommendation_book_load').attr('style', 'display: none !important');
                     } else {
                     }
                 }
