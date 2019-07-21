@@ -15,6 +15,7 @@ import numpy as np
 
 # Import Models
 from title.models import Title
+from transaction.models import Detail
 
 
 def book_detail(request, title_id):
@@ -124,3 +125,13 @@ def search(request):
         'items': items,
         'total_page': total_page
     })
+
+
+@login_required(login_url='/login')
+def profile(request):
+    user = request.user
+    transactions = Detail.objects.filter(transaction__user_id=user.id) \
+        .order_by('-status', '-transaction__date', 'id')
+    return render(request, 'site/user/profile.html',
+                  {'user': user,
+                   'transactions': transactions})

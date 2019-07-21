@@ -1,0 +1,77 @@
+{% extends 'site/layouts/main.html' %}
+
+{% load static from staticfiles %}
+
+{% block title %}
+    Digital Library | Profile
+{% endblock %}
+{% block content %}
+    <div class="component">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-header p-b-0">
+                        <h5 class="card-title">
+                            <i class="fa fa-user" aria-hidden="true"></i>
+                            Profile <span style="text-transform: uppercase">{{ user.username }}</span></h5>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        <div class="nav flex-column nav-pills" id="v-pills-tab"
+                             role="tablist" aria-orientation="vertical">
+                            <a class="list-group-item list-group-item-action nav-link active"
+                               id="v-pills-profile-tab" href="#v-pills-profile"
+                               data-toggle="pill" role="tab"
+                               aria-controls="v-pills-profile" aria-selected="true">Profile</a>
+                            <a class="list-group-item list-group-item-action nav-link"
+                               id="v-pills-history-tab" href="#v-pills-history"
+                               data-toggle="pill" role="tab"
+                               aria-controls="v-pills-history" aria-selected="false">History</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="tab-content" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-profile" role="tabpanel"
+                                 aria-labelledby="v-pills-profile-tab">
+                                <p>Edit user profile</p>
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-history" role="tabpanel"
+                                 aria-labelledby="v-pills-history-tab">
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th class="text-center">Barcode - Title</th>
+                                        <th>Hire Date</th>
+                                        <th>Due Date</th>
+                                        <th>Return Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for item in transactions %}
+                                        <tr>
+                                            <td>
+                                                <b>{{ item.book_id }}</b><br/>
+                                                {{ item.book.title }}<br/>
+                                                <b>Author: </b>
+                                                {% for author in item.book.title.author.all %}
+                                                    {{ author.name }},
+                                                {% endfor %}
+                                            </td>
+                                            <td>{{ item.transaction.date|date:'d.m.Y' }}</td>
+                                            <td>{{ item.due_date|date:'d.m.Y' }}</td>
+                                            <td>{{ item.return_date|date:'d.m.Y' }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -28,7 +28,7 @@
                 <li><a href="{% url 'login' %}">Login</a></li>
             {% else %}
                 <li style="margin-top: 20px;">
-                    <a href="#">
+                    <a href="{% url 'profile' %}">
                         <span class="text-uppercase bold">{{ user.get_username }}</span>
                     </a>
                 </li>
