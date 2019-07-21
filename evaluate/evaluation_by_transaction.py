@@ -15,8 +15,7 @@ django.setup()
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 from title.models import Book
 from transaction.models import Master, Detail
-import rs_system.neighborhood_cf_rs as nb_rs
-import rs_system.content_base_rs as cb_rs
+import rs_system.recommender as recommendation
 
 logger = logging.getLogger('Evaluation')
 
@@ -108,11 +107,10 @@ class EvaluationByTransaction:
         transaction_df = self.load_transaction_data()
         train_data_df, test_user_tile = self.slip_data(transaction_df)
         print(len(test_user_tile))
-        res_nb = nb_rs.RecommendationNB()
         error_list = []
         for item in test_user_tile:
             book_id_list = []
-            rec_list = res_nb.get_list_recommendation(item['user_id'], 10)
+            rec_list = recommendation.get_top_recs_using_collaborative_filtering(item['user_id'], 12)
             print(rec_list)
             for i in rec_list:
                 book_id_list.append(int(i[0]) + 1)
@@ -131,7 +129,7 @@ class EvaluationByTransaction:
         transaction_df = self.load_transaction_data()
         train_data_df, test_user_tile = self.slip_data(transaction_df)
         print(len(test_user_tile))
-        res_cb = cb_rs.RecommendationCB()
+        res_cb = recommendation.get_top_recs_using_content_based()
         error_list = []
         for item in test_user_tile:
             rec_list = res_cb.get_top__recommendations(item['user_id'], 10)

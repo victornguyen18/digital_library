@@ -17,6 +17,7 @@ logger = logging.getLogger('User similarity calculator')
 from title.models import Book
 from transaction.models import Master, Detail
 from main_site.models import Rating
+import rs_system.builder.collaborative_filtering_calculator as cl_calculator
 
 
 def cal_point(sample):
@@ -55,6 +56,8 @@ class CalculatePointAllUser(object):
             user_ratings_df = self.load_data()
             logger.info("Save rating into database")
             self.save_pointing(user_ratings_df)
+            logger.info("Predict rating by collaborative filtering")
+            cl_calculator.CollaborativeFiltering().predict_all_item()
         else:
             logger.debug("Calculate rating before" + str(diff_time) + "days")
 

@@ -37,7 +37,7 @@ def get_top_recs_using_content_based_in_title(title_id, top_item=12):
     cosine_sim_title_id = Similarity.objects.filter(source=title_id)
     cosine_sim_title_id = [Similarity.get_similarity_as_list(similarity) for similarity in
                            cosine_sim_title_id]
-    # Get the pairwsie similarity scores of all movies with that movie
+    # Get the pairwise similarity scores of all movies with that movie
     sim_scores = list(enumerate(cosine_sim_title_id))
     # Sort the movies based on the similarity scores
     sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
@@ -58,7 +58,7 @@ def get_top_recs_using_content_based(user_index, top_item=12):
         cosine_sim_title_id = Similarity.objects.filter(source=title_id)
         cosine_sim_title_id = [Similarity.get_similarity_as_list(similarity) for similarity in
                                cosine_sim_title_id]
-        # Get the pairwsie similarity scores of all movies with that movie
+        # Get the pairwise similarity scores of all movies with that movie
         sim_scores = list(enumerate(cosine_sim_title_id))
         # Sort the movies based on the similarity scores
         sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
