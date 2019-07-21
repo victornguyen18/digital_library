@@ -7,9 +7,8 @@ from django.http import JsonResponse
 # Import python lib
 import json
 import digital_library_java.python_seach.search_library as ps
-import rs_system.popular_rs as popular_rs
+import rs_system.recommender as rs
 import rs_system.neighborhood_cf_rs as cf_rs
-import rs_system.content_base_rs as cb_rs
 
 # Import Models
 from title.models import Title
@@ -30,7 +29,7 @@ def get_recommendation_cb(request):
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    book_id_list = cb_rs.RecommendationCB().get_top__recommendations(current_user_id, 8)
+    book_id_list = rs.get_top_recs_using_content_based(current_user_id, 8)
     book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
@@ -41,7 +40,7 @@ def get_recommendation_cb_with_title(request):
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
     title_id = request.GET["title_id"]
-    book_id_list = cb_rs.RecommendationCB().get_top_recommendations_by_title(title_id)
+    book_id_list = rs.get_top_recs_using_content_based_in_title(title_id)
     book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
@@ -52,13 +51,7 @@ def get_recommendation_cf(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
-    print("Current user id: ", current_user_id)
-    rec_list = cf_rs.RecommendationNB(). \
-        get_list_recommendation(current_user_id, 10)
-    print(rec_list)
-    book_id_list = []
-    for i in rec_list:
-        book_id_list.append(int(i[0]) + 1)
+    book_id_list = rs.get_top_recs_using_collaborative_filtering(current_user_id)
     book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
@@ -66,7 +59,7 @@ def get_recommendation_cf(request):
 
 
 def get_popular_book(request):
-    popular_book = popular_rs.PopularRS().get_popular_book()
+    popular_book = rs.get_popular_book()
     popular_book_12 = popular_book[:12]
     print(popular_book_12)
     popular_book_list = Title.objects.all().filter(id__in=popular_book_12)
@@ -76,7 +69,6 @@ def get_popular_book(request):
 
 
 def search(request):
-    # Post method -> save to database
     num = 12
     search_term = request.GET.get('search_term') if request.GET.get('search_term') is not None else ""
     search_option = request.GET.get('search_option') if request.GET.get('search_option') is not None else ""

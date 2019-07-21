@@ -5,6 +5,7 @@ from tqdm import tqdm
 import logging
 import pandas as pd
 import numpy as np
+import datetime
 
 sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
@@ -119,7 +120,7 @@ def get_item_similarity_matrix(rating_matrix):
 class RecommendationNB:
     def __init__(self, rating_df=None):
         if rating_df is None:
-            self.rating_df = pd.DataFrame(list(Rating.objects.all().values()))
+            self.rating_df = pd.DataFrame(list(Rating.objects.filter(type='calculate').values()))
         else:
             self.rating_df = rating_df
         self.rating_matrix, self.item_rating_matrix = self.get_rating_matrix()
@@ -183,9 +184,38 @@ class RecommendationNB:
             np.abs(user_rating_similarity_value))
         return rating_user_base
 
-    # def predict_all_item(self):
-    #     num_user = User.objects.all().count() + 1
-    #     for user_index in tqdm(range(num_user):
+    def predict_all_item_and_save(self):
+        Rating.objects.filter(type__in=['ub_predicted', 'ib_predicted']).delete()
+        for u_id in tqdm(range(self.rating_matrix.shape[0])):
+            for i_id in range(self.rating_matrix.shape[1]):
+                # Predict rating base on user-base
+                if np.isnan(self.rating_matrix[u_id][i_id]):
+                    predicted_rating_user_based = self.predict(u_id, i_id,
+                                                               self.rating_matrix,
+                                                               self.mean_centered_ratings_matrix,
+                                                               self.user_similarity_matrix)
+                    if not np.isnan(predicted_rating_user_based):
+                        Rating(
+                            user_id=u_id + 1,
+                            title_id=i_id + 1,
+                            rating=predicted_rating_user_based,
+                            type="ub_predicted",
+                            rating_timestamp=datetime.datetime.now(),
+                        ).save()
+                # Predict rating base on item-base
+                if np.isnan(self.item_rating_matrix[i_id][u_id]):
+                    predicted_rating_item_based = self.predict(i_id, u_id,
+                                                               self.item_rating_matrix,
+                                                               self.item_mean_centered_ratings_matrix,
+                                                               self.item_similarity_matrix)
+                    if not np.isnan(predicted_rating_item_based):
+                        Rating(
+                            user_id=u_id + 1,
+                            title_id=i_id + 1,
+                            rating=predicted_rating_item_based,
+                            type="ib_predicted",
+                            rating_timestamp=datetime.datetime.now(),
+                        ).save()
 
     def predict_top_items_of_user(self, u_index):
         items_list = []
@@ -211,12 +241,12 @@ class RecommendationNB:
             # If rating != 0 add to list
             if predicted_rating != 0:
                 items_list.append(i_index)
-                items.append((i_index, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
+                items.append((i_index + 1, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
         # Sorting base on predited rating
         items = sorted(items, key=lambda tup: tup[1])
         return list(reversed(items))
 
-    def get_list_recommendation(self, user_id, top_item=10):
+    def get_list_recommendation(self, user_id):
         print("Predict for user", user_id)
         rec_list = self.predict_top_items_of_user(user_id - 1)
         # print(len(rec_list))
@@ -230,8 +260,8 @@ class RecommendationNB:
 
 
 if __name__ == '__main__':
-    num_user = User.objects.all().count()
-    print(num_user)
+    # for user_index in tqdm(range(1, num_user + 1)):
+    #     print(user_index)
     # for user_index in tqdm(range(num_user)):
     user_index = 5
     # logger.info("Print user ratings_matrix")
