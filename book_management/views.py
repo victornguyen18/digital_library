@@ -14,7 +14,7 @@ from django.contrib.auth.models import User
 from title.models import Title, Book
 from transaction.models import Detail
 
-import rs_system.builder.calculate_point as cp
+import rs_system.builder.point_calculator as cp
 
 
 def homepage(request):
