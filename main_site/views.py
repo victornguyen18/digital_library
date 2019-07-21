@@ -11,7 +11,6 @@ import digital_library_java.python_seach.search_library as ps
 import rs_system.popular_rs as popular_rs
 import rs_system.neighborhood_cf_rs as cf_rs
 import rs_system.content_base_rs as cb_rs
-import numpy as np
 
 # Import Models
 from title.models import Title
@@ -27,22 +26,6 @@ def book_detail(request, title_id):
     })
 
 
-# def get_user_based_rs(request):
-#     # current_user_id = 8
-#     current_user_id = 20
-#     print("Current user id: ", current_user_id)
-#     prediction_matrix, Y_mean = rs.recommend_cf()
-#     my_predictions = prediction_matrix[:, current_user_id] + Y_mean.flatten()
-#     pred_id_xs_sorted = np.argsort(my_predictions)
-#     pred_id_xs_sorted[:] = pred_id_xs_sorted[::-1]
-#     pred_id_xs_sorted = pred_id_xs_sorted + 1
-#     print(pred_id_xs_sorted)
-#     preserved = Case(*[When(pk=pk, then=pos) for pos, pk in enumerate(pred_id_xs_sorted)])
-#     book_list = Title.objects.filter(id__in=pred_id_xs_sorted, ).order_by(preserved)[:12]
-#     book_list = [Title.book_info_as_dict(book) for book in book_list]
-#     print(book_list)
-#     data = {'book_list': json.dumps(book_list)}
-#     return JsonResponse({'status': 200, 'data': data})
 def get_recommendation_cb(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
