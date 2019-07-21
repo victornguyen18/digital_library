@@ -2,7 +2,6 @@ import os
 import sys
 import django
 from tqdm import tqdm
-import logging
 import pandas as pd
 import numpy as np
 import datetime
@@ -10,7 +9,6 @@ import datetime
 sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
 django.setup()
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
 
 # Import Models
 from main_site.models import Rating
@@ -94,6 +92,7 @@ class CollaborativeFiltering:
     def __init__(self, rating_df=None):
         if rating_df is None:
             self.rating_df = pd.DataFrame(list(Rating.objects.filter(type='calculate').values()))
+            print("Getting", Rating.objects.filter(type='calculate').count(), "rating")
         else:
             self.rating_df = rating_df
         self.rating_matrix, self.item_rating_matrix = self.get_rating_matrix()
@@ -159,6 +158,7 @@ class CollaborativeFiltering:
 
     def predict_all_item(self, save=True):
         Rating.objects.filter(type__in=['ub_predicted', 'ib_predicted']).delete()
+        rating_predict_df = pd.DataFrame(columns=["user_id", "title_id", "rating", "type"])
         for u_id in tqdm(range(self.rating_matrix.shape[0])):
             for i_id in range(self.rating_matrix.shape[1]):
                 # Predict rating base on user-base
@@ -167,28 +167,37 @@ class CollaborativeFiltering:
                                                                self.rating_matrix,
                                                                self.mean_centered_ratings_matrix,
                                                                self.user_similarity_matrix)
-                    if not np.isnan(predicted_rating_user_based) and save:
-                        Rating(
-                            user_id=u_id + 1,
-                            title_id=i_id + 1,
-                            rating=predicted_rating_user_based,
-                            type="ub_predicted",
-                            rating_timestamp=datetime.datetime.now(),
-                        ).save()
+                    if not np.isnan(predicted_rating_user_based):
+                        rating_predict_df = rating_predict_df.append(
+                            pd.Series({'user_id': u_id + 1,
+                                       'title_id': i_id + 1,
+                                       'rating': predicted_rating_user_based,
+                                       'type': "ub_predicted"}), ignore_index=True)
+                        if save:
+                            Rating(user_id=u_id + 1,
+                                   title_id=i_id + 1,
+                                   rating=predicted_rating_user_based,
+                                   type="ub_predicted",
+                                   rating_timestamp=datetime.datetime.now()).save()
                 # Predict rating base on item-base
                 if np.isnan(self.item_rating_matrix[i_id][u_id]):
                     predicted_rating_item_based = self.predict(i_id, u_id,
                                                                self.item_rating_matrix,
                                                                self.item_mean_centered_ratings_matrix,
                                                                self.item_similarity_matrix)
-                    if not np.isnan(predicted_rating_item_based) and save:
-                        Rating(
-                            user_id=u_id + 1,
-                            title_id=i_id + 1,
-                            rating=predicted_rating_item_based,
-                            type="ib_predicted",
-                            rating_timestamp=datetime.datetime.now(),
-                        ).save()
+                    if not np.isnan(predicted_rating_item_based):
+                        rating_predict_df = rating_predict_df.append(
+                            pd.Series({'user_id': u_id + 1,
+                                       'title_id': i_id + 1,
+                                       'rating': predicted_rating_item_based,
+                                       'type': "ib_predicted"}), ignore_index=True)
+                        if save:
+                            Rating(user_id=u_id + 1,
+                                   title_id=i_id + 1,
+                                   rating=predicted_rating_item_based,
+                                   type="ib_predicted",
+                                   rating_timestamp=datetime.datetime.now()).save()
+        return rating_predict_df
 
     def predict_top_items_of_user(self, u_index):
         items_list = []
@@ -214,7 +223,8 @@ class CollaborativeFiltering:
             # If rating != 0 add to list
             if predicted_rating != 0:
                 items_list.append(i_index)
-                items.append((i_index + 1, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
+                items.append(
+                    (i_index + 1, predicted_rating, predicted_rating_user_based, predicted_rating_item_based))
         # Sorting base on predited rating
         items = sorted(items, key=lambda tup: tup[1])
         return list(reversed(items))
