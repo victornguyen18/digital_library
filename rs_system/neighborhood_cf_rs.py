@@ -131,8 +131,8 @@ class RecommendationNB:
     def get_rating_matrix(self):
         # Load data
         print("Load all rating data")
-        num_user = User.objects.all().count() + 1
-        num_title = Title.objects.all().count() + 1
+        num_user = User.objects.all().count()
+        num_title = Title.objects.all().count()
         # Creating ratings matrix
         print("Creating ratings matrix")
         rating_matrix = np.empty((num_user, num_title))
@@ -183,6 +183,10 @@ class RecommendationNB:
             np.abs(user_rating_similarity_value))
         return rating_user_base
 
+    # def predict_all_item(self):
+    #     num_user = User.objects.all().count() + 1
+    #     for user_index in tqdm(range(num_user):
+
     def predict_top_items_of_user(self, u_index):
         items_list = []
         items = []
@@ -203,7 +207,7 @@ class RecommendationNB:
                                                            self.item_similarity_matrix)
                 if np.isnan(predicted_rating_item_based):
                     predicted_rating_item_based = 0
-            predicted_rating = predicted_rating_user_based + predicted_rating_item_based
+            predicted_rating = (predicted_rating_user_based + predicted_rating_item_based) / 2
             # If rating != 0 add to list
             if predicted_rating != 0:
                 items_list.append(i_index)
@@ -214,7 +218,7 @@ class RecommendationNB:
 
     def get_list_recommendation(self, user_id, top_item=10):
         print("Predict for user", user_id)
-        rec_list = self.predict_top_items_of_user(user_id)
+        rec_list = self.predict_top_items_of_user(user_id - 1)
         # print(len(rec_list))
         # if len(rec_list) == 0:
         #     return []
@@ -226,8 +230,10 @@ class RecommendationNB:
 
 
 if __name__ == '__main__':
-    # for user_index in tqdm(range(ratings_matrix.shape[0])):
-    user_index = 23
+    num_user = User.objects.all().count()
+    print(num_user)
+    # for user_index in tqdm(range(num_user)):
+    user_index = 5
     # logger.info("Print user ratings_matrix")
     # print(ratings_matrix[user_index])
     # predict_top_k_items_of_user(user_index, ratings_matrix, item_ratings_matrix)

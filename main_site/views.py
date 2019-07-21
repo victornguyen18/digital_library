@@ -1,9 +1,8 @@
 # Import django lib
 from django.contrib import messages
-from django.contrib.auth import authenticate, login as dj_login, logout as dj_logout
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from django.http import JsonResponse, HttpResponse, Http404
+from django.http import JsonResponse
 
 # Import python lib
 import json
@@ -54,7 +53,8 @@ def get_recommendation_cf(request):
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
     print("Current user id: ", current_user_id)
-    rec_list = cf_rs.RecommendationNB().get_list_recommendation(current_user_id - 1, 10)
+    rec_list = cf_rs.RecommendationNB(). \
+        get_list_recommendation(current_user_id, 10)
     print(rec_list)
     book_id_list = []
     for i in rec_list:
