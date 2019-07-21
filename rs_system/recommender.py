@@ -14,6 +14,7 @@ logger = logging.getLogger('User similarity calculator')
 
 # Import Models
 from main_site.models import Rating, Similarity
+import rs_system.builder.collaborative_filtering_calculator  as cl_calculator
 
 
 def get_popular_book():
@@ -78,15 +79,19 @@ def process(sample):
                           rating=total_rating / 2))
 
 
-def get_top_recs_using_collaborative_filtering(user_index, top_item=12):
-    rating_df = pd.DataFrame(list(
-        Rating.objects.filter(user_id=user_index, type__in=['ib_predicted', 'ub_predicted']).order_by(
-            '-rating').values()))
-    cf_rating_df = rating_df.groupby(by=['title_id']).apply(process).reset_index(drop=True)
+def get_top_recs_using_collaborative_filtering(user_index, top_item=12, rating_df=None):
+    if rating_df is None:
+        predicted_rating_df = pd.DataFrame(list(
+            Rating.objects.filter(user_id=user_index, type__in=['ib_predicted', 'ub_predicted']).order_by(
+                '-rating').values()))
+    else:
+        predicted_rating_df = rating_df[rating_df.user_id == user_index]
+    cf_rating_df = predicted_rating_df.groupby(by=['title_id']).apply(process).reset_index(drop=True)
     cf_rating_df = cf_rating_df.sort_values(by=['rating'], ascending=False).reset_index(drop=True)
     return list(cf_rating_df["title_id"])[:top_item]
 
 
 if __name__ == '__main__':
     user_id = 5
-    print(get_top_recs_using_collaborative_filtering(5))
+    res_nb = cl_calculator.CollaborativeFiltering()
+    print(get_top_recs_using_collaborative_filtering(5, rating_df=res_nb.predict_all_item()))
