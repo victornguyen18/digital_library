@@ -2,6 +2,7 @@ import os
 import sys
 import django
 from django.db import connection
+from django.db.models import Avg
 from tqdm import tqdm
 import logging
 import pandas as pd
@@ -14,7 +15,7 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 logger = logging.getLogger('User similarity calculator')
 
 # Import Models
-from title.models import Book
+from title.models import Book, Title
 from transaction.models import Master, Detail
 from main_site.models import Rating
 import rs_system.builder.collaborative_filtering_calculator as cl_calculator
@@ -75,6 +76,12 @@ class CalculatePointAllUser(object):
                 rating_timestamp=datetime.now(),
             ).save()
         logger.info("Finished saving " + str(len(user_ratings_df)) + " records")
+        logger.info("Start save rating of title")
+        title_ids_list = Rating.objects.filter(type='calculate').values('title_id') \
+            .annotate(mean_rating=Avg('rating')) \
+            .order_by('title_id')
+        for row in tqdm(title_ids_list):
+            Title.objects.filter(pk=row['title_id']).update(rating=row['mean_rating'])
 
     @staticmethod
     def load_data():
