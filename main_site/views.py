@@ -57,6 +57,17 @@ def get_recommendation_cf(request):
     return JsonResponse({'status': 200, 'data': data})
 
 
+def get_recommendation_hybrid(request):
+    if not request.user.is_authenticated:
+        return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
+    current_user_id = request.user.id
+    book_id_list = rs.get_top_recs_using_hybrid(current_user_id)
+    book_list = Title.objects.filter(id__in=book_id_list)
+    book_list = [Title.book_info_as_dict(book) for book in book_list]
+    data = {'book_list': json.dumps(book_list)}
+    return JsonResponse({'status': 200, 'data': data})
+
+
 def get_popular_book(request):
     popular_book = rs.get_popular_book()
     popular_book_12 = popular_book[:12]

@@ -10,6 +10,7 @@ urlpatterns = [
     # path('api/get_user_based_rs', views.get_user_based_rs, name='get_user_based_rs'),
     path('api/get_recommendation_cf', views.get_recommendation_cf, name='get_recommendation_cf'),
     path('api/get_recommendation_cb', views.get_recommendation_cb, name='get_recommendation_cb'),
+    path('api/get_recommendation_hybrid', views.get_recommendation_hybrid, name='get_recommendation_hybrid'),
     re_path('api/get_recommendation_cb_with_title', views.get_recommendation_cb_with_title,
             name='get_recommendation_cb_with_title'),
 ]

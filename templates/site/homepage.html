@@ -84,6 +84,32 @@
         </div>
     </div>
 
+    <!-- hybrid recommendation book -->
+
+    <div class="component" id="destinations">
+        <div class="row">
+            <div class="col text-center">
+                <div class="section_subtitle">based on your loans</div>
+                <div class="section_title"><h2>Hybrid Recommendation Books For You</h2></div>
+            </div>
+        </div>
+        <div class="row books_row">
+            <div class="col">
+                {% if user.is_authenticated %}
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-dark" role="status"
+                             id="hybrid_recommendation_book_load">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                {% endif %}
+                <div id="hybrid_recommendation_book_list"
+                     class="owl-carousel owl-theme search_result">
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block footer %}
@@ -154,18 +180,16 @@
                                 loop: true,
                                 margin: 10,
                                 responsiveClass: true,
+                                nav: false,
                                 responsive: {
                                     0: {
                                         items: 1,
-                                        nav: false
                                     },
                                     600: {
                                         items: 2,
-                                        nav: false
                                     },
                                     1000: {
                                         items: 4,
-                                        nav: false,
                                         loop: false,
                                         margin: 20
                                     }
@@ -197,24 +221,63 @@
                                 loop: true,
                                 margin: 10,
                                 responsiveClass: true,
+                                nav: false,
                                 responsive: {
                                     0: {
                                         items: 1,
-                                        nav: false
                                     },
                                     600: {
                                         items: 2,
-                                        nav: false
                                     },
                                     1000: {
                                         items: 4,
-                                        nav: false,
                                         loop: false,
                                         margin: 20
                                     }
                                 }
                             });
                             $('#cb_recommendation_book_load').attr('style', 'display: none !important');
+                        } else {
+                        }
+                    }
+                });
+                $.ajax({
+                    url: "{% url 'get_recommendation_hybrid' %}",
+                    type: "GET",
+                    datatype: "json",
+                    beforeSend: function () {
+                        $('#hybrid_recommendation_book_list div').remove();
+                        $('#hybrid_recommendation_book_load').attr('style', '');
+                    },
+                    success: function (response) {
+                        if (response.status === 200) {
+                            var book_list = JSON.parse(response.data.book_list);
+                            console.log(book_list);
+                            book_list.forEach(function (element) {
+                                $('#hybrid_recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
+                                    element.author, element.publisher));
+                            });
+                            var owl = $('#hybrid_recommendation_book_list');
+                            owl.owlCarousel({
+                                loop: true,
+                                margin: 10,
+                                responsiveClass: true,
+                                nav: false,
+                                responsive: {
+                                    0: {
+                                        items: 1,
+                                    },
+                                    600: {
+                                        items: 2,
+                                    },
+                                    1000: {
+                                        items: 4,
+                                        loop: false,
+                                        margin: 20
+                                    }
+                                }
+                            });
+                            $('#hybrid_recommendation_book_load').attr('style', 'display: none !important');
                         } else {
                         }
                     }
