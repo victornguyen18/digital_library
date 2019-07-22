@@ -1,24 +1,18 @@
 import os
 import sys
 import django
-from tqdm import tqdm
-import logging
 import pandas as pd
-import numpy as np
 
 sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
 django.setup()
-logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
-logger = logging.getLogger('User similarity calculator')
 
 # Import Models
 from main_site.models import Rating, Similarity
 from title.models import Title
-import rs_system.builder.collaborative_filtering_calculator  as cl_calculator
 
 
-def get_popular_book():
+def get_popular_book(top_item=12):
     try:
         df = pd.DataFrame(list(Rating.objects.all().values()))
         df['user_id'] = pd.to_numeric(df['user_id'], errors='coerce')
@@ -28,8 +22,7 @@ def get_popular_book():
         ['rating'].mean().round(3).reset_index().rename(columns={'rating': 'total_rating'})
         [['title_id', 'total_rating']])
         popular_book_df = popular_book_df.sort_values(by=['total_rating'], ascending=False).reset_index(drop=True)
-        print(popular_book_df)
-        return list(popular_book_df.title_id)
+        return list(popular_book_df.title_id)[:top_item]
     except Exception as e:
         print("Something wrong:", str(e))
         return list()
@@ -74,7 +67,7 @@ def get_top_recs_using_content_based(user_index, top_item=12):
     return title_indices[:top_item]
 
 
-def process(sample):
+def process_in_collaborative_filtering(sample):
     total_rating = sample.rating.sum()
     return pd.Series(dict(title_id=sample['title_id'].values[0],
                           rating=total_rating / 2))
@@ -87,7 +80,8 @@ def get_top_recs_using_collaborative_filtering(user_index, top_item=12, rating_d
                 '-rating').values()))
     else:
         predicted_rating_df = rating_df[rating_df.user_id == user_index]
-    cf_rating_df = predicted_rating_df.groupby(by=['title_id']).apply(process).reset_index(drop=True)
+    cf_rating_df = predicted_rating_df.groupby(by=['title_id']).apply(process_in_collaborative_filtering).reset_index(
+        drop=True)
     cf_rating_df = cf_rating_df.sort_values(by=['rating'], ascending=False).reset_index(drop=True)
     return list(cf_rating_df["title_id"])[:top_item]
 
@@ -100,30 +94,39 @@ def process_rating_in_hybrid(sample):
 
 
 def get_top_recs_using_hybrid(user_index, top_item=12, rating_df=None):
+    # Get collaborative filtering rs
     if rating_df is None:
         predicted_rating_df = pd.DataFrame(list(
-            Rating.objects.filter(user_id=user_index, type__in=['ib_predicted', 'ub_predicted']).order_by(
+            Rating.objects.filter(
+                user_id=user_index, type__in=['ib_predicted', 'ub_predicted']).order_by(
                 '-rating').values()))
     else:
         predicted_rating_df = rating_df[rating_df.user_id == user_index]
-    cf_rating_df = predicted_rating_df.groupby(by=['title_id']).apply(process).reset_index(drop=True)
+    cf_rating_df = predicted_rating_df. \
+        groupby(by=['title_id']). \
+        apply(process_in_collaborative_filtering). \
+        reset_index(drop=True)
     cf_rating_df['type'] = "collaborative_filtering"
+    # Get content-based rs
     cb_suggestion_list = get_top_recs_using_content_based(user_index)
+    # Get rating of title
     title_info_in_cb = Title.objects.filter(pk__in=cb_suggestion_list)
     title_info_in_cb_df = pd.DataFrame(list(title_info_in_cb.values()))
+    # Merge 2 set rs into hybrid rs
     hybrid_rs_list_df = pd.DataFrame()
     hybrid_rs_list_df['title_id'] = title_info_in_cb_df['id']
     hybrid_rs_list_df['rating'] = title_info_in_cb_df['rating']
     hybrid_rs_list_df['type'] = "content_based"
     hybrid_rs_list_df = hybrid_rs_list_df.append(cf_rating_df, ignore_index=True, )
     hybrid_rs_list_df['rating'] = pd.to_numeric(hybrid_rs_list_df['rating'], errors='coerce')
+    # Calculate rating = content-based * 0.3 + collaborating filtering rs
     result_hybrid_rs_list_df = hybrid_rs_list_df.groupby(by=['title_id']) \
         .apply(process_rating_in_hybrid) \
         .reset_index(drop=True)
     result_hybrid_rs_list_df['title_id'] = pd.to_numeric(result_hybrid_rs_list_df['title_id'],
                                                          downcast='integer',
                                                          errors='coerce')
-    print(result_hybrid_rs_list_df.dtypes)
+    # Sort rating
     result_hybrid_rs_list_df = result_hybrid_rs_list_df.sort_values(by=['rating'], ascending=False).reset_index(
         drop=True)
     return list(result_hybrid_rs_list_df["title_id"])[:top_item]
