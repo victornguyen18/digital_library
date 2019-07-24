@@ -24,17 +24,6 @@ def book_detail(request, title_id):
 
 
 def get_recommendation_cb(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
-    current_user_id = request.user.id
-    book_id_list = rs.get_top_recs_using_content_based(current_user_id, 8)
-    book_list = Title.objects.filter(id__in=book_id_list)
-    book_list = [Title.book_info_as_dict(book) for book in book_list]
-    data = {'book_list': json.dumps(book_list)}
-    return JsonResponse({'status': 200, 'data': data})
-
-
-def get_recommendation_cb_with_title(request):
     title_id = request.GET["title_id"]
     book_id_list = rs.get_top_recs_using_content_based_in_title(title_id)
     book_list = Title.objects.filter(id__in=book_id_list)

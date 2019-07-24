@@ -53,7 +53,7 @@
 {% block footer %}
     <script>
         $.ajax({
-            url: "{% url 'get_recommendation_cb_with_title' %}",
+            url: "{% url 'get_recommendation_cb' %}",
             type: "GET",
             datatype: "json",
             "data": {
