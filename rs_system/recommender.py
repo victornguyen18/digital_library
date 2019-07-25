@@ -29,19 +29,9 @@ def get_popular_book(top_item=12):
 
 
 def get_top_recs_using_content_based(title_id, top_item=12):
-    cosine_sim_title_id = Similarity.objects.filter(source=title_id)
-    cosine_sim_title_id = [Similarity.get_similarity_as_list(similarity) for similarity in
-                           cosine_sim_title_id]
-    # Get the pairwise similarity scores of all movies with that movie
-    sim_scores = list(enumerate(cosine_sim_title_id))
-    # Sort the movies based on the similarity scores
-    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    # Get the scores of the 10 most similar movies
-    sim_scores = sim_scores[1:13]
-    content_based_rs_list = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-    content_based_rs_list = list(dict.fromkeys(content_based_rs_list))
-    content_based_rs_indices = [i[0] for i in content_based_rs_list]
-    return content_based_rs_indices[:top_item]
+    content_based_rs = Similarity.objects.filter(source=title_id).order_by('-similarity').values()
+    content_based_rs_df = pd.DataFrame(content_based_rs)
+    return list(content_based_rs_df.target[1:top_item])
 
 
 def get_top_recs_using_content_based_with_user_rating(user_index, top_item=12):
@@ -50,21 +40,18 @@ def get_top_recs_using_content_based_with_user_rating(user_index, top_item=12):
     for rating in rating_list[:5]:
         # if rating['rating'] > 5:
         title_id = rating['title_id']
-        cosine_sim_title_id = Similarity.objects.filter(source=title_id)
-        cosine_sim_title_id = [Similarity.get_similarity_as_list(similarity) for similarity in
-                               cosine_sim_title_id]
-        # Get the pairwise similarity scores of all movies with that movie
-        sim_scores = list(enumerate(cosine_sim_title_id))
-        # Sort the movies based on the similarity scores
-        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
-        # Get the scores of the 10 most similar movies
-        sim_scores = sim_scores[1:top_item + 1]
-        content_based_rs_list.extend(sim_scores)
-    content_based_rs_df = pd.DataFrame(content_based_rs_list, columns=['title_id', 'similarity'])
-    content_based_rs_df = content_based_rs_df.groupby(['title_id']).mean().reset_index()
-    content_based_rs_df = content_based_rs_df.sort_values(by=['similarity'], ascending=False).reset_index()
+        # Get similarity with deas order
+        cosine_sim_title = Similarity.objects.filter(source=title_id) \
+                               .order_by('-similarity').values()[1:6]
+        cosine_sim_title_df = pd.DataFrame(cosine_sim_title)
+        content_based_rs_list.append(cosine_sim_title_df)
+    content_based_rs_df = pd.concat(content_based_rs_list)
+    print(content_based_rs_df.dtypes)
+    content_based_rs_df['similarity'] = pd.to_numeric(content_based_rs_df['similarity'])
+    content_based_rs_df = (content_based_rs_df.groupby(['target']))['similarity'].mean().reset_index()
+    content_based_rs_df = content_based_rs_df.sort_values(by=['similarity'], ascending=False).reset_index(drop=True)
     # Get the title indices
-    return list(content_based_rs_df["title_id"])[:top_item]
+    return list(content_based_rs_df["target"])[:top_item]
 
 
 def process_in_collaborative_filtering(sample):
@@ -133,9 +120,9 @@ def get_top_recs_using_hybrid(user_index, top_item=12, rating_df=None):
 
 
 if __name__ == '__main__':
-    user_id = 5
+    user_id = 6
     # rs_list = get_top_recs_using_hybrid(user_index=user_id)
-    rs_list = get_top_recs_using_content_based(user_id)
+    rs_list = get_top_recs_using_content_based_with_user_rating(user_id)
     print(rs_list)
     # res_nb = cl_calculator.CollaborativeFiltering()
     # print(get_top_recs_using_collaborative_filtering(5, rating_df=res_nb.predict_all_item()))
