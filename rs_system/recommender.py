@@ -71,7 +71,7 @@ def get_top_recs_using_collaborative_filtering(user_index, top_item=12, rating_d
     cf_rating_df = predicted_rating_df.groupby(by=['title_id']).apply(process_in_collaborative_filtering).reset_index(
         drop=True)
     cf_rating_df = cf_rating_df.sort_values(by=['rating'], ascending=False).reset_index(drop=True)
-    return list(cf_rating_df["title_id"])[:top_item]
+    return cf_rating_df[:top_item]
 
 
 def process_rating_in_hybrid(sample):

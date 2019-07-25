@@ -15,7 +15,7 @@
 
 
  ******************************/
-function get_book_item(id, title, year, author, publisher) {
+function get_book_item(id, title, year, author, publisher, rating = '') {
     html = "<div class=\"book item\">\n" +
         "                        <div class=\" book_image\">\n" +
         "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
@@ -25,8 +25,11 @@ function get_book_item(id, title, year, author, publisher) {
         "                                <a href='/book/detail/" + id + "'>" + title +
         "                                </a>\n" +
         "                            </div>\n" +
-        "                            <div class=\"book_publisher\">\n" +
-        "                                <a href=\"#\">" + year + "</a> -\n" +
+        "                            <div class=\"book_publisher\">\n";
+    if (rating != '') {
+        html += "                                <span><i>" + rating + "</i></span> -\n";
+    }
+    html += "                                <a href=\"#\">" + year + "</a> -\n" +
         "                                <a href=\"#\">" + publisher + "</a>\n" +
         "                            </div>\n" +
         "                            <div class=\"book_author\">\n" +

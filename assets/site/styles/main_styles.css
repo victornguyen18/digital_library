@@ -1059,7 +1059,8 @@ section {
     text-align: right;
 }
 
-.book_publisher a {
+.book_publisher a,
+.book_publisher span {
     display: inline-block;
     font-family: 'Oswald', sans-serif;
     font-size: 12px;

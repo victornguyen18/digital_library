@@ -100,7 +100,6 @@
                 success: function (response) {
                     if (response.status === 200) {
                         var popular_book_list = JSON.parse(response.data.popular_book_list);
-                        console.log(popular_book_list);
                         popular_book_list.forEach(function (element) {
                             $('#popular_book_list').append(get_book_item(element.id, element.name, element.year,
                                 element.author, element.publisher));
@@ -144,10 +143,12 @@
                     success: function (response) {
                         if (response.status === 200) {
                             var book_list = JSON.parse(response.data.book_list);
-                            console.log(book_list);
                             book_list.forEach(function (element) {
-                                $('#recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
-                                    element.author, element.publisher));
+                                var book_item = JSON.parse(element);
+                                $('#recommendation_book_list').append(
+                                    get_book_item(book_item.id, book_item.name,
+                                        book_item.year, book_item.author,
+                                        book_item.publisher, book_item.rating));
                             });
                             var owl = $('#recommendation_book_list');
                             owl.owlCarousel({
@@ -187,13 +188,10 @@
                             var book_list = JSON.parse(response.data.book_list);
                             book_list.forEach(function (element) {
                                 var book_item = JSON.parse(element);
-                                console.log(book_item.name);
                                 $('#hybrid_recommendation_book_list').append(
-                                    get_book_item(book_item.id,
-                                        book_item.name,
-                                        book_item.year,
-                                        book_item.author,
-                                        book_item.publisher));
+                                    get_book_item(book_item.id, book_item.name,
+                                        book_item.year, book_item.author,
+                                        book_item.publisher, book_item.rating));
                             });
                             var owl = $('#hybrid_recommendation_book_list');
                             owl.owlCarousel({

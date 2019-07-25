@@ -47,10 +47,16 @@ def get_recommendation_cf(request):
     if not request.user.is_authenticated:
         return JsonResponse({'status': 401, 'error': "Please login to get suggestion"})
     current_user_id = request.user.id
-    book_id_list = rs.get_top_recs_using_collaborative_filtering(current_user_id)
-    book_list = Title.objects.filter(id__in=book_id_list)
-    book_list = [Title.book_info_as_dict(book) for book in book_list]
-    data = {'book_list': json.dumps(book_list)}
+    title_rs_df = pd.DataFrame(rs.get_top_recs_using_collaborative_filtering(current_user_id))
+    title_id_list = list(title_rs_df.title_id)
+    title_list = Title.objects.filter(id__in=title_id_list)
+    title_list = [Title.book_info_as_dict(book) for book in title_list]
+    rs_df = pd.DataFrame.from_dict(title_list)
+    rs_df = pd.merge(rs_df, title_rs_df, left_on='id', right_on='title_id')
+    rs_df = rs_df.sort_values(by=['rating'], ascending=False).reset_index(
+        drop=True)
+    json_data = list(rs_df.apply(lambda x: x.to_json(), axis=1))
+    data = {'book_list': json.dumps(json_data)}
     return JsonResponse({'status': 200, 'data': data})
 
 
