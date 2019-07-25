@@ -1,5 +1,7 @@
 from django.db import models
 
+from title.models import Title
+
 
 # Create your models here.
 class Rating(models.Model):
@@ -21,7 +23,7 @@ class Rating(models.Model):
 class Similarity(models.Model):
     created = models.DateField()
     source = models.IntegerField(db_index=True)
-    target = models.IntegerField()
+    target = models.ForeignKey(Title, on_delete=models.CASCADE)
     similarity = models.DecimalField(max_digits=8, decimal_places=7)
 
     class Meta:
