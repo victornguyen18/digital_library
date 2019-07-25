@@ -26,7 +26,17 @@ def book_detail(request, title_id):
 def get_recommendation_cb(request):
     title_id = request.GET["title_id"]
     book_id_list = rs.get_top_recs_using_content_based(title_id)
-    book_list = Title.objects.filter(id__in=book_id_list)
+    string_book_list = str(book_id_list).replace('[', '').replace(']', '')
+    query = """
+        SELECT `title`.* FROM `title`
+        LEFT JOIN `similarity`
+        ON `title`.`id` = `similarity`.`target`
+        WHERE `title`.id IN ({0}) and `similarity`.source = {1}
+        ORDER BY `similarity`.similarity DESC;
+    """
+    query = query.format(string_book_list, title_id)
+    book_list = Title.objects.raw(query)
+    # book_list = Title.objects.filter(id__in=book_id_list)
     book_list = [Title.book_info_as_dict(book) for book in book_list]
     data = {'book_list': json.dumps(book_list)}
     return JsonResponse({'status': 200, 'data': data})
