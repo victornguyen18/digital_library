@@ -95,7 +95,7 @@ def get_top_recs_using_hybrid(user_index, top_item=12, rating_df=None):
         reset_index(drop=True)
     cf_rating_df['type'] = "collaborative_filtering"
     # Get content-based rs
-    content_based_rs_list = get_top_recs_using_content_based(user_index)
+    content_based_rs_list = get_top_recs_using_content_based_with_user_rating(user_index)
     # Get rating of title
     title_info_in_cb = Title.objects.filter(pk__in=content_based_rs_list)
     title_info_in_cb_df = pd.DataFrame(list(title_info_in_cb.values()))

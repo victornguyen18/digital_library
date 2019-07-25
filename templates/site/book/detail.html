@@ -16,11 +16,11 @@
                 <div class="book one_item" style="width: 100%;margin-bottom: 0px;">
                     <div class=" book_content">
                         <div class="book_publisher" style="text-align: center">
-                            <a href="#">2010</a> -
-                            <a href="#">Wiley</a>
+                            <a href="#">{{ detail.year }}</a> -
+                            <a href="#">{{ detail.publisher }}</a>
                         </div>
                         <div class="book_author">
-                            <a href="#">J. M. A. Tanchoco, Jame A. Tompkins, John A. White, Yavuz A. Bozer</a> -
+                            <a href="#">{{ detail.author }}</a>
                         </div>
                     </div>
                     <div class=" book_image">
@@ -67,8 +67,12 @@
                     var book_list = JSON.parse(response.data.book_list);
                     console.log(book_list);
                     book_list.forEach(function (element) {
-                        $('#cb_recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
-                            element.author, element.publisher));
+                        $('#cb_recommendation_book_list').append(
+                            get_book_item(element.id,
+                                element.name,
+                                element.year,
+                                element.author,
+                                element.publisher));
                     });
                 } else {
                 }
