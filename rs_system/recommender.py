@@ -2,6 +2,7 @@ import os
 import sys
 import django
 import pandas as pd
+import json
 
 sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
@@ -113,16 +114,13 @@ def get_top_recs_using_hybrid(user_index, top_item=12, rating_df=None):
     result_hybrid_rs_list_df['title_id'] = pd.to_numeric(result_hybrid_rs_list_df['title_id'],
                                                          downcast='integer',
                                                          errors='coerce')
-    # Sort rating
-    result_hybrid_rs_list_df = result_hybrid_rs_list_df.sort_values(by=['rating'], ascending=False).reset_index(
-        drop=True)
-    return list(result_hybrid_rs_list_df["title_id"])[:top_item]
+    return result_hybrid_rs_list_df[:top_item]
 
 
 if __name__ == '__main__':
     user_id = 6
-    # rs_list = get_top_recs_using_hybrid(user_index=user_id)
-    rs_list = get_top_recs_using_content_based_with_user_rating(user_id)
+    rs_list = get_top_recs_using_hybrid(user_index=user_id)
     print(rs_list)
     # res_nb = cl_calculator.CollaborativeFiltering()
     # print(get_top_recs_using_collaborative_filtering(5, rating_df=res_nb.predict_all_item()))
+    # data = {'book_list': json.dumps(title_list)}
