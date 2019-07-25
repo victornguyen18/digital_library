@@ -40,7 +40,7 @@ def get_top_recs_using_content_based_with_user_rating(user_index, top_item=12):
     for rating in rating_list[:5]:
         # if rating['rating'] > 5:
         title_id = rating['title_id']
-        # Get similarity with deas order
+        # Get similarity with DESC order
         cosine_sim_title = Similarity.objects.filter(source=title_id) \
                                .order_by('-similarity').values()[1:6]
         cosine_sim_title_df = pd.DataFrame(cosine_sim_title)
