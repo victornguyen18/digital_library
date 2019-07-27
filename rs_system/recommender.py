@@ -9,7 +9,7 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
 django.setup()
 
 # Import Models
-from main_site.models import Rating, Similarity
+from main_site.models import Rating, BookSimilarity
 from title.models import Title
 
 
@@ -30,7 +30,7 @@ def get_popular_book(top_item=12):
 
 
 def get_top_recs_using_content_based(title_id, top_item=12):
-    content_based_rs = Similarity.objects.filter(source=title_id).order_by('-similarity').values()
+    content_based_rs = BookSimilarity.objects.filter(source=title_id).order_by('-similarity').values()
     content_based_rs_df = pd.DataFrame(content_based_rs)
     return list(content_based_rs_df.target[1:top_item])
 
@@ -42,7 +42,7 @@ def get_top_recs_using_content_based_with_user_rating(user_index, top_item=12):
         # if rating['rating'] > 5:
         title_id = rating['title_id']
         # Get similarity with DESC order
-        cosine_sim_title = Similarity.objects.filter(source=title_id) \
+        cosine_sim_title = BookSimilarity.objects.filter(source=title_id) \
                                .order_by('-similarity').values()[1:6]
         cosine_sim_title_df = pd.DataFrame(cosine_sim_title)
         content_based_rs_list.append(cosine_sim_title_df)

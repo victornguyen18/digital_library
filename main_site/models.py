@@ -18,14 +18,31 @@ class Rating(models.Model):
         #     .format(self.user_id, self.title_id, self.rating, self.type)
 
 
-class Similarity(models.Model):
+class BookSimilarity(models.Model):
     created = models.DateField()
     source = models.IntegerField(db_index=True)
     target = models.IntegerField()
     similarity = models.DecimalField(max_digits=8, decimal_places=7)
 
     class Meta:
-        db_table = 'similarity'
+        db_table = 'book_similarity'
+
+    def __str__(self):
+        # return [self.similarity]
+        return "[]".format(self.similarity)
+
+    def get_similarity_as_list(self):
+        return float(self.similarity)
+
+
+class UserSimilarity(models.Model):
+    created = models.DateField()
+    source = models.IntegerField(db_index=True)
+    target = models.IntegerField()
+    similarity = models.DecimalField(max_digits=8, decimal_places=7)
+
+    class Meta:
+        db_table = 'user_similarity'
 
     def __str__(self):
         # return [self.similarity]
@@ -42,6 +59,8 @@ class Similarity(models.Model):
 #         return "{} in {}".format(self.user_id, self.cluster_id)
 #
 #
+
+
 # class LdaSimilarity(models.Model):
 #     created = models.DateField()
 #     source = models.IntegerField(db_index=True)

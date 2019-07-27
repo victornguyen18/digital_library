@@ -16,7 +16,7 @@ logger = logging.getLogger('User similarity calculator')
 
 # Import Models
 from title.models import Title
-from main_site.models import Similarity
+from main_site.models import BookSimilarity
 
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.feature_extraction.text import CountVectorizer
@@ -82,7 +82,7 @@ class CalculateItemSimilarity(object):
         cur.execute('TRUNCATE TABLE `similarity`')
         for i in tqdm(range(cosine_sim_matrix.shape[0])):
             for j in range(cosine_sim_matrix.shape[1]):
-                Similarity(
+                BookSimilarity(
                     source=i + 1,
                     target=j + 1,
                     similarity=cosine_sim_matrix[i][j],
