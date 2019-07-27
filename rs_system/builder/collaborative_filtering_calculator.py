@@ -1,6 +1,7 @@
 import os
 import sys
 import django
+from django.db import connection
 from tqdm import tqdm
 import logging
 import pandas as pd
@@ -14,7 +15,7 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 logger = logging.getLogger('User similarity calculator')
 
 # Import Models
-from main_site.models import Rating, UserSimilarity
+from main_site.models import Rating, UserRatingSimilarity, ItemRatingSimilarity
 from title.models import Title
 from django.contrib.auth.models import User
 
@@ -102,8 +103,11 @@ class CollaborativeFiltering:
         self.rating_matrix, self.item_rating_matrix = self.get_rating_matrix()
         self.mean_centered_ratings_matrix = self.cal_mean_centered_ratings_matrix(self.rating_matrix)
         self.item_mean_centered_ratings_matrix = self.cal_mean_centered_ratings_matrix(self.item_rating_matrix)
-        self.user_similarity_matrix = self.cal_similarity_matrix(self.rating_matrix, save_db)
-        self.item_similarity_matrix = self.cal_similarity_matrix(self.item_rating_matrix)
+        self.user_similarity_matrix = self.cal_similarity_matrix(self.rating_matrix, is_user=True, save_db=save_db)
+        self.item_similarity_matrix = self.cal_similarity_matrix(self.item_rating_matrix, is_user=False,
+                                                                 save_db=save_db)
+        tmp = pd.DataFrame(self.user_similarity_matrix)
+        print(tmp)
 
     def get_rating_matrix(self):
         # Load data
@@ -129,9 +133,15 @@ class CollaborativeFiltering:
         return mean_centered_ratings_matrix
 
     @staticmethod
-    def cal_similarity_matrix(rating_matrix, save_db=False):
+    def cal_similarity_matrix(rating_matrix, is_user, save_db=False):
         if save_db:
             logger.info("TRUNCATE user_rating_similarity TABLE")
+            if is_user:
+                cur = connection.cursor()
+                cur.execute('TRUNCATE TABLE `user_rating_similarity`')
+            else:
+                cur = connection.cursor()
+                cur.execute('TRUNCATE TABLE `item_rating_similarity`')
         similarity_matrix = []
         for u_index in range(rating_matrix.shape[0]):
             user_ratings = rating_matrix[u_index, :]
@@ -139,12 +149,20 @@ class CollaborativeFiltering:
             for v_index in range(rating_matrix.shape[0]):
                 pearson_similarity = pearson(rating_matrix[v_index, :], user_ratings)
                 if not np.isnan(pearson_similarity):
-                    UserSimilarity.objects.create(
-                        source=u_index + 1,
-                        target=v_index + 1,
-                        similarity=pearson_similarity,
-                        created=datetime.datetime.now(),
-                    ).save()
+                    if is_user:
+                        UserRatingSimilarity.objects.create(
+                            source=u_index + 1,
+                            target=v_index + 1,
+                            similarity=pearson_similarity,
+                            created=datetime.datetime.now(),
+                        ).save()
+                    else:
+                        ItemRatingSimilarity.objects.create(
+                            source=u_index + 1,
+                            target=v_index + 1,
+                            similarity=pearson_similarity,
+                            created=datetime.datetime.now(),
+                        ).save()
                 similarity_value.append(pearson_similarity)
             similarity_matrix.append(similarity_value)
         return np.array(similarity_matrix)
