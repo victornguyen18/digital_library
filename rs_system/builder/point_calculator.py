@@ -58,7 +58,7 @@ class CalculatePointAllUser(object):
             logger.info("Save rating into database")
             self.save_pointing(user_ratings_df)
             logger.info("Predict rating by collaborative filtering")
-            cl_calculator.CollaborativeFiltering().predict_all_item()
+            cl_calculator.CollaborativeFiltering(save_db=True).predict_all_item()
         else:
             logger.debug("Calculate rating before" + str(diff_time) + "days")
 

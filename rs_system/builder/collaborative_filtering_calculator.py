@@ -2,6 +2,7 @@ import os
 import sys
 import django
 from tqdm import tqdm
+import logging
 import pandas as pd
 import numpy as np
 import datetime
@@ -9,9 +10,11 @@ import datetime
 sys.path.insert(0, os.path.realpath(''))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "book_management.settings")
 django.setup()
+logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.DEBUG)
+logger = logging.getLogger('User similarity calculator')
 
 # Import Models
-from main_site.models import Rating
+from main_site.models import Rating, UserSimilarity
 from title.models import Title
 from django.contrib.auth.models import User
 
@@ -89,25 +92,26 @@ def get_item_similarity_matrix(rating_matrix):
 
 
 class CollaborativeFiltering:
-    def __init__(self, rating_df=None):
+    def __init__(self, rating_df=None, save_db=False):
         if rating_df is None:
             self.rating_df = pd.DataFrame(list(Rating.objects.filter(type='calculate').values()))
-            print("Getting", Rating.objects.filter(type='calculate').count(), "rating")
+            logger.info(
+                "Calculating similarities ... using {} ratings".format(Rating.objects.filter(type='calculate').count()))
         else:
             self.rating_df = rating_df
         self.rating_matrix, self.item_rating_matrix = self.get_rating_matrix()
         self.mean_centered_ratings_matrix = self.cal_mean_centered_ratings_matrix(self.rating_matrix)
         self.item_mean_centered_ratings_matrix = self.cal_mean_centered_ratings_matrix(self.item_rating_matrix)
-        self.user_similarity_matrix = self.cal_similarity_matrix(self.rating_matrix)
+        self.user_similarity_matrix = self.cal_similarity_matrix(self.rating_matrix, save_db)
         self.item_similarity_matrix = self.cal_similarity_matrix(self.item_rating_matrix)
 
     def get_rating_matrix(self):
         # Load data
-        print("Load all rating data")
+        logger.info("Load all rating data")
         num_user = User.objects.all().count()
         num_title = Title.objects.all().count()
         # Creating ratings matrix
-        print("Creating ratings matrix")
+        logger.info("Creating ratings matrix")
         rating_matrix = np.empty((num_user, num_title))
         rating_matrix[:] = np.nan
         item_rating_matrix = np.empty((num_title, num_user))
@@ -125,13 +129,22 @@ class CollaborativeFiltering:
         return mean_centered_ratings_matrix
 
     @staticmethod
-    def cal_similarity_matrix(rating_matrix):
+    def cal_similarity_matrix(rating_matrix, save_db=False):
+        if save_db:
+            logger.info("TRUNCATE user_rating_similarity TABLE")
         similarity_matrix = []
         for u_index in range(rating_matrix.shape[0]):
             user_ratings = rating_matrix[u_index, :]
             similarity_value = []
             for v_index in range(rating_matrix.shape[0]):
                 pearson_similarity = pearson(rating_matrix[v_index, :], user_ratings)
+                if not np.isnan(pearson_similarity):
+                    UserSimilarity.objects.create(
+                        source=u_index + 1,
+                        target=v_index + 1,
+                        similarity=pearson_similarity,
+                        created=datetime.datetime.now(),
+                    ).save()
                 similarity_value.append(pearson_similarity)
             similarity_matrix.append(similarity_value)
         return np.array(similarity_matrix)
@@ -230,7 +243,7 @@ class CollaborativeFiltering:
         return list(reversed(items))
 
     def get_list_recommendation(self, user_id):
-        print("Predict for user", user_id)
+        logger.info("Predict for user {}".format(user_id))
         rec_list = self.predict_top_items_of_user(user_id - 1)
         # print(len(rec_list))
         # if len(rec_list) == 0:
