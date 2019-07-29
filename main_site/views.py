@@ -30,10 +30,10 @@ def get_recommendation_cb(request):
     string_book_list = str(book_id_list).replace('[', '').replace(']', '')
     query = """
         SELECT `title`.* FROM `title`
-        LEFT JOIN `similarity`
-        ON `title`.`id` = `similarity`.`target`
-        WHERE `title`.id IN ({0}) and `similarity`.source = {1}
-        ORDER BY `similarity`.similarity DESC;
+        LEFT JOIN `book_similarity`
+        ON `title`.`id` = `book_similarity`.`target`
+        WHERE `title`.id IN ({0}) and `book_similarity`.source = {1}
+        ORDER BY `book_similarity`.similarity DESC;
     """
     query = query.format(string_book_list, title_id)
     book_list = Title.objects.raw(query)
@@ -73,7 +73,7 @@ def get_recommendation_hybrid(request):
     rs_df = rs_df.sort_values(by=['rating'], ascending=False).reset_index(
         drop=True)
     json_data = list(rs_df.apply(lambda x: x.to_json(), axis=1))
-    print(json_data)
+    # print(json_data)
     data = {'book_list': json.dumps(json_data)}
     return JsonResponse({'status': 200, 'data': data})
 
