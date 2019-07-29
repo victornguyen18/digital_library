@@ -11,6 +11,8 @@ import java.util.*;
 import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Date;
+import java.util.Date;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -32,12 +34,16 @@ public class GoogleBookSearch {
         String searchURL = GOOGLE_SEARCH_URL + "?q=" + searchTerm + "&start=" + start + "&tbm=bks&num=" + num;
         try {
             Document doc = Jsoup.connect(searchURL)
-                    .userAgent("Mozilla/5.0")
+                    .userAgent("Mozilla/5.0 (Windows; U; WindowsNT 5.1; en-US; rv1.8.1.6) Gecko/20070725 Firefox/2.0.0.6")
+//                    .userAgent("Mozilla/5.0")
                     .maxBodySize(0)
                     .get();
 //            Document doc = Jsoup.connect(searchURL).userAgent("Mozilla/5.0").maxBodySize(0)
 //                    .timeout(600000).get();
-//            BufferedWriter writer = new BufferedWriter(new FileWriter("/Users/victornguyen/Desktop/test.html"));
+            Date date = new Date();
+            System.out.println(date);
+//            String fileName = "/Users/victornguyen/Desktop/test" + date + ".html";
+//            BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
 //            writer.write(doc.toString());
             System.out.println(searchURL);
             return doc;
