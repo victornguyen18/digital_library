@@ -680,10 +680,8 @@ public class searchMethod {
                 setId.add(Id);
             }
         }
-        System.out.println("final Results : ");
         List<sortData> sortList = new ArrayList<sortData>();
         for (String id : setId) {
-            System.out.println(id);
             sortData sd = new sortData();
             OWLNamedIndividual selectedBook = df.getOWLNamedIndividual(":book" + id, pm);
             OWLNamedIndividual selectedAuthor = df.getOWLNamedIndividual(":author" + id, pm);
