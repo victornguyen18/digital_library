@@ -27,6 +27,7 @@ public class SearchEntryPoint {
     public String searchGoogleBook(String search, int num, int page) {
         JSONObject result = new JSONObject();
         try {
+            System.out.println("Running Google Book Search");
             int start = num * (page - 1);
             GoogleBookSearch merge = new GoogleBookSearch();
             result.put("status", 200);
@@ -52,6 +53,7 @@ public class SearchEntryPoint {
             OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
             List<sortData> list = searchMethod.searchGloVe(search, m, o);
             Collections.sort(list, new sortData.CompValue());
+            System.out.println("Running Glove");
             System.out.println("Search term: " + search);
             System.out.println("No. item: " + num);
             System.out.println("No. page: " + page);
@@ -60,7 +62,6 @@ public class SearchEntryPoint {
             int start = num * (page - 1);
             int finish = start + num;
             if (start < sizeList) {
-                System.out.println("Running Glove");
                 System.out.println("Size list: " + sizeList);
                 if (sizeList < finish) {
                     finish = sizeList;
