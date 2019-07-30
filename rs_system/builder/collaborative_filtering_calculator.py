@@ -106,8 +106,6 @@ class CollaborativeFiltering:
         self.user_similarity_matrix = self.cal_similarity_matrix(self.rating_matrix, is_user=True, save_db=save_db)
         self.item_similarity_matrix = self.cal_similarity_matrix(self.item_rating_matrix, is_user=False,
                                                                  save_db=save_db)
-        tmp = pd.DataFrame(self.user_similarity_matrix)
-        print(tmp)
 
     def get_rating_matrix(self):
         # Load data
