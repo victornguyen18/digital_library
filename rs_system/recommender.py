@@ -47,7 +47,6 @@ def get_top_recs_using_content_based_with_user_rating(user_index, top_item=12):
         cosine_sim_title_df = pd.DataFrame(cosine_sim_title)
         content_based_rs_list.append(cosine_sim_title_df)
     content_based_rs_df = pd.concat(content_based_rs_list)
-    print(content_based_rs_df.dtypes)
     content_based_rs_df['similarity'] = pd.to_numeric(content_based_rs_df['similarity'])
     content_based_rs_df = (content_based_rs_df.groupby(['target']))['similarity'].mean().reset_index()
     content_based_rs_df = content_based_rs_df.sort_values(by=['similarity'], ascending=False).reset_index(drop=True)
