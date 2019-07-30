@@ -1,8 +1,11 @@
 # Import django lib
-from django.shortcuts import render
+import os
+
+from django.conf import settings
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
-
+from django.core.files.storage import default_storage
 # Import python lib
 from datetime import datetime, timedelta
 
@@ -63,7 +66,19 @@ def title_index(request):
 
 @login_required(login_url='/login')
 def title_create(request):
-    return 0
+    if request.POST:
+        # Create user -> save to db
+        print(request.POST)
+        if request.FILES['image']:
+            save_path = os.path.join(settings.MEDIA_ROOT, request.FILES['image'].name)
+            path_db = "assets/images/" + request.FILES['image'].name
+            default_storage.save(save_path, request.FILES['image'])
+            print(path_db)
+        return redirect('title:title.index')
+    else:
+        # Render create user form
+        return render(request, 'admin/title/create.html', {
+        })
 
 
 def get_book_info(request, barcode):

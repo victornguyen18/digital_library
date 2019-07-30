@@ -51,6 +51,7 @@ class Title(models.Model):
     created_time = models.DateTimeField(auto_now_add=True)
     updated_time = models.DateTimeField(auto_now=True)
     ori_quantity = models.IntegerField(blank=True, null=True)
+    image = models.CharField(max_length=256, blank=True, null=True)
     rating = models.DecimalField(decimal_places=2, max_digits=4, default=0)
     author = models.ManyToManyField('Author')
     publisher = models.ManyToManyField('Publisher')

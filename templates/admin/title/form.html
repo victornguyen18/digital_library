@@ -1,0 +1,106 @@
+<div class="col-md-12">
+    <div class="col-sm-12 col-md-6">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="name">
+                Title Name</label>
+            <div class="col-sm-9">
+                <input type="text" name="name"
+                       value="" id="name"
+                       class="form-control"
+                       data-rule-required="true"
+                       data-msg-required="Please enter data">
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="faculty">
+                Faculty</label>
+            <div class="col-sm-9">
+                <input type="text" name="faculty"
+                       value="" id="faculty"
+                       class="form-control"
+                       data-rule-required="true"
+                       data-msg-required="Please enter data">
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="location">
+                Location</label>
+            <div class="col-sm-9">
+                <input type="text" name="location"
+                       value="" id="location"
+                       class="form-control"
+                       data-rule-required="true"
+                       data-msg-required="Please enter data">
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="col-sm-12 col-md-6">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="isbn">
+                ISBN</label>
+            <div class="col-sm-9">
+                <input type="text" name="isbn"
+                       value="" id="isbn"
+                       class="form-control"
+                       data-rule-required="true"
+                       data-msg-required="Please enter data">
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="week_price">
+                Week Price</label>
+            <div class="col-sm-9">
+                <input type="text" name="week_price"
+                       value="" id="week_price"
+                       class="form-control"
+                       data-rule-required="true"
+                       data-msg-required="Please enter data">
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12 col-md-3">
+        <div class="form-group">
+            <label class="col-sm-3 control-label" for="sem_price">
+                Semester Price</label>
+            <div class="col-sm-9">
+                <input type="text" name="sem_price"
+                       value="" id="sem_price"
+                       class="form-control"
+                       data-rule-required="true"
+                       data-msg-required="Please enter data">
+                <div class="help-block"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group">
+        <label class="col-sm-3 control-label" for="sem_price">
+            Select image: </label>
+        <div class="col-sm-9">
+            <input type="file" name="image" id="image">
+            <div class="help-block"></div>
+        </div>
+    </div>
+</div>
+<div class="col-md-12">
+    <div class="form-group pull-right">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'title:title.index' %}"
+           data-toggle="tooltip" title="" class="btn btn-default" data-original-title="Cancel"><i
+                class="fa fa-reply"></i></a>
+    </div>
+</div>

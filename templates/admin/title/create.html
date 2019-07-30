@@ -1,0 +1,83 @@
+{% extends 'admin/layouts/main.html' %}
+
+{% load static from staticfiles %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+        <h1>
+            Title
+        </h1>
+        <ol class="breadcrumb">
+            <li>
+                <a href="{% url 'dashboard' %}">
+                    <i class="fa fa-dashboard"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'title:title.index' %}">Title</a>
+            </li>
+            <li>Add User</li>
+        </ol>
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title"><i class="fa fa-pencil"></i> Add Title</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="col-md-12">
+                            {% if messages %}
+                                {% for message in messages %}
+                                    <div class="alert alert-{{ message.tags }}">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×
+                                        </button>
+                                        {{ message }}
+                                    </div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                        <form action="" method="post" enctype="multipart/form-data"
+                              class="form-horizontal">
+                            {% csrf_token %}
+                            {% include 'admin/title/form.html' %}
+                        </form>
+                    </div>
+                </div>
+                <!-- /.box -->
+            </div>
+            <!-- /.col -->
+        </div>
+    </section>
+    <!-- /.content -->
+{% endblock %}
+
+{% block footer %}
+    <script>
+        $(function () {
+            $('.form-horizontal').validate({
+                highlight: function (e) {
+                    $(e).closest(".form-group").addClass("has-error")
+                }, unhighlight: function (e) {
+                    $(e).closest(".form-group").removeClass("has-error")
+                },
+                errorClass: "help-block",
+                errorElement: "span",
+                ignore: [],
+                rules: {},
+                messages: {},
+                /* use below section if required to place the error*/
+                errorPlacement: function (error, element) {
+                    error.insertAfter(element);
+                }
+            });
+        });
+    </script>
+{% endblock %}
