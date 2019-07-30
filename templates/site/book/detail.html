@@ -4,7 +4,7 @@
 {% load helps %}
 
 {% block title %}
-    Search Book {{ search_term }}
+    Book Detail | {{ detail.name }}
 {% endblock %}
 
 {% block content %}
@@ -24,7 +24,12 @@
                         </div>
                     </div>
                     <div class=" book_image">
-                        <img src="/static/images/logo-IU.jpg" alt="">
+                        <img src="
+                        {% if detail.image %}
+                        {{ detail.image }}
+                        {% else %}
+                        /static/images/logo-IU.jpg
+                        {% endif %}" alt="{{ detail.name }}">
                     </div>
                 </div>
             </div>
@@ -43,7 +48,16 @@
         </div>
         <div class="row books_row">
             <div class="col">
-                <div id="cb_recommendation_book_list" class="row books_container item_grid col-md-12">
+                {% if user.is_authenticated %}
+                    <div class="d-flex justify-content-center">
+                        <div class="spinner-border text-dark" role="status"
+                             id="cb_recommendation_book_load">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                {% endif %}
+                <div id="cb_recommendation_book_list"
+                     class="owl-carousel owl-theme search_result">
                 </div>
             </div>
         </div>
@@ -65,15 +79,33 @@
             success: function (response) {
                 if (response.status === 200) {
                     var book_list = JSON.parse(response.data.book_list);
-                    console.log(book_list);
                     book_list.forEach(function (element) {
-                        $('#cb_recommendation_book_list').append(
-                            get_book_item(element.id,
-                                element.name,
-                                element.year,
-                                element.author,
-                                element.publisher));
+                        $('#cb_recommendation_book_list').append(get_book_item(element.id, element.name, element.year,
+                            element.author, element.publisher, element.image));
                     });
+                    var owl = $('#cb_recommendation_book_list');
+                    owl.owlCarousel({
+                        loop: true,
+                        margin: 10,
+                        responsiveClass: true,
+                        responsive: {
+                            0: {
+                                items: 1,
+                                nav: false
+                            },
+                            600: {
+                                items: 2,
+                                nav: false
+                            },
+                            1000: {
+                                items: 4,
+                                nav: false,
+                                loop: false,
+                                margin: 20
+                            }
+                        }
+                    });
+                    $('#cb_recommendation_book_load').attr('style', 'display: none !important');
                 } else {
                 }
             }

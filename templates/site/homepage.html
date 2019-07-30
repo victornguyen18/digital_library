@@ -102,7 +102,7 @@
                         var popular_book_list = JSON.parse(response.data.popular_book_list);
                         popular_book_list.forEach(function (element) {
                             $('#popular_book_list').append(get_book_item(element.id, element.name, element.year,
-                                element.author, element.publisher));
+                                element.author, element.publisher, element.image));
                         });
                         var owl = $('#popular_book_list');
                         owl.owlCarousel({
@@ -148,7 +148,7 @@
                                 $('#recommendation_book_list').append(
                                     get_book_item(book_item.id, book_item.name,
                                         book_item.year, book_item.author,
-                                        book_item.publisher, book_item.rating));
+                                        book_item.publisher, book_item.image, book_item.rating));
                             });
                             var owl = $('#recommendation_book_list');
                             owl.owlCarousel({
@@ -191,7 +191,7 @@
                                 $('#hybrid_recommendation_book_list').append(
                                     get_book_item(book_item.id, book_item.name,
                                         book_item.year, book_item.author,
-                                        book_item.publisher, book_item.rating));
+                                        book_item.publisher, book_item.image, book_item.rating));
                             });
                             var owl = $('#hybrid_recommendation_book_list');
                             owl.owlCarousel({

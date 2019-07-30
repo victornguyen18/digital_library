@@ -78,6 +78,7 @@ class Title(models.Model):
             "location": self.location,
             "year": self.year,
             "isbn": self.isbn,
+            "image": self.image,
             "author": author_list,
             "publisher": publisher_list,
             # "topic": self.topic,
