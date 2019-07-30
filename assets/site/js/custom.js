@@ -15,10 +15,13 @@
 
 
  ******************************/
-function get_book_item(id, title, year, author, publisher, rating = '') {
+function get_book_item(id, title, year, author, publisher, image_link = '', rating = '') {
+    if (image_link == null || image_link === '') {
+        image_link = '/static/images/logo-IU.jpg'
+    }
     html = "<div class=\"book item\">\n" +
         "                        <div class=\" book_image\">\n" +
-        "                            <img src=\"/static/images/logo-IU.jpg\" alt=\"\">\n" +
+        "                            <img src=\"" + image_link + "\" alt=\"\">\n" +
         "                        </div>\n" +
         "                        <div class=\" book_content\">\n" +
         "                            <div class=\"book_title\">\n" +
