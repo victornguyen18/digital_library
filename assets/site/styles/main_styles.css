@@ -677,7 +677,7 @@ section {
     padding-right: 61px;
     padding-bottom: 59px;
     background: rgba(255, 255, 255, 0.26);
-    border-radius: 12px;
+    border-radius: 5px;
 }
 
 .home_search_title {
@@ -703,6 +703,7 @@ section {
     padding-bottom: 18px;
     padding-left: 67px;
     padding-right: 83px;
+
 }
 
 .search_input {
@@ -716,6 +717,7 @@ section {
     font-size: 14px !important;
     font-weight: 500 !important;
     color: #72728c !important;
+    border-radius: 5px;
 }
 
 /*.search_input:hover {*/
@@ -775,7 +777,7 @@ section {
     font-size: 16px;
     font-weight: 400;
     text-transform: uppercase;
-    border-radius: 20px;
+    border-radius: 5px;
     border: none;
     outline: none;
     cursor: pointer;
