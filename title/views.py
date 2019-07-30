@@ -2,6 +2,7 @@
 import os
 
 from django.conf import settings
+from django.contrib import messages
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
@@ -10,6 +11,8 @@ from django.core.files.storage import default_storage
 from datetime import datetime, timedelta
 
 # Import Models
+from django.utils.datastructures import MultiValueDictKeyError
+
 from .models import Title, Author, Publisher, Book
 
 
@@ -67,18 +70,55 @@ def title_index(request):
 @login_required(login_url='/login')
 def title_create(request):
     if request.POST:
-        # Create user -> save to db
-        print(request.POST)
-        if request.FILES['image']:
-            save_path = os.path.join(settings.MEDIA_ROOT, request.FILES['image'].name)
-            path_db = "assets/images/" + request.FILES['image'].name
-            default_storage.save(save_path, request.FILES['image'])
-            print(path_db)
+        title = Title.objects.create()
+        title.name = request.POST.get('name')
+        title.faculty = request.POST.get('faculty')
+        title.location = request.POST.get('location')
+        title.isbn = request.POST.get('isbn')
+        title.week_price = request.POST.get('week_price')
+        title.sem_price = request.POST.get('sem_price')
+        try:
+            image_upload = request.FILES['image']
+            has_image = True
+        except MultiValueDictKeyError:
+            has_image = False
+        if has_image:
+            name_file = 'book_image_' + str(datetime.now()) + '.jpg'
+            save_path = os.path.join(settings.MEDIA_ROOT, name_file)
+            path_db = "/static/images/" + name_file
+            default_storage.save(save_path, image_upload)
+            title.image = path_db
+        title.save()
+        messages.success(request, 'Edit title successful')
         return redirect('title:title.index')
-    else:
-        # Render create user form
-        return render(request, 'admin/title/create.html', {
-        })
+    return render(request, 'admin/title/create.html', {})
+
+
+def title_edit(request, title_id):
+    title = Title.objects.get(id=title_id)
+    print(request.FILES)
+    if request.POST:
+        title.name = request.POST.get('name')
+        title.faculty = request.POST.get('faculty')
+        title.location = request.POST.get('location')
+        title.isbn = request.POST.get('isbn')
+        title.week_price = request.POST.get('week_price')
+        title.sem_price = request.POST.get('sem_price')
+        try:
+            image_upload = request.FILES['image']
+            has_image = True
+        except MultiValueDictKeyError:
+            has_image = False
+        if has_image:
+            name_file = 'book_image_' + str(datetime.now()) + '.jpg'
+            save_path = os.path.join(settings.MEDIA_ROOT, name_file)
+            path_db = "/static/images/" + name_file
+            default_storage.save(save_path, image_upload)
+            title.image = path_db
+        title.save()
+        messages.success(request, 'Edit title successful')
+        return redirect('title:title.index')
+    return render(request, 'admin/title/edit.html', {'title': title})
 
 
 def get_book_info(request, barcode):

@@ -15,4 +15,6 @@ urlpatterns = [
     # Title
     path('title', views.title_index, name='title.index'),
     path('title/create/', views.title_create, name='title.create'),
+    path('title/edit/<int:title_id>', views.title_edit, name='title.edit'),
+
 ]
