@@ -126,9 +126,9 @@
                                 }
                             }
                         });
-                        $('#popular_book_load').attr('style', 'display: none !important');
                     } else {
                     }
+                    $('#popular_book_load').attr('style', 'display: none !important');
                 }
             });
             {% if user.is_authenticated %}
@@ -170,9 +170,9 @@
                                     }
                                 }
                             });
-                            $('#recommendation_book_load').attr('style', 'display: none !important');
                         } else {
                         }
+                        $('#recommendation_book_load').attr('style', 'display: none !important');
                     }
                 });
                 $.ajax({
@@ -213,9 +213,9 @@
                                     }
                                 }
                             });
-                            $('#hybrid_recommendation_book_load').attr('style', 'display: none !important');
                         } else {
                         }
+                        $('#hybrid_recommendation_book_load').attr('style', 'display: none !important');
                     }
                 });
             {% endif %}

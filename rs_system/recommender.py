@@ -68,6 +68,8 @@ def get_top_recs_using_collaborative_filtering(user_index, top_item=12, rating_d
                 '-rating').values()))
     else:
         predicted_rating_df = rating_df[rating_df.user_id == user_index]
+    if len(predicted_rating_df) == 0:
+        return None
     cf_rating_df = predicted_rating_df.groupby(by=['title_id']).apply(process_in_collaborative_filtering).reset_index(
         drop=True)
     cf_rating_df = cf_rating_df.sort_values(by=['rating'], ascending=False).reset_index(drop=True)
