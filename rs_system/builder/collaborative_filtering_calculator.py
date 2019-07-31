@@ -186,7 +186,8 @@ class CollaborativeFiltering:
         return rating_user_base
 
     def predict_all_item(self, save=True):
-        Rating.objects.filter(type__in=['ub_predicted', 'ib_predicted']).delete()
+        if save:
+            Rating.objects.filter(type__in=['ub_predicted', 'ib_predicted']).delete()
         rating_predict_df = pd.DataFrame(columns=["user_id", "title_id", "rating", "type"])
         for u_id in tqdm(range(self.rating_matrix.shape[0])):
             for i_id in range(self.rating_matrix.shape[1]):
