@@ -91,11 +91,14 @@ def get_top_recs_using_hybrid(user_index, top_item=12, rating_df=None):
                 '-rating').values()))
     else:
         predicted_rating_df = rating_df[rating_df.user_id == user_index]
-    cf_rating_df = predicted_rating_df. \
-        groupby(by=['title_id']). \
-        apply(process_in_collaborative_filtering). \
-        reset_index(drop=True)
-    cf_rating_df['type'] = "collaborative_filtering"
+    if len(predicted_rating_df) > 0:
+        cf_rating_df = predicted_rating_df. \
+            groupby(by=['title_id']). \
+            apply(process_in_collaborative_filtering). \
+            reset_index(drop=True)
+        cf_rating_df['type'] = "collaborative_filtering"
+    else:
+        cf_rating_df = predicted_rating_df
     # Get content-based rs
     content_based_rs_list = get_top_recs_using_content_based_with_user_rating(user_index)
     # Get rating of title
