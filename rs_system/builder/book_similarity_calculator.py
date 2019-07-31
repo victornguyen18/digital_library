@@ -79,7 +79,7 @@ class CalculateItemSimilarity(object):
     def save_similarity(cosine_sim_matrix):
         logger.info("TRUNCATE SIMILARITY TABLE")
         cur = connection.cursor()
-        cur.execute('TRUNCATE TABLE `similarity`')
+        cur.execute('TRUNCATE TABLE `book_similarity`')
         for i in tqdm(range(cosine_sim_matrix.shape[0])):
             for j in range(cosine_sim_matrix.shape[1]):
                 BookSimilarity(
