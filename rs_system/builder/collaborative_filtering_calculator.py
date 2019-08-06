@@ -72,26 +72,6 @@ def pearson(u, v):
     return result
 
 
-def get_similarity_value_for(u_index, rating_matrix):
-    user_ratings = rating_matrix[u_index, :]
-    similarity_value = np.array([pearson(rating_matrix[i, :], user_ratings) for i in range(rating_matrix.shape[0])])
-    return similarity_value
-
-
-def get_item_similarity_value_for(i_index, rating_matrix):
-    title_ratings = rating_matrix[:, i_index]
-    similarity_value = np.array([pearson(rating_matrix[:, i], title_ratings) for i in range(rating_matrix.shape[1])])
-    return similarity_value
-
-
-def get_item_similarity_matrix(rating_matrix):
-    similarity_matrix = []
-    for i_index in range(rating_matrix.shape[1]):
-        similarity_value = get_item_similarity_value_for(i_index, rating_matrix)
-        similarity_matrix.append(similarity_value)
-    return np.array(similarity_matrix)
-
-
 class CollaborativeFiltering:
     def __init__(self, rating_df=None, save_db=False):
         if rating_df is None:
