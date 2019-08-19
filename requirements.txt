@@ -4,7 +4,6 @@ numpy
 datetime
 django-debug-permissions
 py4j
-mysqlclient
 sklearn
 scipy
 matplotlib
