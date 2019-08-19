@@ -112,6 +112,14 @@ To set up another database is described in the Django docs [here](https://docs.d
 Running the server like this, will make the website available 
 [http://127.0.0.1:8000](http://127.0.0.1:8000) other applications also use this port
 so you might need to try out 8001 instead. 
+* Account admin to login admin
+    * Username: admin
+    * Password: adminadmin
+    * Admin Page of Django build:[http://127.0.0.1:8000/admin2](http://127.0.0.1:8000/admin2)
+    * Admin Page of System:[http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+* Account of other user:
+    * Username: in dbs ititiu15050
+    * Password: Default123456
 
 ### Closing down.
 when you are finished running the project you can:
