@@ -83,7 +83,7 @@ def title_create(request):
         except MultiValueDictKeyError:
             has_image = False
         if has_image:
-            name_file = 'book_image_' + str(datetime.now()) + '.jpg'
+            name_file = 'book_image_' + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.jpg'
             save_path = os.path.join(settings.MEDIA_ROOT, name_file)
             path_db = "/static/images/" + name_file
             default_storage.save(save_path, image_upload)
@@ -110,7 +110,7 @@ def title_edit(request, title_id):
         except MultiValueDictKeyError:
             has_image = False
         if has_image:
-            name_file = 'book_image_' + str(datetime.now()) + '.jpg'
+            name_file = 'book_image_' + datetime.now().strftime("%Y-%m-%d_%H-%M-%S") + '.jpg'
             save_path = os.path.join(settings.MEDIA_ROOT, name_file)
             path_db = "/static/images/" + name_file
             default_storage.save(save_path, image_upload)
