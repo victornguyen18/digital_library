@@ -70,7 +70,6 @@ DATABASES = {
    }
 }
 ```
-you should update the NAME, USER, PASSWORD, HOST, PORT fields.
 
 #### Create the dbs. 
 If you have a database running on your machine I would encourage 
