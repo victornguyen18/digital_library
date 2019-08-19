@@ -17,21 +17,21 @@ filename = 'databases/auth_import.sql'
 file = open(filename, 'r')
 sql = " ".join(file.readlines())
 logger.info("Start executing: {} at {}".format(filename, str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))))
-cur.execute(sql)
+cur.executescript(sql)
 
 logger.info("Import information of book")
 filename_title = 'databases/title.sql'
 file_title = open(filename_title, 'r')
 sql_title = " ".join(file_title.readlines())
 logger.info("Start executing: {} at {}".format(filename_title, str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))))
-cur.execute(sql_title)
+cur.executescript(sql_title)
 
 logger.info("Import barcode of book")
 filename_books = 'databases/books.sql'
 file_books = open(filename_books, 'r')
 sql_books = " ".join(file_books.readlines())
 logger.info("Start executing: {} at {}".format(filename_books, str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))))
-cur.execute(sql_books)
+cur.executescript(sql_books)
 
 logger.info("Import transaction")
 filename_transactions = 'databases/transactions.sql'
@@ -39,7 +39,7 @@ file_transactions = open(filename_transactions, 'r')
 sql_transactions = " ".join(file_transactions.readlines())
 logger.info(
     "Start executing: {} at {}".format(filename_transactions, str(datetime.datetime.now().strftime("%Y-%m-%d %H:%M"))))
-cur.execute(sql_transactions)
+cur.executescript(sql_transactions)
 
 logger.info("Finish import initial database")
 connection.close()
