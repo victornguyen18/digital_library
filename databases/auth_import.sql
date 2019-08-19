@@ -12,6 +12,7 @@ INSERT INTO `auth_group` (`id`, `name`) VALUES
 --
 
 INSERT INTO `auth_user` (`id`, `password`, `last_login`, `is_superuser`, `username`, `first_name`, `last_name`, `email`, `is_staff`, `is_active`, `date_joined`) VALUES
+(1, 'pbkdf2_sha256$150000$2DpbCJAdLFOS$w+6SRwGyxC4rTieIeGGUWwXmbdKfcwp3vPx9UWzL3Js=', '2019-08-16 00:51:11.818611', 1, 'admin', 'admin', '', 'npxthang.enactusiu@gmail.com', 1, 1, '2018-11-17 08:31:05.000000'),
 (2, 'pbkdf2_sha256$150000$DtMP9F48TDFJ$88AEshvdr1+VvZu28vmRU50hSQkdhFnC8mXD8Q5O/Gc=', NULL, 0, 'student', 'student', '', '', 0, 1, '2018-11-17 14:29:15.000000'),
 (3, 'pbkdf2_sha256$150000$DtMP9F48TDFJ$88AEshvdr1+VvZu28vmRU50hSQkdhFnC8mXD8Q5O/Gc=', NULL, 0, 'staff', 'Lib Staff', '', '', 0, 1, '2019-07-14 01:37:14.000000'),
 (4, 'pbkdf2_sha256$150000$DtMP9F48TDFJ$88AEshvdr1+VvZu28vmRU50hSQkdhFnC8mXD8Q5O/Gc=', NULL, 0, 'parttime', 'Part Time', '', '', 0, 1, '2019-07-14 02:01:09.000000'),

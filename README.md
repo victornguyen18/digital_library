@@ -9,7 +9,6 @@ Moreover, user can find relevant books by ontology search engine.
 
 ## Required services/applications:
 * Python 3: [Download](https://www.python.org/Downloads/) 
-* MySQL Community 5.7.*: [Download](https://dev.mysql.com/Downloads/mysql/5.7.html#Downloads)
 * Java: [Download](https://www.java.com/en/Download/)
     * Install Java JDK [Download](https://www.oracle.com/technetwork/java/javase/Downloads/jdk8-Downloads-2133151.html)
 * Install Gradle [Download](https://gradle.org/releases/).
@@ -28,8 +27,7 @@ The following is expecting you to have python 3.x installed on your machine. I r
  For windows users it's a good idea to install the Anaconda package. Anaconda is the leading open 
  data science platform powered by Python (according to their homepage) [Anaconda](https://www.continuum.io/Downloads)
  
-### Create a virtual environment for the project 
-YOU CAN SKIP THIS STEP
+### [OPTIONAL]Create a virtual environment for the project 
 
 Look at the following guide for more details [guide](http://docs.python-guide.org/en/latest/dev/virtualenvs/#virtualenvironments-ref)
 
@@ -42,7 +40,7 @@ Run terminal/command line on project folder
 > setprojectdir .
 ```
 
-*** Linux/MacOS
+* Linux/MacOS
 ```bash
 # cd digital_library
 > pip install virtualenv
@@ -66,14 +64,10 @@ and update the following
 
 ```bash
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'db_name',                      
-        'USER': 'db_user',
-        'PASSWORD': 'db_user_password',
-        'HOST': '',
-        'PORT': 'db_port_number',
-    }
+   'default': {
+       'ENGINE': 'django.db.backends.sqlite3',
+       'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+   }
 }
 ```
 you should update the NAME, USER, PASSWORD, HOST, PORT fields.
