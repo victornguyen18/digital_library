@@ -66,7 +66,7 @@ class CalculatePointAllUser(object):
     def save_pointing(user_ratings_df):
         logger.info("TRUNCATE RATING TABLE")
         cur = connection.cursor()
-        cur.execute('TRUNCATE TABLE `rating`')
+        cur.execute('DELETE FROM `rating`')
         Rating.objects.filter(type='calculate').delete()
         for row in tqdm(user_ratings_df.itertuples()):
             Rating(

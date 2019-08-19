@@ -116,10 +116,10 @@ class CollaborativeFiltering:
             logger.info("TRUNCATE user_rating_similarity TABLE")
             if is_user:
                 cur = connection.cursor()
-                cur.execute('TRUNCATE TABLE `user_rating_similarity`')
+                cur.execute('DELETE FROM `user_rating_similarity`')
             else:
                 cur = connection.cursor()
-                cur.execute('TRUNCATE TABLE `item_rating_similarity`')
+                cur.execute('DELETE FROM `item_rating_similarity`')
         similarity_matrix = []
         for u_index in range(rating_matrix.shape[0]):
             user_ratings = rating_matrix[u_index, :]
