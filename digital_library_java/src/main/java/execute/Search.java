@@ -64,7 +64,7 @@ public class Search {
     private static OWLObjectRenderer renderer = new DLSyntaxObjectRenderer();
 
     public static Set<String> getGlovewords(String input) {
-        String file = "/Users/victornguyen/Sites/BookDigital/src/main/resources/test.txt";
+        String file = "src/main/resources/test.txt";
         Options options = new Options();
         options.debug = true;
         Vocabulary vocab = GloVe.build_vocabulary(file, options);

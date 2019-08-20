@@ -62,7 +62,7 @@ public class resoneCollectionList {
     public static List<allData> getByCollection(String temp) throws OWLOntologyCreationException {
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
 
-        File inputFile = new File("/Users/victornguyen/Sites/BookDigital/src/main/resources/bookOWL.owl");
+        File inputFile = new File("src/main/resources/bookOWL.owl");
         //Load ontology
         OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
 

@@ -79,9 +79,10 @@ To set up another database is described in the Django docs [here](https://docs.d
 > python3 manage.py migrate
 ```
 #### Initial db by running the following script. 
-
+[WARNING][This step will take time because of training data]
 ```bash
 > python3 import_data.py
+> python3 train.py
 ```
 
 ## Start the web server

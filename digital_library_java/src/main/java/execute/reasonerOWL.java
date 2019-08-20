@@ -116,7 +116,7 @@ public class reasonerOWL {
     public static List<allData> getDataPropertyValue() throws IOException, OWLOntologyCreationException {
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
 
-        File inputFile = new File("/Users/victornguyen/Sites/BookDigital/src/main/resources/bookOWL.owl");
+        File inputFile = new File("src/main/resources/bookOWL.owl");
         // Load ontology
         OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
 
@@ -511,7 +511,7 @@ public class reasonerOWL {
          * System.out.println(title); }
          */
         FileOutputStream outputStream = new FileOutputStream(
-                "/Users/victornguyen/Sites/BookDigital/scr/main/resouces/allAuthorValue.txt");
+                "scr/main/resouces/allAuthorValue.txt");
         OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream, "UTF-16");
         BufferedWriter bufferedWriter = new BufferedWriter(outputStreamWriter);
 

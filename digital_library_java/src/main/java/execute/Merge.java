@@ -33,7 +33,7 @@ public class Merge {
 
         //get IU book
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        File inputFile = new File("/Users/victornguyen/Sites/BookDigital/src/main/resources/bookOWL.owl");
+        File inputFile = new File("src/main/resources/bookOWL.owl");
         OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
         searchMethod searchMethod = new searchMethod();
         List<sortData> listOp = searchMethod.searchGloVe(searchterm, m, o);

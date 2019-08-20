@@ -100,7 +100,7 @@ public class readDataFromExcel {
     }
 
     public List<Data> executeReadExcel() throws IOException {
-        String excelFilePath = "/Users/victornguyen/Sites/BookDigital/src/main/resources/BookData.xlsx";
+        String excelFilePath = "src/main/resources/BookData.xlsx";
         readDataFromExcel read = new readDataFromExcel();
         List<Data> list = read.readBooksFromExcelFile(excelFilePath);
         return list;
