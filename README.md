@@ -84,6 +84,7 @@ To set up another database is described in the Django docs [here](https://docs.d
 
 ```bash
 > python3 import_data.py
+> python3 train.py
 ```
 
 ## Start the web server
