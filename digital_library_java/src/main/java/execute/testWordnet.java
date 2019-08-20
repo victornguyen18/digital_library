@@ -31,7 +31,7 @@ public class testWordnet {
         try {
             // initialize JWNL (this must be done before JWNL can be used)
             // See the JWordnet documentation for details on the properties file
-            JWNL.initialize(new FileInputStream("/Users/victornguyen/Sites/BookDigital/properties.xml"));
+            JWNL.initialize(new FileInputStream("properties.xml"));
         } catch (Exception ex) {
             ex.printStackTrace();
             System.exit(-1);

@@ -72,7 +72,7 @@ public class searchMethod {
     private static OWLObjectRenderer renderer = new DLSyntaxObjectRenderer();
 
     public static Set<String> getGlovewords(String input) {
-        String file = "/Users/victornguyen/Sites/BookDigital/src/main/resources/test.txt";
+        String file = "src/main/resources/test.txt";
         Options options = new Options();
         options.debug = true;
         Vocabulary vocab = GloVe.build_vocabulary(file, options);
@@ -97,7 +97,7 @@ public class searchMethod {
         Set<String> synset = new LinkedHashSet<String>();
         try {
             Object obj = parser.parse(
-                    new FileReader("/Users/victornguyen/Sites/BookDigital/src/main/resources/testJson.json"));
+                    new FileReader("src/main/resources/testJson.json"));
             JSONObject jsonObject = (JSONObject) obj;
             System.out.println(jsonObject);
             JSONArray msg = (JSONArray) jsonObject.get(input);
@@ -1009,7 +1009,7 @@ public class searchMethod {
         String input = "Java";
         System.out.println("final Results");
         OWLOntologyManager m = OWLManager.createOWLOntologyManager();
-        File inputFile = new File("/Users/victornguyen/Sites/BookDigital/src/main/resources/bookOWL.owl");
+        File inputFile = new File("src/main/resources/bookOWL.owl");
         // Load ontology
         OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
         List<sortData> listOp3 = searchGloVe(input, m, o);

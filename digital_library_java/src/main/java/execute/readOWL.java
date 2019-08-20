@@ -609,7 +609,7 @@ public class readOWL {
         //create Reasoner Factory
         OWLReasonerFactory reasonerFactory = new StructuralReasonerFactory();
         //Create input File
-        File inputFile = new File("/Users/victornguyen/Sites/BookDigital/src/main/resources/bookOWL.owl");
+        File inputFile = new File("src/main/resources/bookOWL.owl");
         //Load ontology
         OWLOntology o = m.loadOntologyFromOntologyDocument(inputFile);
 		/*for (OWLClass cls: o.getClassesInSignature()){
