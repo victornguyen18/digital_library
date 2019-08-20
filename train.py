@@ -6,5 +6,5 @@ logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=lo
 logger = logging.getLogger("Import initial database")
 
 logger.info("Run train data")
-CalculatePointAllUser().calculate(run_force=True)
 CalculateItemSimilarity().calculate(run_force=True)
+CalculatePointAllUser().calculate(run_force=True)
