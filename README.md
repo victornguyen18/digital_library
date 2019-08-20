@@ -34,15 +34,13 @@ Look at the following guide for more details [guide](http://docs.python-guide.or
 Run terminal/command line on project folder
 * Windows
 ```bash
-# cd digital_library
-> pip install virtualenvwrapper-win
-> mkvirtualenv env_library
-> setprojectdir .
+> pip install virtualenv
+> virtualenv venv
+> venv\Scripts\activate.bat
 ```
 
 * Linux/MacOS
 ```bash
-# cd digital_library
 > pip install virtualenv
 > virtualenv venv
 > source venv/bin/activate
