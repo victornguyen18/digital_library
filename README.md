@@ -8,6 +8,7 @@ Moreover, I reuse java application to apply ontology search engine and web porta
 Moreover, user can find relevant books by ontology search engine.
 
 ## Required services/applications:
+
 * Python 3: [Download](https://www.python.org/Downloads/) 
 * Java: [Download](https://www.java.com/en/Download/)
     * Install Java JDK [Download](https://www.oracle.com/technetwork/java/javase/Downloads/jdk8-Downloads-2133151.html)
@@ -20,6 +21,7 @@ Look at the following guide for more details
     * Step 4. Verify your installation
     
 ## Project Setup
+
 The following is expecting you to have python 3.x installed on your machine. I recommend
  looking that the [Hitchhikers guide to Python](http://docs.python-guide.org/en/latest/) if you 
  haven't.
@@ -32,7 +34,9 @@ The following is expecting you to have python 3.x installed on your machine. I r
 Look at the following guide for more details [guide](http://docs.python-guide.org/en/latest/dev/virtualenvs/#virtualenvironments-ref)
 
 Run terminal/command line on project folder
+
 * Windows
+
 ```bash
 > pip install virtualenv
 > virtualenv venv
@@ -40,6 +44,7 @@ Run terminal/command line on project folder
 ```
 
 * Linux/MacOS
+
 ```bash
 > pip install virtualenv
 > virtualenv venv
@@ -53,6 +58,7 @@ if you are running Anaconda you can also use conda virtual environment instead.
 ```bash
 pip3 install -r requirements.txt
 ```
+
 ## Database setup
 
 #### Configuration
@@ -70,25 +76,33 @@ DATABASES = {
 ```
 
 #### Create the dbs. 
+
 If you have a database running on your machine I would encourage 
 you to connect it, by updating the settings in `book_management/settings.py` (fx like shown above). 
 
 To set up another database is described in the Django docs [here](https://docs.djangoproject.com/en/2.0/ref/databases/)
+
 ```bash
 > python3 manage.py makemigrations
 > python3 manage.py migrate
 ```
+
 #### Initial db by running the following script. 
+
 [WARNING][This step will take time because of training data]
+
 ```bash
 > python3 import_data.py
 > python3 train.py
 ```
 
 ## Start the web server
+
  To run web portal and ontology search engine.
  You mush build and run java project first.
+ 
  * In Windows
+ 
  ```bash
 > cd digital_library_java
 > gradle build
@@ -96,6 +110,7 @@ To set up another database is described in the Django docs [here](https://docs.d
 ```
 
 * In Linux/Mac
+
  ```bash
 > cd digital_library_java
 > ./gradlew build
@@ -105,25 +120,34 @@ To set up another database is described in the Django docs [here](https://docs.d
  * Open another terminal/command line
 
  To start the development server run:
+ 
 ```bash
 > python3 manage.py runserver 127.0.0.1:8000
 ```
+
 Running the server like this, will make the website available 
 [http://127.0.0.1:8000](http://127.0.0.1:8000) other applications also use this port
-so you might need to try out 8001 instead. 
+so you might need to try out 8001 instead.
+
 * Account admin to login admin
+
     * Username: admin
     * Password: adminadmin
     * Admin Page of Django build:[http://127.0.0.1:8000/admin2](http://127.0.0.1:8000/admin2)
     * Admin Page of System:[http://127.0.0.1:8000/admin](http://127.0.0.1:8000/admin)
+    
 * Account of other user:
-    * Username: in dbs ititiu15050
+
+    * Username: in dbs (Example: ititiu15050)
     * Password: Default123456
 
 ### Closing down.
+
 when you are finished running the project you can:
+
 * Close down the server by pressing <CLTR>-c  
 * exit the virtual env:
+
 ```bash
 > deactivate
 ```
